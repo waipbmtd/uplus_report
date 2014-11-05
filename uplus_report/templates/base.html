@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="UTF-8">
+<head>
+    {% include "partial/header.html"%}
+    {% block head %}{% end %}
+</head>
+<body >
+{% module Navbar() %}
+{% include "layout/logout.html"%}
+{% block body %}{% end %}
+</body>
+{% block extra %}{% end  %}
+</html>

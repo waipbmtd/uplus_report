@@ -1,0 +1,16 @@
+
+<div class="panel-group" id="accordion" style="margin:-20px;">
+    <div class="panel panel-default">
+        <div class="panel-heading accordion-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+            <span class="glyphicon glyphicon-user"></span>
+            <span  class="col-lg-offset-1">举报内容</span>
+            <span class="indicator glyphicon glyphicon-hand-right  pull-right"></span>
+        </div>
+
+        <div id="collapseOne" class="list-group panel-collapse collapse in">
+            <a href="javascript:void(0)" class="accordion-inner list-group-item activated" onclick="$.RightPageController.showDauViews(this)">-<span class="col-lg-offset-1">图片</span></a>
+            <a href="javascript:void(0)" class="accordion-inner list-group-item" onclick="$.RightPageController.showRetainedViews(this)">-<span class="col-lg-offset-1">音频</span></a>
+            <a href="javascript:void(0)" class="accordion-inner list-group-item" onclick="$.RightPageController.showRetainedViews(this)">-<span class="col-lg-offset-1">视频</span></a>
+        </div>
+    </div>
+</div>

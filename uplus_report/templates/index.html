@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="Zh-CN">
+<head>
+    {% include "partial/header.html"%}
+    {% block head %}{% end %}
+</head>
+<body class="body-signin">
+    <div class="container">
+
+      <form class="form-signin" role="form" action="/login" method="POST">
+        <h2 class="form-signin-heading">用户登录：</h2>
+        <input type="hidden" name="next" value="{{next}}">
+        <input type="text" name="username" class="form-control" placeholder="用户名" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
+        <button class="btn btn-lg btn-primary btn-block form-singin-button" type="submit">登录</button>
+      </form>
+
+    </div> <!-- /container -->
+
+<footer>
+</footer>
+</body>
+{% block extra %}{% end  %}
+</html>

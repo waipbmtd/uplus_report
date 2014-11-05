@@ -1,0 +1,8 @@
+exclude.txt
+dauconfig.py
+test.py
+.idea
+config
+*/*.pyc
+*.pyc
+*.ini

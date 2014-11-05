@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from datetime import datetime
+import json
+import logging
+import time
+
+import jsonpickle
+import jsonpickle.backend
+import tornado.web
+
+import config
+from storage.mysql.database import session_manange
+from storage.mysql.models import AdminUser
+from utils import util
+
+
+class BaseHandler(tornado.web.RequestHandler):
+    def __init__(self, application, request, **kwargs):
+        super(BaseHandler, self).__init__(application, request, **kwargs)
+        self.session = None
+
+    def initialize(self):
+        pass
+
+    def json(self, data):
+        """
+
+        :rtype : object
+        """
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
+        self.write(jsonpickle.encode(data, unpicklable=False, backend=backend))
+
+        self.set_header('Content-Type', 'application/json; charset=UTF-8')
+
+    def send_success_json(self, data):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        self.write(json.dumps({'status': 'ok', 'content': data},
+                              default=util.dthandler))
+        self.finish()
+
+    def send_error_json(self, data):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        self.write(json.dumps({'status': 'error', 'content': data},
+                              default=util.dthandler))
+        self.finish()
+
+    def handle_http_arguments(self, arguments):
+        if not isinstance(arguments, dict):
+            return
+        for key, val in arguments.items():
+            try:
+                arguments[key] = val[0].strip()
+            except:
+                arguments[key] = val[0]
+        return arguments
+
+    @session_manange
+    def get_current_user(self):
+        user_id = self.get_secure_cookie("r_u_a")
+        expire_time = self.get_secure_cookie("r_u_a_e")
+
+        if not user_id:
+            return None
+
+        now = time.time()
+        idel = int(config.app.max_idle_time)
+        try:
+            expire = float(expire_time)
+        except Exception:
+            return None
+        if expire < now:
+            return None
+
+        expire_time = now + idel
+        self.set_secure_cookie("u_a_e", u'{}'.format(expire_time))
+
+        user = self.session.query(AdminUser).filter_by(id=int(user_id),
+                                                       state=True).first()
+        if not user:
+            return None
+
+        self.session.expunge(user)
+        return user
+
+    def get(self):
+        return self.render('index.html')
+
+
+class DefaultHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        logging.info("revere index url : %s" % self.reverse_url("comm_msg"))
+        self.redirect(self.reverse_url("comm_msg"))

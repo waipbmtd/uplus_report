@@ -1,0 +1,8 @@
+[uplus_admin]
+db_name=uplus_report
+dialect=mysql+mysqldb
+user=report
+host=192.168.1.218:3306
+password=qwe123
+charset=utf8
+echo=False
