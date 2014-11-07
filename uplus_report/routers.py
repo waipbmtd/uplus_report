@@ -13,5 +13,8 @@ routers = [
     url(r"/logout", auth.LogoutHandler),
 
 
-    url(r"/comm_msg", commMsg.CommonMsgHandler, name="comm_msg"),
+    # 获取消息首页
+    url(r"/comm_msg/index", commMsg.CommonMsgIndexHandler,
+        name="comm_msg_index"),
+    url(r"/comm_msg/image/list", commMsg.ImageMsgListHandler),
 ]

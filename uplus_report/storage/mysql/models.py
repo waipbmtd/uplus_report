@@ -16,7 +16,7 @@ class AdminUser(Base):
     username = Column('name', String(20), nullable=False, unique=True)
     password = Column('password', String(50))
     role = Column('role', Enum('admin', 'editor'))
-    realname = Column('realname', String(50))
+    real_name = Column('real_name', String(50))
     state = Column('state', Boolean(True), default=True)
     create_time = Column('create_time', DateTime,
                          default=datetime.datetime.now())
@@ -32,7 +32,7 @@ class AdminOperationLog(Base):
     __tablename__ = "admin_operation_log"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    csid = Column("csid", ForeignKey('admin_user.csid'))
+    admin_user_id = Column("admin_user_id", ForeignKey('admin_user.csid'))
     content = Column('content', String(1000))
     create_time = Column('create_time', DateTime)
     ip = Column('ip', String(50))

@@ -263,3 +263,17 @@ accordion
 .collapsed > .glyphicon-hand-right:before {
     content: "";
 }
+
+.box img {
+    width: 100px;
+}
+
+.box{
+    padding: 5px;
+}
+
+.box_select {
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: #f00;
+}

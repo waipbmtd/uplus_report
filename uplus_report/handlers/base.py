@@ -92,5 +92,5 @@ class BaseHandler(tornado.web.RequestHandler):
 class DefaultHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        logging.info("revere index url : %s" % self.reverse_url("comm_msg"))
-        self.redirect(self.reverse_url("comm_msg"))
+        logging.info("revere index url : %s" % self.reverse_url("comm_msg_index"))
+        self.redirect(self.reverse_url("comm_msg_index"))
