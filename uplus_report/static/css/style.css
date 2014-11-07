@@ -264,16 +264,37 @@ accordion
     content: "";
 }
 
+.subMenu{
+    background-color:#ffffff;
+    opacity:.8;
+    filter:alpha(opacity=0);
+    -moz-opacity: 0;
+    position: fixed;
+    z-index: 100;
+    bottom:0px;
+    right:0px;
+    float:top;
+}
+
+.subMenu .float{
+    width:100%;
+    margin:0 auto;
+    border-top:0px #333333 solid;
+    color:#ffffff;}
+.subMenu .float span{
+    border:0px solid #fff;
+}
+
 .box img {
     width: 100px;
 }
 
 .box{
-    padding: 5px;
+    border: 5px solid #fff;
+    margin: 1px;
 }
 
 .box_select {
-    border: 1px solid #ddd;
-    padding: 5px;
-    background: #f00;
+    border-color: #f00;
 }
+

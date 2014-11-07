@@ -1,14 +1,27 @@
-<div class="panel panel-default">
-    <div class="panel-heading">查询条件
-    <button type="button" class="btn btn-md btn-default panel-btn-right"  id="sieve_btn" >
-        版本渠道
-    </button>
+
+
+
+<div class="container-fluid" >
+
+    <div class="subMenu">
+        <div class="float">
+        <div class="btn-group">
+            <button class="btn btn-primary" type="button" onclick="$.ImageMessageController.NextImageMessageList()">申请任务</button>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-default " type="button" onclick="$.ImageMessageController.SelecAllImages()">全选</button>
+            <button class="btn btn-default " type="button" onclick="$.ImageMessageController.UnselectAllImages()">取消全选</button>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-warning" type="button" onclick="$.ImageMessageController.ShowConformDialog(true)">合格</button>
+            <button class="btn btn-danger " type="button" onclick="$.ImageMessageController.ShowConformDialog(false)">不合格</button>
+        </div>
+        </div>
     </div>
-    <div class="panel-body" id="search_form_div"></div>
-</div>
 
-
-<div class="container-fluid" id="image_masonry_content">
+    <div id="image_masonry_content"></div>
 
 </div>
 

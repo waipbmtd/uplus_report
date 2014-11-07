@@ -8,7 +8,7 @@ from utils.util import hash_password
 
 
 def testAdminuser(session):
-    user1 = AdminUser(username='daixuefeng',password=hash_password('qwe123'),
+    user1 = AdminUser(username='chenlu',password=hash_password('qwe123'),
                       role='admin',
                       state=True,
                       create_time=datetime.datetime.now(),

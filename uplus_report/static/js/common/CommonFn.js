@@ -28,7 +28,7 @@ $(function () {
             }
 
             return resultObject;
-        }
+        };
 
     $.CommonFn.checkBoxVal=function(name){
         result = [];
@@ -36,12 +36,53 @@ $(function () {
             result.push($(this).val());
         })
         return result;
+    };
+
+    $.CommonFn.hideAllPopover = function () {
+            $('.form-control,.btn').on('click', function (e) {
+                $('.form-control').popover('hide');
+            });
+    };
+
+    $.CommonFn.removeAllErrorSpan = function () {
+        $('.error-area').remove();
+        $('.error-main-area').remove();
+    };
+
+    $.CommonFn.insertErrorSpan = function (obj) {
+        var html = '<span class="error-area hide" id="span_error"></span>';
+        $(obj + ' .modal-header').append(html);
+    };
+
+    $.CommonFn.insertMainErrorSpan = function () {
+        var html = '<span class="error-main-area hide" id="span_error"></span>';
+        $("#main").after(html);
+    };
+
+    $.CommonFn.errorLoadImage = function (obj, context) {
+        obj.onerror = null;
+        obj.src = "/static/img/default.png";
+    };
+
+    $.CommonFn.open = function(url, name){
+        var iWidth = 1000;
+        var iLeft = (window.screen.availWidth-10-iWidth)/2;
+        window.open(url, name,"height=650,width=" + iWidth + ",left=" + iLeft + ",toolbar=no,menubar=0,scrollbars=1,resizable=no,location=no,status=no",true);
+//        window.open(url, name);
+    };
+
+    $.CommonFn.MessageDialog = function (title, content) {
+        var tmpl = doT.template($("#message_common_dialog_template").html());
+        var html = tmpl({msg_title:title,
+                        msg_content: content});
+        $("#add").html(html);
+        $("#CommonMessageDialogModal").modal();
+
     }
 
     $.CommonFn.DataTable = function (elm, config) {
 
-    }
-
+    };
 
     $.extend($.CommonFn.DataTable, {
         fnSetKey: function (aoData, sKey, mValue) {
@@ -78,6 +119,11 @@ $(function () {
         getaoColumns: function(page_id){
             var page_key = getPageKeyByValue(page_id);
             return DATATABLE_CONFIG[page_key]["aoColumns"]
+        },
+
+        getsAjaxMethod: function (page_id) {
+            var page_key = getPageKeyByValue(page_id);
+            return DATATABLE_CONFIG[page_key]["method"]
         }
 
     })
