@@ -11,7 +11,7 @@ import tornado.web
 
 import config
 from storage.mysql.database import session_manange
-from storage.mysql.models import AdminUser
+from storage.mysql.models import AdminUser, AdminOperationLog
 from utils import util
 
 
@@ -35,16 +35,28 @@ class BaseHandler(tornado.web.RequestHandler):
 
         self.set_header('Content-Type', 'application/json; charset=UTF-8')
 
-    def send_success_json(self, data):
+    def send_success_json(self, data={}, info="", code=""):
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        self.write(json.dumps({'status': 'ok', 'content': data},
-                              default=util.dthandler))
+        result = {'ret': 1, 'code': code, 'info': info}
+        result.update(data)
+        self.write(jsonpickle.encode(result,
+                                     unpicklable=False,
+                                     backend=backend))
         self.finish()
 
-    def send_error_json(self, data):
+    def send_error_json(self, data={}, info="", code=""):
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        self.write(json.dumps({'status': 'error', 'content': data},
-                              default=util.dthandler))
+        result = {'ret': 0, 'code': code, 'info': info}
+        result.update(data)
+        self.write(jsonpickle.encode(result,
+                                     unpicklable=False,
+                                     backend=backend))
         self.finish()
 
     def handle_http_arguments(self, arguments):
@@ -88,9 +100,17 @@ class BaseHandler(tornado.web.RequestHandler):
     def get(self):
         return self.render('index.html')
 
+    @session_manange
+    def record_log(self, content=""):
+        log = AdminOperationLog(content=content,
+                                ip=self.request.remote_ip)
+        current_user = self.session.query(AdminUser).get(self.current_user.id)
+        current_user.logs.append(log)
+
 
 class DefaultHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        logging.info("revere index url : %s" % self.reverse_url("comm_msg_index"))
-        self.redirect(self.reverse_url("comm_msg_index"))
+        logging.info(
+            "revere index url : %s" % self.reverse_url("comm_report_index"))
+        self.redirect(self.reverse_url("comm_report_index"))

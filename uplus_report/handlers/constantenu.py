@@ -13,7 +13,7 @@ class TypeEnumHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
-        enum_dic = reportConstant.REPORT_TYPE
+        enum_dic = reportConstant.REPORT_REASONS
         report_type_list = [dict(id=x, title=enum_dic[x]) for x in enum_dic]
         return self.json(report_type_list)
 
@@ -25,7 +25,7 @@ class ModEnumHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
-        enum_dic = reportConstant.REPORT_MOD
+        enum_dic = reportConstant.REPORT_MODULE_TYPES
         report_type_list = [dict(id=x, title=enum_dic[x]) for x in enum_dic]
         return self.json(report_type_list)
 
@@ -37,6 +37,16 @@ class PunishEnumHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
-        enum_dic = reportConstant.REPORT_PUNISH
+        enum_dic = reportConstant.REPORT_PUNISHES
         report_type_list = [dict(id=x, title=enum_dic[x]) for x in enum_dic]
         return self.json(report_type_list)
+
+
+class PunishRelationHandler(BaseHandler):
+    """
+    像册处罚关联表
+    """
+    @tornado.web.authenticated
+    def get(self):
+        enum_dic = reportConstant.PUNISH_RELATION
+        return self.send_success_json(enum_dic)

@@ -34,7 +34,8 @@ class AdminOperationLog(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     admin_user_id = Column("admin_user_id", ForeignKey('admin_user.csid'))
     content = Column('content', String(1000))
-    create_time = Column('create_time', DateTime)
+    create_time = Column('create_time', DateTime,
+                         default=datetime.datetime.now())
     ip = Column('ip', String(50))
 
     def __repr__(self):

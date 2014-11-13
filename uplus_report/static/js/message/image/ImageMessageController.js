@@ -60,13 +60,13 @@ $(function () {
         initNextData : function(){
             $.ajax({
                 type: "POST",
-                url: "/comm_msg/image/list",
+                url: "/comm_report/album_image/list",
                 dataType : "json",
                 async: true,
                 cache: true,
                 success: function (data) {
                     var tmp = doT.template($("#message_list_image_template").html());
-                    var html = tmp({"images":data});
+                    var html = tmp({"images":data["data"]});
                     var $container = $('#image_masonry_content');
 
                     $container.html(html);

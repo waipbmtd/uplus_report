@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # 通用工具函数
 import decimal
+import json
 from urllib import unquote
 from hashlib import md5
 from datetime import date, datetime, timedelta

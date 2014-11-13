@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*-
 from tornado.web import url
 
-from handlers import base, auth, commMsg, constantenu
+from handlers import base, auth, commReport, constantenu,punish
 
 routers = [
     # 首页
@@ -19,8 +19,22 @@ routers = [
     #获取举报处理类型
     url(r"/enum/punish", constantenu.PunishEnumHandler),
 
-    # 获取消息首页
-    url(r"/comm_msg/index", commMsg.CommonMsgIndexHandler,
-        name="comm_msg_index"),
-    url(r"/comm_msg/image/list", commMsg.ImageMsgListHandler),
+
+    # 获取像册图片首页
+    url(r"/comm_report/index", commReport.CommonReportIndexHandler,
+        name="comm_report_index"),
+    #获取像册图片列表
+    url(r"/comm_report/album_image/list",
+        commReport.AlbumImageReportListHandler),
+
+
+    #获取下一个被举报的消息
+    url(r"/comm_report/message/next", commReport.MessageReportNextHandler),
+
+    #处罚关联
+    url(r'/punish_enum_relation',
+        constantenu.PunishRelationHandler),
+
+    #处罚
+    url(r"/punish/", punish.PunishAdapterHandler)
 ]
