@@ -19,10 +19,6 @@ routers = [
     #获取举报处理类型
     url(r"/enum/punish", constantenu.PunishEnumHandler),
 
-
-    # 获取像册图片首页
-    url(r"/comm_report/index", commReport.CommonReportIndexHandler,
-        name="comm_report_index"),
     #获取像册图片列表
     url(r"/comm_report/album_image/list",
         commReport.AlbumImageReportListHandler),

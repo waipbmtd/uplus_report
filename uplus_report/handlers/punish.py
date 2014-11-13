@@ -147,8 +147,8 @@ class PunishAdapterHandler(PunishBaseHandler):
         if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
             data = self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
-            data = self._close()
-
+            data = self._close(reportConstant.REPORT_MODULE_TYPE_USER,
+                               self.v("uid"))
         return data
 
     def _close(self, mod_type, u_id):
@@ -160,7 +160,7 @@ class PunishAdapterHandler(PunishBaseHandler):
                                            parameters=self.feature_parameter)
 
         self.log_record()
-        self.delete_resource()
+        self._delete_resource()
         return data
 
     def _silence(self, mod_type, u_id):
