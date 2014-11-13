@@ -12,6 +12,9 @@ routers = [
     # 登出
     url(r"/logout", auth.LogoutHandler),
 
+    # 获取页面
+    url(r"/get_template", base.GetTemplateHandler),
+
     #获取举报原因枚举
     url(r"/enum/type", constantenu.TypeEnumHandler),
     #获取举报业务场所
@@ -32,5 +35,5 @@ routers = [
         constantenu.PunishRelationHandler),
 
     #处罚
-    url(r"/punish/", punish.PunishAdapterHandler)
+    url(r"/punish", punish.PunishAdapterHandler)
 ]

@@ -115,3 +115,11 @@ class DefaultHandler(BaseHandler):
             "revere index url : %s" % "index.html")
         self.render("index.html",
                     data=dict(username=self.current_user.username))
+
+
+class GetTemplateHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        page = self.get_argument("page")
+        page_str = self.render_string(page)
+        self.finish(page_str)
