@@ -98,7 +98,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return user
 
     def get(self):
-        return self.render('index.html')
+        return self.render('login.html')
 
     @session_manange
     def record_log(self, content=""):
@@ -112,5 +112,6 @@ class DefaultHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         logging.info(
-            "revere index url : %s" % self.reverse_url("comm_report_index"))
-        self.redirect(self.reverse_url("comm_report_index"))
+            "revere index url : %s" % "index.html")
+        self.render("index.html",
+                    data=dict(username=self.current_user.username))

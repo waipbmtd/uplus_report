@@ -1,3 +1,8 @@
 [default]
 host = 192.168.1.185:8180
-image_list = uplus-report/test_get_pic
+report_album_image_list = uplus-report/api/get_pic_list
+report_message_next = uplus-report/api/get_next_report
+report_close_api = uplus-report/close/mt/%(mod_type)s/uid/%(u_id)s
+report_silence_api = uplus-report/silence/mt/%(mod_type)s/uid/%(u_id)s
+report_delete_resource = uplus-report/del
+report_punish_business  = uplus-report/

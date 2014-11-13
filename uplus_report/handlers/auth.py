@@ -20,7 +20,7 @@ class LoginHandler(BaseHandler):
         if self.current_user:
             self.redirect('/')
             return 0
-        return self.render("index.html", next=self.get_argument(
+        return self.render("login.html", next=self.get_argument(
             'next', default="/"))
 
     @session_manange

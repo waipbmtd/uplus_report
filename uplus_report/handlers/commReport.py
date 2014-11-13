@@ -10,6 +10,7 @@ from utils import WebRequrestUtil
 
 API_HOST = config.api.host
 
+
 class CommonReportIndexHandler(BaseHandler):
     """
     普通消息首页
@@ -37,11 +38,11 @@ class AlbumImageReportListHandler(BaseHandler):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.LIST_ALBUM_IMAGE,
                                            parameters=dict(
-                                           csid=self.current_user.id,
-                                           size=20))
+                                               csid=self.current_user.id,
+                                               size=20))
         return self.send_success_json(json.loads(data))
 
-    post=get
+    post = get
 
 
 class AlbumImageHandler(BaseHandler):
@@ -49,6 +50,7 @@ class AlbumImageHandler(BaseHandler):
     普通举报相册图片
     """
     ALBUM_IMAGE = config.api.report_album_image
+
     @tornado.web.authenticated
     @session_manange
     def get(self):
@@ -69,5 +71,5 @@ class MessageReportNextHandler(BaseHandler):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.NEXT_MESSAGE,
                                            parameters=dict(
-                                           csid=self.current_user.id))
+                                               csid=self.current_user.id))
         return self.send_success_json(json.loads(data))
