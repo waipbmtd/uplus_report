@@ -5,7 +5,7 @@ import tornado
 import tornado.web
 from handlers.base import BaseHandler
 import config
-from models import serverApiConstant, reportConstant
+from models import reportConstant
 from utils import WebRequrestUtil
 
 API_HOST = config.api.host
@@ -46,6 +46,8 @@ class PunishBaseHandler(BaseHandler):
             thumb_url=self.get_argument("thumb_url", ""),
             #消息ID
             msg_id=self.get_argument("msg_id", ""),
+            #文字：
+            content=self.get_argument("content", ""),
             #拥有者ID
             owner=self.get_argument("owner", ""),
             #客服id
@@ -61,7 +63,7 @@ class PunishBaseHandler(BaseHandler):
             timedelta=self.v("timedelta"),
             rid=self.v("rid"),
             cid=self.v("cid"),
-            reporter=self.v("report_id")
+            reporter=self.v("reporter_id")
         )
 
     @property
@@ -76,11 +78,27 @@ class PunishBaseHandler(BaseHandler):
             msgId=self.v("msg_id"),
             timedelta=self.v("timedelta"),
             cid=self.v("cid"),
-            reporter=self.v("report_id")
+            reporter=self.v("reporter_id")
         )
 
-    def log_record(self):
-        log_format = "%(punish) s%(mod)s (%(uid)s)"
+    def log_record_pass(self):
+        log_format = "%(passed)s (%(uid)s)"
+        content = log_format % dict(
+            uid=str(self.v("uid")),
+            passed=reportConstant.REPORT_PUNISH_PASSED
+        )
+
+        if self.v("content"):
+            content += " " + self.v("content").encode('utf8')
+        if self.v("url"):
+            content += " %s" % str(self.v("url"))
+        if self.v("thumb_url"):
+            content += " %s" % str(self.v("thumb_url"))
+
+        self.record_log(content)
+
+    def log_record_close(self):
+        log_format = "%(mod)s %(punish)s (%(uid)s)"
         content = log_format % dict(
             mod=reportConstant.REPORT_MODULE_TYPES.get(
                 int(self.v("module_type"))),
@@ -89,15 +107,74 @@ class PunishBaseHandler(BaseHandler):
             uid=str(self.v("uid"))
         )
         if self.v("timedelta"):
-            content += str(" %sHOURS" % self.v("timedelta"))
+            content += str(" %sHOURS" % str(self.v("timedelta")))
+
+        self.record_log(content)
+
+    log_record_silence = log_record_close
+
+    def log_record_delete(self):
+        log_format = "%(mod)s %(punish)s (%(uid)s)"
+        content = log_format % dict(
+            mod=reportConstant.REPORT_MODULE_TYPES.get(
+                int(self.v("module_type"))),
+            punish=reportConstant.REPORT_PUNISHES.get(
+                int(reportConstant.REPORT_PUNISH_DELETE_RESOURCE)),
+            uid=str(self.v("uid"))
+        )
+        if self.v("content"):
+            content += " " + self.v("content").encode('utf8')
         if self.v("url"):
-            content += " %s" % self.v("url")
+            content += str(" %s" % str(self.v("url")))
         if self.v("thumb_url"):
-            content += " %s" % self.v("thumb_url")
+            content += str(" %s" % str(self.v("thumb_url")))
         self.record_log(content)
 
     def v(self, key):
         return self.args.get(key)
+
+
+class PassedHandler(PunishBaseHandler):
+    PASS_API = config.api.report_pass
+
+    def parse_argument(self):
+        self.args = dict(
+            # 举报人id
+            reporter_id=self.get_argument("reporter"),
+            # 被举报人id
+            uid=self.get_argument("u_id"),
+            #report记录id
+            rid=self.get_argument("id"),
+
+            #举报入口
+            mod=self.get_argument("mod"),
+            # 资源url
+            url=self.get_argument("url", ""),
+            #资源缩略图
+            thumb_url=self.get_argument("thumb_url", ""),
+            #消息ID
+            msg_id=self.get_argument("msg_id", ""),
+            #文字：
+            content=self.get_argument("content", ""),
+            #拥有者ID
+            owner=self.get_argument("owner", ""),
+            #客服id
+            cid=self.current_user.id
+        )
+
+    def post(self):
+        self.parse_argument()
+        server_api = self.PASS_API
+
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           server_api,
+                                           parameters=dict(
+                                               rid=self.v("rid"),
+                                               cid=self.current_user.id,
+                                               reporter=self.v("reporter_id")
+                                           ))
+        self.log_record_pass()
+        return self.send_success_json(json.loads(data))
 
 
 class PunishAdapterHandler(PunishBaseHandler):
@@ -125,6 +202,9 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._punish_group()
         elif module_type == reportConstant.REPORT_MODULE_TYPE_USER:
             data = self._punish_user()
+
+        if not data:
+            return self.send_error_json()
 
         return self.send_success_json(json.loads(data))
 
@@ -158,8 +238,8 @@ class PunishAdapterHandler(PunishBaseHandler):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            server_api,
                                            parameters=self.feature_parameter)
+        self.log_record_close()
 
-        self.log_record()
         self._delete_resource()
         return data
 
@@ -170,9 +250,8 @@ class PunishAdapterHandler(PunishBaseHandler):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            server_api,
                                            parameters=self.feature_parameter)
-
-        self.log_record()
-        self.delete_resource()
+        self.log_record_silence()
+        self._delete_resource()
         return data
 
     def _dismiss_group(self):
@@ -189,6 +268,6 @@ class PunishAdapterHandler(PunishBaseHandler):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            server_api,
                                            parameters=self.resource_parameter)
-        self.log_record()
+        self.log_record_delete()
         return data
 

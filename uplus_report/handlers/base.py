@@ -40,7 +40,7 @@ class BaseHandler(tornado.web.RequestHandler):
         backend.set_encoder_options("json", default=util.dthandler,
                                     ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        result = {'ret': 1, 'code': code, 'info': info}
+        result = {'ret': 0, 'code': code, 'info': info}
         result.update(data)
         self.write(jsonpickle.encode(result,
                                      unpicklable=False,
@@ -52,7 +52,7 @@ class BaseHandler(tornado.web.RequestHandler):
         backend.set_encoder_options("json", default=util.dthandler,
                                     ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        result = {'ret': 0, 'code': code, 'info': info}
+        result = {'ret': 1, 'code': code, 'info': info}
         result.update(data)
         self.write(jsonpickle.encode(result,
                                      unpicklable=False,

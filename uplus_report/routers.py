@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*-
 from tornado.web import url
 
-from handlers import base, auth, commReport, constantenu,punish
+from handlers import base, auth, commReport, constantenu, punish, passed
 
 routers = [
     # 首页
@@ -25,15 +25,14 @@ routers = [
     #获取像册图片列表
     url(r"/comm_report/album_image/list",
         commReport.AlbumImageReportListHandler),
-
-
     #获取下一个被举报的消息
     url(r"/comm_report/message/next", commReport.MessageReportNextHandler),
 
+    #审核通过
+    url(r"/comm_report/pass", punish.PassedHandler),
+    #处罚
+    url(r"/punish", punish.PunishAdapterHandler),
     #处罚关联
     url(r'/punish_enum_relation',
-        constantenu.PunishRelationHandler),
-
-    #处罚
-    url(r"/punish", punish.PunishAdapterHandler)
+        constantenu.PunishRelationHandler)
 ]
