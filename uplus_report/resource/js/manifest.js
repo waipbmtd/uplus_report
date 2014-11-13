@@ -1,14 +1,16 @@
+var _ = window;
+
 ;require.config({
-	// baseUrl: '/resource',
+	baseUrl: _.url.resource,
 	paths: {
-		jQuery: '/resource/js/jQuery.min',
-		less: '/resource/js/less.min',
-		doT: '/resource/js/doT.min',
-		loaded: '/resource/js/imagesloaded.pkgd.min',
-		masonry: '/resource/js/masonry.min',
-		fancybox: '/resource/plugin/fancybox/jquery.fancybox.pack',
-		Youjia: '/resource/js/Youjia',
-		action: '/resource/js/action'
+		jQuery: 'js/jQuery.min',
+		less: 'js/less.min',
+		doT: 'js/doT.min',
+		loaded: 'js/imagesloaded.pkgd.min',
+		masonry: 'js/masonry.min',
+		fancybox: 'plugin/fancybox/jquery.fancybox.pack',
+		Youjia: 'js/Youjia',
+		action: 'js/action'
 	}
 }),
 

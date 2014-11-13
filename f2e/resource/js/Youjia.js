@@ -345,12 +345,12 @@ result = {
 					type: 'get',
 					url: options.html,
 					success: function(html){
-						options.callback( (options.render = doT.template( html )({ '$data': data }), options) );
+						options.callback( (options.render = doT.template( html )(data), options) );
 					}
 				});
 				return;
 			}
-			options.callback( (options.render = doT.template( $(options.element).html() )({ '$data': data }), options) );
+			options.callback( (options.render = doT.template( $(options.element).html() )(data), options) );
 		};
 
 		if( !_.doT ){
@@ -363,6 +363,17 @@ result = {
 				dataType: options.dataType,
 				url: options.data,
 				success: function( data ){
+					data = $.isType(data, 'string') ?
+						function(data){
+							try{
+								data = $.parseJSON(data);
+							}
+							catch(e){
+								data = eval('(' + data + ')');
+							}
+							return data;
+						}( data ):
+						data;
 					options.action( $.isType(data, 'string') ? $.parseJSON(data) : data );
 				}
 			});

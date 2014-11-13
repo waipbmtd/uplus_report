@@ -4,7 +4,7 @@
  * All Function Is In Plus
  * ** *** **** ***** **** *** ** *
  */
-+function( kit, masonry, active ){
++function( kit, masonry, report, active ){
 
 var
 	/* Kit Element */
@@ -12,6 +12,9 @@ var
 
 	/* Masonry Element */
 	iMasonry = $(masonry),
+
+	/* Report Element */
+	iReport = $(report),
 
 	/* Data-Function In Kit */
 	kitFunction = {
@@ -22,7 +25,7 @@ var
 		getImageData: function(it){
 			$.renderHTML({
 				element: masonry,
-				data: '/resource/database/try.json',
+				data: '/resource/database/data-img.json',
 				html: '/template/albums.html',
 				type: 'get',
 				dataType: 'script',
@@ -79,7 +82,22 @@ var
 
 		/* Get Data */
 		getInfoData: function(it){
+			$.renderHTML({
+				element: report,
+				data: '/resource/database/data-info.json',
+				html: '/template/profile.html',
+				type: 'get',
+				dataType: 'json',
+				callback: function(options){
 
+					// Append Html To Element
+					$(options.element).html( options.render );
+
+					console.log(options);
+					alert(options);
+
+				}
+			});
 		}
 
 		/* Choose Un */
@@ -176,7 +194,7 @@ var
 	/* Fancy Pop */
 	$.fancyPop();
 
-}( '.kit', '.masonry', 'active' );
+}( '.kit', '.masonry', '.report', 'active' );
 
 $.extend({
 	fancyFn: {

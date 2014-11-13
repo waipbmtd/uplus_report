@@ -5,6 +5,9 @@ _.path = {
 	// Base Root
 	root: _.location.protocol + '//' + _.location.host,
 
+	// Base Resource
+	resource: _.url.resource || '',
+
 	// Params
 	params: function(params){
 			params = params.match(/\w+\=\w+/g);
