@@ -1,0 +1,55 @@
+<div class="audit-operat">
+	<form data-submit="ajax" data-callback="operatSubmit" method="post" action="/">
+		<ul>
+			<li>
+				<label data-name="illegal_type"><i class="sign">*</i>违规类型：</label>
+				<div>
+					<menu>
+						<button type="button" data-option="1">广告</button>
+						<button type="button" data-option="2">色情</button>
+						<button type="button" data-option="3">敏感话题</button>
+					</menu>
+				</div>
+			</li>
+			<li>
+				<label data-name="punish_mode"><i class="sign">*</i>处罚业务单元：</label>
+				<div>
+					<menu>
+						<button type="button" data-option="1">大厅</button>
+						<button type="button" data-option="2">秀场</button>
+						<button type="button" data-option="3">群</button>
+						<button type="button" data-option="4">用户</button>
+					</menu>
+				</div>
+			</li>
+			<li>
+				<label><i class="sign">*</i>处罚类型：</label>
+				<div>
+					<menu>
+						<button type="button">禁言</button>
+						<span class="input-time-hour">
+							<input type="text" />
+							<bdo>小时</bdo>
+						</span>
+						<button type="button">关闭秀场</button>
+						<button type="button">删除资源</button>
+						<button type="button">登录限制</button>
+						<button type="button">解散群</button>
+						<button type="button">踢出群</button>
+					</menu>
+				</div>
+			</li>
+			<li>
+				<label>备注：</label>
+				<div>
+					<textarea rows="6" placeholder="处罚详细原因"></textarea>
+				</div>
+			</li>
+		</ul>
+		<div class="form-submit">
+			<hr class="line-gray" />
+			<button type="button" class="btn-gray">取消</button>
+			<button type="submit" class="btn-orange">提交处罚</button>
+		</div>
+	</form>
+</div>
