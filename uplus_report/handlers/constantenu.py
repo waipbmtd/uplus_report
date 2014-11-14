@@ -2,6 +2,7 @@
 # coding=utf-8
 import tornado
 import tornado.web
+
 from handlers.base import BaseHandler
 from models import reportConstant
 
@@ -46,6 +47,7 @@ class PunishRelationHandler(BaseHandler):
     """
     像册处罚关联表
     """
+
     @tornado.web.authenticated
     def get(self):
         enum_dic = reportConstant.PUNISH_RELATION
@@ -56,6 +58,7 @@ class EntranceModEnumHandler(BaseHandler):
     """
     MOD取值
     """
+
     @tornado.web.authenticated
     def get(self):
         enum_dic = reportConstant.MOD_ENUM
@@ -63,6 +66,10 @@ class EntranceModEnumHandler(BaseHandler):
 
 
 class ALLEnumHandler(BaseHandler):
+    """
+    获取所有接口
+    """
+
     @tornado.web.authenticated
     def get(self):
         ent_enum_dic = reportConstant.MOD_ENUM
@@ -70,5 +77,5 @@ class ALLEnumHandler(BaseHandler):
         request = reportConstant.REQUEST_TYPES
 
         return self.json(dict(mod=ent_enum_dic,
-                              type = reasons,
+                              type=reasons,
                               ret=request))

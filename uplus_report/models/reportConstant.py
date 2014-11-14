@@ -47,6 +47,13 @@ REPORT_PUNISHES = {
 
 REPORT_PUNISH_PASSED = "审核通过"
 
+REPORT_HALL_OPEN_MOUTH = "大厅禁言解除"
+
+REPORT_SHOW_OPEN_MOUTH = "秀场禁言解除"
+REPORT_SHOW_UNLOCK = "秀场解封"
+
+REPORT_USER_UNLOCK = "用户解封"
+
 # 关联关系
 PUNISH_RELATION = {
     "reasons": [dict(id=x, title=REPORT_REASONS[x]) for x in REPORT_REASONS],

@@ -70,3 +70,14 @@ class MessageReportNextHandler(BaseHandler):
                                            parameters=dict(
                                                csid=self.current_user.id))
         return self.send_success_json(json.loads(data))
+
+
+class RemainReportCountHandler(BaseHandler):
+    REMAIN_REPORT = config.api.report_remain_count
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self):
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           self.REMAIN_REPORT)
+        return self.send_success_json(json.loads(data))
