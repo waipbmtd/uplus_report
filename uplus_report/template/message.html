@@ -1,0 +1,70 @@
+<dl>
+	<dt>
+		<bdo>{{!= $.escape(it.data.mod, 'mod') }}</bdo>
+		<label data-id="19850913"><span>ID：</span>19850913</label>
+		<label data-reporter="{{!= it.data.reporter }}"><span>举报人：</span>{{!= it.data.reporter }}</label>
+		<label data-buid="{{!= it.data.buid}}"><span>被举报人：</span>{{!= it.data.buid}}</label>
+		<label data-mod="{{!= it.data.mod }}"><span>模式：</span>{{!= it.data.mod }}</label>
+		<label data-type="reason"><span>原因：</span>{{!= it.data.type }}</label>
+	</dt>
+	<dd>
+		<div class="profile" data-mid="{{!= it.data.profile.mid }}" data-oid="{{!= it.data.profile.oid }}">
+			<h2>{{!= it.data.profile.name }}</h2>
+			<p>{{!= it.data.profile.desc }}</p>
+			<menu>
+				<button class="yellow" type="button" data-fancy="/get_template?page=operat.html" data-title="举报处理" data-callback="operatSelect">操作</button>
+			</menu>
+		</div>
+		<div class="divider"></div>
+		<div class="proinfo">
+			<table class="table-theme">
+				<thead>
+					<tr>
+						<th width="10%">编号</th>
+						<th width="40%">内容</th>
+						<th width="20%">举报人ID</th>
+						<th width="10%">消息类型</th>
+						<th width="20%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{!~ it.data.msgs:item }}
+					<tr>
+						<td>{{!= item.msgid }}</td>
+
+						{{!? item.msg_type == 'text' }}
+						<!-- 消息.文本 -->
+						<td>
+							<i class="glyphicon glyphicon-list-alt"></i>
+							{{!= item.content }}
+						</td>
+						{{!?}}
+
+						{{!? item.msg_type == 'audio' }}
+						<!-- 消息.音频 -->
+						<td>
+							<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
+						</td>
+						{{!?}}
+
+						{{!? item.msg_type == 'video' }}
+						<!-- 消息.视频 -->
+						<td>
+							<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-film"></i>点击访问视频</a>
+						</td>
+						{{!?}}
+
+						<td>{{!= item.senderid }}</td>
+						<td>{{!= item.msg_type }}</td>
+						<td>
+							<menu>
+								<button class="yellow" type="button">操作</button>
+							</menu>
+						</td>
+					</tr>
+					{{!~ }}
+				</tbody>
+			</table>
+		</div>
+	</dd>
+</dl>

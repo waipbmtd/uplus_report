@@ -1,9 +1,9 @@
 <ul class="album">
-	<%~ it.$data:item %>
-		<li data-id="<%=item.id %>">
-			<span class="active">
-				<img src="<%=item.url %>">
+	{{!~ it.data:item }}
+		<li>
+			<span class="active" data-id="{{!=item.id }}">
+				<img src="{{!=item.url }}">
 			</span>
 		</li>
-	<%~ %>
+	{{!~ }}
 </ul>

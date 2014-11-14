@@ -1,8 +1,8 @@
 <div class="audit-operat">
-	<form data-submit="ajax" data-callback="operatSubmit" method="post" action="/">
+	<form data-submit="ajax" data-callback="operatSubmit" method="post" action="/punish">
 		<ul>
 			<li>
-				<label data-name="illegal_type"><i class="sign">*</i>违规类型：</label>
+				<label data-name="reason"><i class="sign">*</i>违规类型：</label>
 				<div>
 					<menu>
 						<button type="button" data-option="1">广告</button>
@@ -12,7 +12,7 @@
 				</div>
 			</li>
 			<li>
-				<label data-name="punish_mode"><i class="sign">*</i>处罚业务单元：</label>
+				<label data-name="module_type"><i class="sign">*</i>处罚业务单元：</label>
 				<div>
 					<menu>
 						<button type="button" data-option="1">大厅</button>
@@ -23,26 +23,26 @@
 				</div>
 			</li>
 			<li>
-				<label><i class="sign">*</i>处罚类型：</label>
+				<label data-name="punish_type"><i class="sign">*</i>处罚类型：</label>
 				<div>
 					<menu>
-						<button type="button">禁言</button>
+						<button type="button" data-option="101">禁言</button>
 						<span class="input-time-hour">
-							<input type="text" />
+							<input type="text" data-name="timedelta" data-value="-1" />
 							<bdo>小时</bdo>
 						</span>
-						<button type="button">关闭秀场</button>
-						<button type="button">删除资源</button>
-						<button type="button">登录限制</button>
-						<button type="button">解散群</button>
-						<button type="button">踢出群</button>
+						<button type="button" data-option="102">关闭秀场</button>
+						<button type="button" data-option="103">删除资源</button>
+						<button type="button" data-option="104">登录限制</button>
+						<button type="button" data-option="105">解散群</button>
+						<button type="button" data-option="106">踢出群</button>
 					</menu>
 				</div>
 			</li>
 			<li>
 				<label>备注：</label>
 				<div>
-					<textarea rows="6" placeholder="处罚详细原因"></textarea>
+					<textarea rows="6" placeholder="处罚详细原因" data-name="memo"></textarea>
 				</div>
 			</li>
 		</ul>

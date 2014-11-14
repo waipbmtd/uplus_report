@@ -1,5 +1,9 @@
 ;(function(_, $, undefined){
 
+/* !!
+ * 路径
+ * ** *** **** ***** **** *** ** *
+ */
 _.path = {
 
 	// Base Root
@@ -7,6 +11,11 @@ _.path = {
 
 	// Base Resource
 	resource: _.url.resource || '',
+
+	// Base Template
+	template: function(page){
+		return _.path.root + '/get_template?page=' + page + '.html';
+	},
 
 	// Params
 	params: function(params){
@@ -29,6 +38,31 @@ _.path = {
 	hash: _.location.hash.replace(/^#/, '')
 },
 
+/* !!
+ * 数据接口
+ * ** *** **** ***** **** *** ** *
+ */
+_.api = {
+	// 获取Album
+	albums: '/comm_report/album_image/list',
+	// 获取Message
+	message: '/comm_report/message/next'
+},
+
+/* !!
+ * 模板接口
+ * ** *** **** ***** **** *** ** *
+ */
+_.tpl = {
+	albums: _.path.template('albums'),
+	message: _.path.template('message'),
+	operat: _.path.template('operat')
+},
+
+/* !!
+ * 节点对象
+ * ** *** **** ***** **** *** ** *
+ */
 _.dom = {
 	win:     $(window),
 	doc:     $(document),
@@ -39,6 +73,19 @@ _.dom = {
 	section: $('section')
 },
 
+/* !!
+ * 翻译
+ * ** *** **** ***** **** *** ** *
+ */
+_.enum = {},
+$.get('/enum/all', function(data){
+	_.enum = data;
+}),
+
+/* !!
+ * 事件
+ * ** *** **** ***** **** *** ** *
+ */
 _.evt = [
 	{
 		click: 'touchstart',
@@ -66,6 +113,21 @@ _.evt = [
 $.extend({
 	isType: function(data, type){
 		return !!(typeof data == type);
+	},
+	inGroup: function(item, data){
+		if( $.isType(data, 'array') ){
+			return !!~$.inArray(item, data);
+		}
+		if( $.isType(data, 'object') ){
+			return !!(item in data);
+		}
+		if( $.isType(data, 'string') ){
+			return !!~data.indexOf(item);
+		}
+		return undefined;
+	},
+	escape: function(word, mode){
+		return _.enum[mode][word];
 	},
 	drag: function(options){
 		
@@ -267,48 +329,50 @@ $.extend({
 	},
 	checkResult: function(result, callback){
 		result = result || {}, callback = callback || $.noop;
-		if( result.error ){
-			callback(result), $.trace( result.message || '错误' );
-			return false;
-		}
+		return result.ret == 1 ? ($.trace( result.info || '错误' ), false) : (callback(result), true);
 	},
 	formSubmit: function(options){
 		options = options || {}
-		, options.form = options.form || 'data-submit';
+		, options.form = options.form || 'data-submit'
+		, options.database = options.database || undefined
+		, options.instead = $.isType(options.instead, 'function') ? options.instead : undefined;
 
 		$.each( $('[' + options.form + ']'), function(x, form){
 			form = $(form);
 
-			var formData = $.getData( form ),
-				option = {
-					name: options.name || 'data-name',
-					value: options.value || 'data-value',
-					method: options.method || formData.method || form.attr('method'),
-					type: formData.submit,
-					url: options.url || formData.action || form.attr('action'),
-					callback: formData.callback ? $.formFn[ formData.callback ] : $.noop,
-					data: {}
-				};
-
 			form.on('submit', function(){
 
+				var formData = $.getData( form ),
+					option = {
+						name: options.name || 'data-name',
+						value: options.value || 'data-value',
+						method: options.method || formData.method || form.attr('method'),
+						type: formData.submit,
+						instead: options.instead,
+						database: options.database,
+						url: options.url || formData.action || form.attr('action'),
+						callback: formData.callback ? $.formCall[ formData.callback ] : $.noop,
+						data: {}
+					};
+
+				$.each( form.find('[' + option.name + ']'), function(i, item){
+					item = $(item), option.data[ item.attr( option.name ) ] = item.attr( option.value );
+				});
+
+				if( option.instead ){
+					option.instead( option );
+					return false;
+				}
+
 				if( option.type == 'ajax' ){
-					$.each( form.find('[' + option.name + ']'), function(i, item){
-						item = $(item), option.data[ item.attr( option.name ) ] = item.attr( option.value );
-					});
 					$.ajax({
 						type: option.method,
 						url: option.url,
 						data: option.data,
 						success: function(result){
-result = {
-	error: true,
-	message: 'This is a Error Message !!'
-};
 							$.checkResult(result, function( result ){
 								option.callback( result );
 							});
-
 						}
 					});
 
@@ -348,12 +412,12 @@ result = {
 					type: 'get',
 					url: options.html,
 					success: function(html){
-						options.callback( (options.render = doT.template( html )({ '$data': data }), options) );
+						options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
 					}
 				});
 				return;
 			}
-			options.callback( (options.render = doT.template( $(options.element).html() )({ '$data': data }), options) );
+			options.callback( (options.render = doT.template( $(options.element).html() )(data), (options.database = data, options)) );
 		};
 
 		if( !_.doT ){
@@ -366,7 +430,21 @@ result = {
 				dataType: options.dataType,
 				url: options.data,
 				success: function( data ){
-					options.action( $.isType(data, 'string') ? $.parseJSON(data) : data );
+					data = $.isType(data, 'string') ?
+						function(data){
+							try{
+								data = $.parseJSON(data);
+							}
+							catch(e){
+								data = eval('(' + data + ')');
+							}
+							return data;
+						}( data ):
+						data;
+
+					$.checkResult(data, function(){
+						options.action( data );
+					});
 				}
 			});
 			return;
@@ -429,15 +507,46 @@ result = {
 	},
 	trace: function(text){
 		$.fancybox.open({
-			content: text,
+			content: '<div class="trace">' + text + '</div>',
+			minHeight: 20,
 			closeBtn: false
 		}),
 		$.timeout({
-			time: 3000,
+			time: 2000,
 			callback: function(){
 				$.fancybox.close();
 			}
 		});
+	},
+	confirm: function(text, callback){
+		callback = callback || $.noop;
+
+		var html = '<div class="confirm">'
+				 + '<p>' + text + '</p>'
+				 + '<hr class="line-gray" />'
+				 + '<button type="button" class="btn-gray">取消</button>'
+				 + '<button type="button" class="btn-green">确定</button>'
+				 + '</div>'
+
+		$.fancybox.open({
+			content: html,
+			closeBtn: false,
+			afterShow: function(){
+
+				$.each( $('.confirm'), function(i, dialog){
+					dialog = $(dialog),
+					dialog.find('button:eq(0)').on(_.evt.click, function(){
+						$.fancybox.close();
+					}),
+					dialog.find('button:eq(1)').on(_.evt.click, function(){
+						if( callback() ){
+							$.fancybox.close();
+						}
+					})
+				});
+
+			}
+		})
 	},
 	fancyPop: function(options){
 		options = options || {}
@@ -457,7 +566,7 @@ result = {
 				type: 'ajax',
 				title: option.title,
 				closeClick: option.closeClick,
-				afterShow: $.fancyFn[ option.callback ],
+				afterShow: $.fancyCall[ option.callback ],
 				helpers: {
 					title: {
 						type: 'inside',
@@ -466,6 +575,57 @@ result = {
 				}
 			});
 		});
+	},
+	punish: function(options, callback){
+		options = options || {}
+		, options.callback = options.callback || $.noop
+
+		// Must
+		, options.module_type = options.module_type || undefined
+		, options.punish_type = options.punish_type || undefined
+		, options.reason = options.reason || undefined
+		, options.reporter = options.reporter || undefined
+		, options.u_id = options.u_id || undefined
+		, options.id = options.id || undefined
+		, options.mod = options.mod || undefined
+
+		// Optional
+		, options.timedelta = options.timedelta || ''
+		, options.memo = options.memo || ''
+		, options.url = options.url || ''
+		, options.thumb_url = options.thumb_url || ''
+		, options.module_id = options.module_id || ''
+		, options.msg_id = options.msg_id || ''
+		, options.owner = options.owner || '';
+
+		$.ajax({
+			type: 'post',
+			data: options,
+			url: '/punish',
+			success: function(result){
+				$.checkResult(result, function( result ){
+					callback( result );
+				});
+			}
+		});
+	},
+	recursivePunish: function(options, often){
+
+		if( !$.isType(options, 'object') ){
+			return;
+		}
+console.log(options);
+console.log('===== ===== =====');
+console.log(often);
+alert( options.length );
+		if( options.length ){
+			$.punish( $.mergeJSON( options.shift(), often ), function(){
+				$.recursivePunish( options );
+			});
+		}
+
+		return false;
+
 	}
 });
 

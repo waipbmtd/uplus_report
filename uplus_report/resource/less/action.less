@@ -230,6 +230,11 @@ aside{
 section{
 	.no-select;
 	background: @color-main;
+
+	.masonry{
+		width: 900px;
+	}
+
 	.kit{
 		z-index: 1;
 		.fixed;
@@ -313,8 +318,15 @@ section{
 				border-bottom: 1px solid @color-frivo;
 				background: @color-white;
 
+				bdo{
+					padding: @distance / 3 @distance / 2;
+					border-radius: @radius;
+					color: @color-white;
+					background: @color-dim;
+				}
+
 				label{
-					margin-right: 2em;
+					margin-left: 2em;
 				}
 			}
 			dd{
@@ -381,9 +393,8 @@ section{
 }
 
 .audit-operat{
-	min-width: 640px; min-height: 360px;
+	min-width: 640px; min-height: 300px;
 	.relative;
-	font-size: 1.1em;
 	padding-bottom: 6 * @distance;
 
 	li{
@@ -426,6 +437,7 @@ section{
 					border-radius: @radius 0 0 @radius;
 				}
 				bdo{
+					line-height: 20px;
 					padding: 0 .5em;
 					border-radius: 0 @radius @radius 0;
 					color: #000;
