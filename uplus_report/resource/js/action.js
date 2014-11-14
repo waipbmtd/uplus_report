@@ -260,14 +260,73 @@ var
 /* Extend Callback */
 $.extend({
 	fancyCall: {
-		operatSelect: function(){
+		// Operat Base
+		operatBase: function(){
+
+			var
+				form = $('.audit-operat form'),
+				associates = 'data-associate',
+				assos = 'data-assos';
+
+			// 关联点击事件
+			form.find('[' + associates + ']').on( _.evt.click, function(e){
+				var me = $(this),
+					data = me.attr( associates );
+
+				$.each(form.find('[' + assos + ']').hide(), function(i, item){
+					item = $(item);
+
+					if( !!~$.inArray(data, item.attr( assos ).split(' ')) ){
+						item.show();
+					}
+				});
+
+				form.find('[' + assos + ']:not(:hidden):eq(0)').trigger( _.evt.click );
+			});
+
+			// Input Press
+			$.sameInput({
+				input: '.audit-operat form [data-name=timedelta]',
+				onKeydown: function(e){
+					var code = e.keyCode;
+					if( (code == 8) || (code > 47 && code < 58) ){
+						return true;
+					}
+					return false;
+				},
+				onKeyup: function(e){
+					e.target.setAttribute('data-value', e.target.value)
+				}
+			});
+
+			// Tab 切换事件
 			$.taber({
 				container: '.audit-operat form menu',
 				menus: 'button',
 				callback: function(it, index){
-					it = $(it), it.closest('li').find('[data-name]:eq(0)').attr('data-value', it.attr('data-option'));
+					it = $(it);
+
+					var
+						parent = it.closest('li'),
+						next = it.next();
+
+					parent.find('[data-name]:eq(0)').attr('data-value', it.attr('data-option')),
+					parent.find('span').hide();
+
+					if( next.is('span') ){
+						next.show();
+					}
 				}
 			});
+		},
+		// Operat Albums
+		operatSelect: function(){
+
+			// 隐藏不可用项
+			// $('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+
+			// Default UI
+			$.fancyCall.operatBase();
 
 			// Get Selected Item's IDs
 			var database = [];
@@ -283,9 +342,37 @@ $.extend({
 			$.formSubmit({
 				database: database,
 				instead: function(option){
+					// Punish - 递归
 					$.recursivePunish( option.database, option.data );
 				}
 			});
+		},
+		// Operat Dating
+		operatSelect_dating: function(){
+
+			// 隐藏不可用项
+			$('.audit-operat form li:eq(1)').find('button:eq(1), button:eq(2), button:eq(3)').hide();
+
+			// Default UI
+			$.fancyCall.operatBase();
+		},
+		// Operat Xiuchang
+		operatSelect_xiuchang: function(){
+
+			// 隐藏不可用项
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(2)').hide();
+
+			// Default UI
+			$.fancyCall.operatBase();
+		},
+		// Operat Qun
+		operatSelect_qun: function(){
+
+			// 隐藏不可用项
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+
+			// Default UI
+			$.fancyCall.operatBase();
 		}
 	},
 	formCall: {

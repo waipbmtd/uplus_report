@@ -127,7 +127,16 @@ $.extend({
 		return undefined;
 	},
 	escape: function(word, mode){
-		return _.enum[mode][word];
+		if( $.isType(word, 'number') || $.isType(word, 'string') ){
+			return _.enum[mode][word];
+		}
+		if( $.isType(word, 'object') ){
+			var result = '';
+			$.each(word, function(i, v){
+				result += (i ? ', ' : '') + _.enum[mode][v];
+			});
+			return result;
+		}
 	},
 	drag: function(options){
 		
@@ -356,7 +365,10 @@ $.extend({
 					};
 
 				$.each( form.find('[' + option.name + ']'), function(i, item){
-					item = $(item), option.data[ item.attr( option.name ) ] = item.attr( option.value );
+					item = $(item);
+					if( !item.is(':hidden') ){
+						option.data[ item.attr( option.name ) ] = item.attr( option.value );
+					}
 				});
 
 				if( option.instead ){
@@ -576,6 +588,30 @@ $.extend({
 			});
 		});
 	},
+	sameInput: function(options){
+		options = options || {}
+		, options.input = $(options.input || undefined)
+		, options.onKeyup = options.onKeyup || undefined
+		, options.onKeydown = options.onKeydown || undefined
+		, options.onKeypress = options.onKeypress || undefined;
+
+		if( options.onKeyup ){
+			options.input.on('keyup', function(e){
+				return options.onKeyup( e );
+			});
+		}
+		if( options.onKeydown ){
+			options.input.on('keydown', function(e){
+				return options.onKeydown( e );
+			});
+		}
+		if( options.onKeypress ){
+			options.input.on('keypress', function(e){
+				return options.onKeypress( e );
+			});
+		}
+
+	},
 	punish: function(options, callback){
 		options = options || {}
 		, options.callback = options.callback || $.noop
@@ -618,6 +654,7 @@ console.log(options);
 console.log('===== ===== =====');
 console.log(often);
 alert( options.length );
+return;
 		if( options.length ){
 			$.punish( $.mergeJSON( options.shift(), often ), function(){
 				$.recursivePunish( options );

@@ -15,10 +15,10 @@
 				<label data-name="module_type"><i class="sign">*</i>处罚业务单元：</label>
 				<div>
 					<menu>
-						<button type="button" data-option="1">大厅</button>
-						<button type="button" data-option="2">秀场</button>
-						<button type="button" data-option="3">群</button>
-						<button type="button" data-option="4">用户</button>
+						<button type="button" data-option="1" data-associate="dt">大厅</button>
+						<button type="button" data-option="2" data-associate="xc">秀场</button>
+						<button type="button" data-option="3" data-associate="qn">群</button>
+						<button type="button" data-option="4" data-associate="us">用户</button>
 					</menu>
 				</div>
 			</li>
@@ -26,16 +26,20 @@
 				<label data-name="punish_type"><i class="sign">*</i>处罚类型：</label>
 				<div>
 					<menu>
-						<button type="button" data-option="101">禁言</button>
+						<button type="button" data-option="101" data-assos="dt">禁言</button>
 						<span class="input-time-hour">
 							<input type="text" data-name="timedelta" data-value="-1" />
 							<bdo>小时</bdo>
 						</span>
-						<button type="button" data-option="102">关闭秀场</button>
-						<button type="button" data-option="103">删除资源</button>
-						<button type="button" data-option="104">登录限制</button>
-						<button type="button" data-option="105">解散群</button>
-						<button type="button" data-option="106">踢出群</button>
+						<button type="button" data-option="102" data-assos="xc">关闭秀场</button>
+						<button type="button" data-option="103" data-assos="dt xc qn us">删除资源</button>
+						<button type="button" data-option="104" data-assos="us">登录限制</button>
+						<span class="input-time-hour">
+							<input type="text" data-name="timedelta" data-value="-1" />
+							<bdo>小时</bdo>
+						</span>
+						<button type="button" data-option="105" data-assos="qn">解散群</button>
+						<button type="button" data-option="106" data-assos="qn">踢出群</button>
 					</menu>
 				</div>
 			</li>
