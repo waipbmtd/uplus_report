@@ -21,6 +21,8 @@ routers = [
     url(r"/enum/mod", constantenu.ModEnumHandler),
     #获取举报处理类型
     url(r"/enum/punish", constantenu.PunishEnumHandler),
+    #f
+    url(r"/enum/entrance_mod", constantenu.EntranceModEnumHandler),
 
     #获取像册图片列表
     url(r"/comm_report/album_image/list",

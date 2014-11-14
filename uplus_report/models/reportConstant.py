@@ -44,7 +44,8 @@ REPORT_PUNISH_PASSED = "审核通过"
 # 关联关系
 PUNISH_RELATION = {
     "reasons": [dict(id=x, title=REPORT_REASONS[x]) for x in REPORT_REASONS],
-    "module_types": [{"id": REPORT_MODULE_TYPE_HALL,
+    "module_types": [
+                    {"id": REPORT_MODULE_TYPE_HALL,
                       "title": REPORT_MODULE_TYPES.get(
                           REPORT_MODULE_TYPE_HALL),
                       "punishes": [
@@ -56,7 +57,7 @@ PUNISH_RELATION = {
                                REPORT_PUNISH_DELETE_RESOURCE),
                            "required_time": False}
                       ]
-                     },
+                    },
                      {"id": REPORT_MODULE_TYPE_SHOW,
                       "title": REPORT_MODULE_TYPES.get(
                           REPORT_MODULE_TYPE_SHOW),
@@ -69,13 +70,13 @@ PUNISH_RELATION = {
                                REPORT_PUNISH_CLOSE_SHOW),
                            "required_time": True},
                           {"id": REPORT_PUNISH_DELETE_RESOURCE,
-                           "title": REPORT_PUNISHES.get(
+                          "title": REPORT_PUNISHES.get(
                                REPORT_PUNISH_DELETE_RESOURCE),
-                           "required_time": False},
-                          {"id": REPORT_PUNISH_LOGIN_LIMIT,
-                           "title": REPORT_PUNISHES.get(
-                               REPORT_PUNISH_LOGIN_LIMIT),
-                           "required_time": True}
+                          "required_time": False},
+                          # {"id": REPORT_PUNISH_LOGIN_LIMIT,
+                          #  "title": REPORT_PUNISHES.get(
+                          #      REPORT_PUNISH_LOGIN_LIMIT),
+                          #  "required_time": True}
                       ]
                      },
                      {"id": REPORT_MODULE_TYPE_GROUP,
@@ -111,6 +112,23 @@ PUNISH_RELATION = {
                       ]
                      }
     ]
+}
+
+
+MOD_ENUM = {
+    11 : "大厅消息",
+    12 : "私聊消息",
+    13 : "群消息",
+    14 : "秀场消息",
+    15 : "相册图",
+    16 : "秀册内的资源",
+
+    21 : "大厅",
+    22 : "群profile",
+    23 : "个人profile",
+    24 : "秀场",
+    25 : "私聊",
+    26 : "群聊",
 }
 
 

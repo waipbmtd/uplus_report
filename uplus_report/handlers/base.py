@@ -101,8 +101,9 @@ class BaseHandler(tornado.web.RequestHandler):
         return self.render('login.html')
 
     @session_manange
-    def record_log(self, content=""):
+    def record_log(self, content="", memo=""):
         log = AdminOperationLog(content=content,
+                                memo=memo,
                                 ip=self.request.remote_ip)
         current_user = self.session.query(AdminUser).get(self.current_user.id)
         current_user.logs.append(log)

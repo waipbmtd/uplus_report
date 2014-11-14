@@ -74,7 +74,7 @@ class PunishBaseHandler(BaseHandler):
             mid=self.v("mid"),
             mod=self.v("mod"),
             url=self.v("url"),
-            thumbUrl=self.v("thumb_url"),
+            thumb_url=self.v("thumb_url"),
             msgId=self.v("msg_id"),
             timedelta=self.v("timedelta"),
             cid=self.v("cid"),
@@ -95,7 +95,7 @@ class PunishBaseHandler(BaseHandler):
         if self.v("thumb_url"):
             content += " %s" % str(self.v("thumb_url"))
 
-        self.record_log(content)
+        self.record_log(content, memo=self.v("memo"))
 
     def log_record_close(self):
         log_format = "%(mod)s %(punish)s (%(uid)s)"
@@ -109,7 +109,7 @@ class PunishBaseHandler(BaseHandler):
         if self.v("timedelta"):
             content += str(" %sHOURS" % str(self.v("timedelta")))
 
-        self.record_log(content)
+        self.record_log(content, memo=self.v("memo"))
 
     log_record_silence = log_record_close
 
@@ -128,7 +128,7 @@ class PunishBaseHandler(BaseHandler):
             content += str(" %s" % str(self.v("url")))
         if self.v("thumb_url"):
             content += str(" %s" % str(self.v("thumb_url")))
-        self.record_log(content)
+        self.record_log(content, memo=self.v("memo"))
 
     def v(self, key):
         return self.args.get(key)
@@ -148,6 +148,8 @@ class PassedHandler(PunishBaseHandler):
 
             #举报入口
             mod=self.get_argument("mod"),
+            #对应的群/秀场id
+            mid=self.get_argument("mid",""),
             # 资源url
             url=self.get_argument("url", ""),
             #资源缩略图
