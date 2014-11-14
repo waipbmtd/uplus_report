@@ -37,6 +37,7 @@ class AdminOperationLog(Base):
     create_time = Column('create_time', DateTime,
                          default=datetime.datetime.now())
     ip = Column('ip', String(50))
+    memo = Column('memo', String(2000))
 
     def __repr__(self):
         return "admin_operation_log<content: %s ip: %s>" % (self.content,

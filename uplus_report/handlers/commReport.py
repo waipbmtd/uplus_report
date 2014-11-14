@@ -6,7 +6,7 @@ import tornado.web
 import config
 from handlers.base import BaseHandler
 from storage.mysql.database import session_manange
-from utils import WebRequrestUtil
+from utils import WebRequrestUtil, util
 
 API_HOST = config.api.host
 
@@ -20,11 +20,6 @@ class CommonReportIndexHandler(BaseHandler):
     def get(self):
         return self.render("comm_report/main.html")
 
-    @tornado.web.authenticated
-    @session_manange
-    def post(self):
-        pass
-
 
 class AlbumImageReportListHandler(BaseHandler):
     """
@@ -32,6 +27,7 @@ class AlbumImageReportListHandler(BaseHandler):
     """
     LIST_ALBUM_IMAGE = config.api.report_album_image_list
 
+    @util.exception_handler
     @tornado.web.authenticated
     @session_manange
     def get(self):
@@ -65,6 +61,7 @@ class MessageReportNextHandler(BaseHandler):
     """
     NEXT_MESSAGE = config.api.report_message_next
 
+    @util.exception_handler
     @tornado.web.authenticated
     @session_manange
     def get(self):

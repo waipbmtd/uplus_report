@@ -6,7 +6,7 @@ import tornado.web
 from handlers.base import BaseHandler
 import config
 from models import reportConstant
-from utils import WebRequrestUtil
+from utils import WebRequrestUtil, util
 
 API_HOST = config.api.host
 
@@ -162,6 +162,8 @@ class PassedHandler(PunishBaseHandler):
             cid=self.current_user.id
         )
 
+    @util.exception_handler
+    @tornado.web.authenticated
     def post(self):
         self.parse_argument()
         server_api = self.PASS_API
@@ -182,6 +184,7 @@ class PunishAdapterHandler(PunishBaseHandler):
     SILENCE_API = config.api.report_silence_api
     DELETE_RESOURCE = config.api.report_delete_resource
 
+    @util.exception_handler
     @tornado.web.authenticated
     def post(self):
         """
@@ -210,6 +213,12 @@ class PunishAdapterHandler(PunishBaseHandler):
 
     def _punish_hall(self):
         # 对大厅用户惩罚
+        data = {}
+        if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
+            data = self._delete_resource()
+        elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
+            data = self._close(reportConstant.REPORT_MODULE_TYPE_USER,
+                               self.v("uid"))
         return {}
 
 

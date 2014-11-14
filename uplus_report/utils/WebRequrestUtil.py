@@ -30,6 +30,7 @@ def getRequest(url, parameters={}):
     except urllib2.HTTPError, e:
         logging.error("error request:\nexception : %s\n%s" %
                       (traceback.format_exc(), printHttpRequest(req)))
+        raise e
 
 
 def getRequest2(host, path, parameters={}):

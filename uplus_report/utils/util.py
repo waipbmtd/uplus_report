@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # 通用工具函数
 import decimal
-import json
+import logging
+import traceback
 from urllib import unquote
 from hashlib import md5
 from datetime import date, datetime, timedelta
@@ -28,6 +29,19 @@ def add_body_arguments(func):
                 mydict[data[0]] = [value]
         cls.request.arguments.update(mydict)
         return func(*args, **kwargs)
+
+    return wrapper
+
+
+def exception_handler(func):
+    def wrapper(*args, **kwargs):
+        cls = args[0]
+        try:
+            return func(*args, **kwargs)
+        except Exception, e:
+            exc_info = traceback.format_exc()
+            logging.error("exception is %s" % exc_info)
+            return cls.send_error_json(code=500, info=exc_info)
 
     return wrapper
 

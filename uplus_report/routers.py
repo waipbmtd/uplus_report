@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*-
 from tornado.web import url
 
-from handlers import base, auth, commReport, constantenu, punish, passed
+from handlers import base, auth, commReport, constantenu, punish
 
 routers = [
     # 首页
