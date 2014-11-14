@@ -49,7 +49,7 @@ class PunishRelationHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         enum_dic = reportConstant.PUNISH_RELATION
-        return self.send_success_json(enum_dic)
+        return self.send_success_json(dict(data=enum_dic))
 
 
 class EntranceModEnumHandler(BaseHandler):
@@ -60,3 +60,15 @@ class EntranceModEnumHandler(BaseHandler):
     def get(self):
         enum_dic = reportConstant.MOD_ENUM
         return self.send_success_json(dict(data=enum_dic))
+
+
+class ALLEnumHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        ent_enum_dic = reportConstant.MOD_ENUM
+        reasons = reportConstant.REPORT_REASONS
+        request = reportConstant.REQUEST_TYPES
+
+        return self.json(dict(mod=ent_enum_dic,
+                              type = reasons,
+                              ret=request))

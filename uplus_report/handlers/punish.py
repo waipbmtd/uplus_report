@@ -185,6 +185,8 @@ class PunishAdapterHandler(PunishBaseHandler):
     CLOSE_API = config.api.report_close_api
     SILENCE_API = config.api.report_silence_api
     DELETE_RESOURCE = config.api.report_delete_resource
+    DISMISS_GROUP = config.api.report_dismiss_group
+    KICK_OUT = config.api.report_kick_out
 
     @util.exception_handler
     @tornado.web.authenticated
@@ -218,19 +220,35 @@ class PunishAdapterHandler(PunishBaseHandler):
         data = {}
         if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
             data = self._delete_resource()
-        elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
-            data = self._close(reportConstant.REPORT_MODULE_TYPE_USER,
-                               self.v("uid"))
-        return {}
+        elif self.punish_type == reportConstant.REPORT_PUNISH_SILENCE:
+            data = self._silence()
+            self._delete_resource()
+        return data
 
 
     def _punish_show(self):
         # 对秀场本省或则秀场内容处罚
-        return {}
+        data = {}
+        if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
+            data = self._delete_resource()
+        elif self.punish_type == reportConstant.REPORT_PUNISH_SILENCE:
+            data = self._silence()
+            self._delete_resource()
+        elif self.punish_type == reportConstant.REPORT_PUNISH_CLOSE_SHOW:
+            data = self._close()
+        return data
 
     def _punish_group(self):
         # 对群或则群成员处罚
-        return {}
+        data = {}
+        if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
+            data = self._delete_resource()
+        elif self.punish_type == reportConstant.REPORT_PUNISH_DISMISS_GROUP:
+            data = self._dismiss_group()
+        elif self.punish_type == reportConstant.REPORT_PUNISH_KICK_OUT_GROUP:
+            data = self._kick_out_group()
+            self._delete_resource()
+        return data
 
     def _punish_user(self):
         # 对用户处罚
@@ -238,25 +256,25 @@ class PunishAdapterHandler(PunishBaseHandler):
         if self.punish_type == reportConstant.REPORT_PUNISH_DELETE_RESOURCE:
             data = self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
-            data = self._close(reportConstant.REPORT_MODULE_TYPE_USER,
-                               self.v("uid"))
+            data = self._close()
+            self._delete_resource()
         return data
 
-    def _close(self, mod_type, u_id):
+    def _close(self):
         # 封（封大厅或用户）
-        server_api = self.CLOSE_API % dict(mod_type=mod_type, u_id=u_id)
+        server_api = self.CLOSE_API % dict(mod_type=self.v("module_type"),
+                                           u_id=self.v("uid"))
 
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            server_api,
                                            parameters=self.feature_parameter)
         self.log_record_close()
-
-        self._delete_resource()
         return data
 
-    def _silence(self, mod_type, u_id):
+    def _silence(self):
         # 禁言
-        server_api = self.SILENCE_API % dict(mod_type=mod_type, u_id=u_id)
+        server_api = self.SILENCE_API % dict(mod_type=self.v("module_type"),
+                                             u_id=self.v("uid"))
 
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            server_api,
@@ -267,10 +285,12 @@ class PunishAdapterHandler(PunishBaseHandler):
 
     def _dismiss_group(self):
         # 解散群
+        server_api = self.DISMISS_GROUP
         return {}
 
     def _kick_out_group(self):
         # 踢出群
+        server_api = self.KICK_OUT
         return {}
 
     def _delete_resource(self):

@@ -1,6 +1,12 @@
 #!/usr/bin/python
 # coding=utf-8
 
+# 请求
+REQUEST_TYPES = {
+    1: "失败",
+    0: "成功",
+}
+
 # 被封原因
 REPORT_REASONS = {
     1: "广告",
