@@ -7,8 +7,8 @@ REPORT_RISK_FALSE = 0
 
 #
 REPORT_RISK_ENUS = {
-    REPORT_RISK_TRUE: '高危',
-    REPORT_RISK_FALSE: '普通'
+    REPORT_RISK_TRUE: u'高危',
+    REPORT_RISK_FALSE: u'普通'
 }
 
 

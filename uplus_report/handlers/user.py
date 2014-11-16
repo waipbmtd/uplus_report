@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Admin account manager
+import time
+import tornado
+import tornado.web
 from handlers.base import BaseHandler
-from models import reportConstant
+from models import reportConstant, redisConstant
 from storage.mysql.database import session_manage
 from storage.mysql.models import AdminUser
+from storage.redis.redisClient import redis_risk_user, redis_special_user
 from utils import util, WebRequrestUtil
 import config
 import json
@@ -19,6 +23,7 @@ class UserHandler(BaseHandler):
 
     @util.exception_handler
     @session_manage
+    @tornado.web.authenticated
     def get(self):
         user_id = self.get_argument("id")
         user = self.session.query(AdminUser).get(user_id)
@@ -26,6 +31,7 @@ class UserHandler(BaseHandler):
 
     @util.exception_handler
     @session_manage
+    @tornado.web.authenticated
     def post(self):
         # 创建用户
         username = self.get_argument("username")
@@ -36,6 +42,7 @@ class UserHandler(BaseHandler):
 
     @util.exception_handler
     @session_manage
+    @tornado.web.authenticated
     def delete(self):
         # 删除某个用户
         userid = int(self.get_argument("userid", -1))
@@ -85,6 +92,7 @@ class UnlockUserHandler(UserBaseHandler):
 
     @util.exception_handler
     @session_manage
+    @tornado.web.authenticated
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(uid=self.v("uid"))
@@ -96,3 +104,65 @@ class UnlockUserHandler(UserBaseHandler):
                                            ))
         self.log_record_unlock()
         return self.send_success_json(json.loads(data))
+
+
+class UplusUserListBaseHandler(BaseHandler):
+    _redis = ""
+    KEY = ""
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self):
+        users = self._redis.zrangebyscore(self.KEY, 0, "+inf", withscores=True)
+        return self.send_success_json(
+            dict(data=[dict(user_id=x[0], score=x[1]) for x in users])
+        )
+
+
+class UplusUserBaseHandler(BaseHandler):
+    _redis = ""
+    KEY = ""
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self):
+        user_id = self.get_argument("user_id")
+        score = self._redis.zscore(self.KEY, user_id)
+        return self.send_success_json(
+            dict(data=dict(user_id=user_id, score=score)))
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def post(self):
+        user_id = self.get_argument("user_id")
+        score = int(time.time() * 1000)
+        self._redis.zadd(self.KEY, user_id, score)
+        return self.send_success_json(
+            dict(data=dict(user_id=user_id, score=score)))
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def delete(self):
+        user_id = self.get_argument("user_id")
+        self._redis.zrem(self.KEY, user_id)
+        return self.send_success_json(dict(data=dict(user_id=user_id)))
+
+
+class HighRiskUserListHandler(UplusUserListBaseHandler):
+    _redis = redis_risk_user
+    KEY = redisConstant.REDIS_HIGH_RISK_KEY
+
+
+class HighRiskUserHandler(UplusUserBaseHandler):
+    _redis = redis_risk_user
+    KEY = redisConstant.REDIS_HIGH_RISK_KEY
+
+
+class SpecialUserListHandler(UplusUserListBaseHandler):
+    _redis = redis_special_user
+    KEY = redisConstant.REDIS_SPECIAL_USER_KEY
+
+
+class SpecialUserHandler(UplusUserBaseHandler):
+    _redis = redis_special_user
+    KEY = redisConstant.REDIS_SPECIAL_USER_KEY

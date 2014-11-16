@@ -53,5 +53,13 @@ routers = [
     url(r'/show/un_clock', show.UnlockShowHandler),
 
     #用户解封
-    url(r'/user/un_clock', user.UnlockUserHandler)
+    url(r'/user/un_clock', user.UnlockUserHandler),
+
+    #高危用户
+    url(r'/user/risk', user.HighRiskUserHandler),
+    url(r'/user/risk/list', user.HighRiskUserListHandler),
+
+    #特殊用户
+    url(r'/user/special', user.SpecialUserHandler),
+    url(r'/user/special/list', user.SpecialUserListHandler)
 ]
