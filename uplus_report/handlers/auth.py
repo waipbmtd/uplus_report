@@ -4,7 +4,7 @@
 import time
 
 from base import BaseHandler
-from storage.mysql.database import session_manange
+from storage.mysql.database import session_manage
 import config
 from storage.mysql import models
 from utils import util
@@ -23,7 +23,7 @@ class LoginHandler(BaseHandler):
         return self.render("login.html", next=self.get_argument(
             'next', default="/"))
 
-    @session_manange
+    @session_manage
     def post(self):
         if self.current_user:
             self.redirect('/')

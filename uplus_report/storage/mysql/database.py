@@ -39,7 +39,7 @@ def sqlalchemy_json(self):
 Base.__json__ = sqlalchemy_json
 
 
-def session_manange(fn):
+def session_manage(fn):
     def wrapper(*args, **kwargs):
         cls = args[0]
         cls.session = DB_Session()

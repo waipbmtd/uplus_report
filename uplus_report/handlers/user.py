@@ -3,7 +3,7 @@
 # Admin account manager
 from handlers.base import BaseHandler
 from models import reportConstant
-from storage.mysql.database import session_manange
+from storage.mysql.database import session_manage
 from storage.mysql.models import AdminUser
 from utils import util, WebRequrestUtil
 import config
@@ -18,14 +18,14 @@ class UserHandler(BaseHandler):
     """
 
     @util.exception_handler
-    @session_manange
+    @session_manage
     def get(self):
         user_id = self.get_argument("id")
         user = self.session.query(AdminUser).get(user_id)
         self.json(user.__json__())
 
     @util.exception_handler
-    @session_manange
+    @session_manage
     def post(self):
         # 创建用户
         username = self.get_argument("username")
@@ -35,7 +35,7 @@ class UserHandler(BaseHandler):
         self.session.add(user)
 
     @util.exception_handler
-    @session_manange
+    @session_manage
     def delete(self):
         # 删除某个用户
         userid = int(self.get_argument("userid", -1))
@@ -84,7 +84,7 @@ class UnlockUserHandler(UserBaseHandler):
         self.record_log(content, memo=self.v("memo"))
 
     @util.exception_handler
-    @session_manange
+    @session_manage
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(uid=self.v("uid"))

@@ -5,7 +5,7 @@ import tornado
 import tornado.web
 import config
 from handlers.base import BaseHandler
-from storage.mysql.database import session_manange
+from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
 
 API_HOST = config.api.host
@@ -29,7 +29,7 @@ class AlbumImageReportListHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @session_manange
+    @session_manage
     def get(self):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.LIST_ALBUM_IMAGE,
@@ -41,20 +41,6 @@ class AlbumImageReportListHandler(BaseHandler):
     post = get
 
 
-class AlbumImageHandler(BaseHandler):
-    """
-    普通举报相册图片
-    """
-    ALBUM_IMAGE = config.api.report_album_image
-
-    @tornado.web.authenticated
-    @session_manange
-    def get(self):
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.ALBUM_IMAGE)
-        return self.send_success_json(json.loads(data))
-
-
 class MessageReportNextHandler(BaseHandler):
     """
     获取下一个被举报的消息
@@ -63,7 +49,7 @@ class MessageReportNextHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @session_manange
+    @session_manage
     def get(self):
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.NEXT_MESSAGE,
@@ -79,5 +65,8 @@ class RemainReportCountHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.REMAIN_REPORT)
+                                           self.REMAIN_REPORT,
+                                           parameters=dict(
+                                               csid=self.current_user.id
+                                           ))
         return self.send_success_json(json.loads(data))

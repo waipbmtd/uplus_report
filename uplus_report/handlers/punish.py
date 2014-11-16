@@ -32,7 +32,7 @@ class PunishBaseHandler(BaseHandler):
             mid=self.get_argument("module_id", ""),
             # report记录id
             rid=self.get_argument("id"),
-            #违规类型
+            # 违规类型
             reason=self.get_argument("reason"),
             #惩罚类型
             punish_type=int(self.get_argument("punish_type")),
@@ -145,6 +145,7 @@ class PunishBaseHandler(BaseHandler):
 
     def v(self, key):
         return self.args.get(key)
+
 
 class PunishAdapterHandler(PunishBaseHandler):
     CLOSE_API = config.api.report_close_api

@@ -10,7 +10,7 @@ import jsonpickle.backend
 import tornado.web
 
 import config
-from storage.mysql.database import session_manange
+from storage.mysql.database import session_manage
 from storage.mysql.models import AdminUser, AdminOperationLog
 from utils import util
 
@@ -69,7 +69,7 @@ class BaseHandler(tornado.web.RequestHandler):
                 arguments[key] = val[0]
         return arguments
 
-    @session_manange
+    @session_manage
     def get_current_user(self):
         user_id = self.get_secure_cookie("r_u_a")
         expire_time = self.get_secure_cookie("r_u_a_e")
@@ -100,7 +100,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def get(self):
         return self.render('login.html')
 
-    @session_manange
+    @session_manage
     def record_log(self, content="", memo=""):
         log = AdminOperationLog(content=content,
                                 memo=memo,

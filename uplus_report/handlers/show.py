@@ -3,7 +3,7 @@
 from handlers.base import BaseHandler
 import config
 from models import reportConstant
-from storage.mysql.database import session_manange
+from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
 import json
 
@@ -75,7 +75,7 @@ class UnlockShowHandler(ShowBaseHandler):
         self.record_log(content, memo=self.v("memo"))
 
     @util.exception_handler
-    @session_manange
+    @session_manage
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(showId=self.v("show_id"))
