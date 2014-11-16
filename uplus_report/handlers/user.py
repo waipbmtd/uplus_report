@@ -115,7 +115,7 @@ class UplusUserListBaseHandler(BaseHandler):
     def get(self):
         users = self._redis.zrangebyscore(self.KEY, 0, "+inf", withscores=True)
         return self.send_success_json(
-            dict(data=[dict(user_id=x[0], score=x[1]) for x in users])
+            dict(data=[dict(user_id=x[0], create_time=x[1]) for x in users])
         )
 
 
@@ -129,7 +129,7 @@ class UplusUserBaseHandler(BaseHandler):
         user_id = self.get_argument("user_id")
         score = self._redis.zscore(self.KEY, user_id)
         return self.send_success_json(
-            dict(data=dict(user_id=user_id, score=score)))
+            dict(data=dict(user_id=user_id, create_time=score)))
 
     @util.exception_handler
     @tornado.web.authenticated
@@ -138,7 +138,7 @@ class UplusUserBaseHandler(BaseHandler):
         score = int(time.time() * 1000)
         self._redis.zadd(self.KEY, user_id, score)
         return self.send_success_json(
-            dict(data=dict(user_id=user_id, score=score)))
+            dict(data=dict(user_id=user_id, create_time=score)))
 
     @util.exception_handler
     @tornado.web.authenticated
