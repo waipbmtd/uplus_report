@@ -40,7 +40,8 @@ class AlbumImageReportListHandler(BaseHandler):
                                                csid=self.current_user.id,
                                                size=20))
         self.record_log(content=u"获取下一批图片 " +
-                                reportConstant.REPORT_RISK_ENUS.get(risk))
+                                reportConstant.REPORT_RISK_ENUS.get(
+                                    risk).decode('utf8'))
         return self.send_success_json(json.loads(data))
 
     post = get
@@ -63,7 +64,8 @@ class MessageReportNextHandler(BaseHandler):
                                                risk=risk,
                                                csid=self.current_user.id))
         self.record_log(content=u"获取下一条消息 " +
-                                reportConstant.REPORT_RISK_ENUS.get(risk))
+                                reportConstant.REPORT_RISK_ENUS.get(
+                                    risk).decode('utf8'))
         return self.send_success_json(json.loads(data))
 
 
