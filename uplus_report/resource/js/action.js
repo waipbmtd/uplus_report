@@ -164,6 +164,11 @@ var
 				return;
 			}
 
+			if( !iMasonry.find('span.active').length ){
+				$.trace('至少选择一张图片');
+				return;
+			}
+
 			$.confirm('确定通过这些图片吗？', function(){
 				
 				var database = kitFunction.getImageActive({
@@ -189,6 +194,11 @@ var
 		isBlock: function(it){
 			if( !iMasonry.find('li').length ){
 				$.trace('请先申领任务');
+				return;
+			}
+
+			if( !iMasonry.find('span.active').length ){
+				$.trace('至少选择一张图片');
 				return;
 			}
 
@@ -410,7 +420,7 @@ $.taber({
 			children: 'li',
 			self: true,
 			left: _.dom.win.width(),
-			top: _.dom.win.height() - _.dom.foot.outerHeight(),
+			top: _.dom.win.height() / 2, // - _.dom.foot.outerHeight(),
 			off: {
 				x: -1, y: -35
 			}
@@ -462,8 +472,6 @@ $.extend({
 				form.find('[' + assos + ']:not(:hidden):eq(0)').trigger( _.evt.click );
 			});
 
-			// form.find('[' + associates + ']:not(:hidden):eq(0)').trigger( _.evt.click );
-
 			// Input Press
 			$.sameInput({
 				input: '.audit-operat form [data-name=timedelta]',
@@ -506,6 +514,9 @@ $.extend({
 					}
 				}
 			});
+
+			// 中间排触发事件
+			form.find('[' + associates + ']:not(:hidden):eq(0)').trigger( _.evt.click );
 
 			// Popup Fancy Cancel
 			cancel.on( _.evt.click, function(){
