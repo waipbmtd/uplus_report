@@ -39,7 +39,10 @@ class LoginHandler(BaseHandler):
             username=username, password=hash_password).first()
 
         if not user:
+            self.record_log(content=u"登录失败：" + username)
             return self.redirect("/")
+
+        self.record_log(content=u"登录成功：" + username)
 
         now = time.time()
         expire_time = now + int(config.app.max_idle_time)
@@ -57,4 +60,5 @@ class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie('r_u_a')
         self.clear_cookie('r_u_a_e')
+        self.record_log(content=u"用户登出：" + self.current_user.username)
         return self.redirect('/')

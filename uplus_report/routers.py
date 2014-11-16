@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*-
 from tornado.web import url
 
-from handlers import base, auth, commReport, constantenu, punish, passed, \
+from handlers import base, auth, report, constantenu, punish, passed, \
     hall, show, user
 
 
@@ -29,12 +29,12 @@ routers = [
     url(r"/enum/all", constantenu.ALLEnumHandler),
 
     #获取像册图片列表
-    url(r"/comm_report/album_image/list",
-        commReport.AlbumImageReportListHandler),
+    url(r"/report/album_image/list",
+        report.AlbumImageReportListHandler),
     #获取下一个被举报的消息
-    url(r"/comm_report/message/next", commReport.MessageReportNextHandler),
+    url(r"/report/message/next", report.MessageReportNextHandler),
     #获取还剩余的未处理的举报数
-    url(r"/comm_report/remain", commReport.RemainReportCountHandler),
+    url(r"/report/remain", report.RemainReportCountHandler),
 
     #审核通过
     url(r"/pass", passed.PassedHandler),

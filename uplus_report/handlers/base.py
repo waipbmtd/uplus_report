@@ -105,8 +105,12 @@ class BaseHandler(tornado.web.RequestHandler):
         log = AdminOperationLog(content=content,
                                 memo=memo,
                                 ip=self.request.remote_ip)
-        current_user = self.session.query(AdminUser).get(self.current_user.id)
-        current_user.logs.append(log)
+        if self.current_user:
+            current_user = self.session.query(AdminUser).get(
+                self.current_user.id)
+            current_user.logs.append(log)
+        else:
+            self.session.add(log)
 
 
 class DefaultHandler(BaseHandler):
