@@ -75,7 +75,9 @@ class ALLEnumHandler(BaseHandler):
         ent_enum_dic = reportConstant.MOD_ENUM
         reasons = reportConstant.REPORT_REASONS
         request = reportConstant.REQUEST_TYPES
+        risk = reportConstant.REPORT_RISK_ENUS
 
         return self.json(dict(mod=ent_enum_dic,
                               type=reasons,
-                              ret=request))
+                              ret=request,
+                              risk=risk))

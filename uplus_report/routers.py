@@ -37,7 +37,7 @@ routers = [
     url(r"/comm_report/remain", commReport.RemainReportCountHandler),
 
     #审核通过
-    url(r"/comm_report/pass", passed.PassedHandler),
+    url(r"/pass", passed.PassedHandler),
     #处罚
     url(r"/punish", punish.PunishAdapterHandler),
     #处罚关联

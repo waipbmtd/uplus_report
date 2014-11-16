@@ -5,6 +5,7 @@ import tornado
 import tornado.web
 import config
 from handlers.base import BaseHandler
+from models import reportConstant
 from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
 
@@ -31,9 +32,11 @@ class AlbumImageReportListHandler(BaseHandler):
     @tornado.web.authenticated
     @session_manage
     def get(self):
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.LIST_ALBUM_IMAGE,
                                            parameters=dict(
+                                               risk=risk,
                                                csid=self.current_user.id,
                                                size=20))
         return self.send_success_json(json.loads(data))
@@ -51,9 +54,11 @@ class MessageReportNextHandler(BaseHandler):
     @tornado.web.authenticated
     @session_manage
     def get(self):
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.NEXT_MESSAGE,
                                            parameters=dict(
+                                               risk=risk,
                                                csid=self.current_user.id))
         return self.send_success_json(json.loads(data))
 
@@ -64,9 +69,11 @@ class RemainReportCountHandler(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.REMAIN_REPORT,
                                            parameters=dict(
+                                               risk=risk,
                                                csid=self.current_user.id
                                            ))
         return self.send_success_json(json.loads(data))
