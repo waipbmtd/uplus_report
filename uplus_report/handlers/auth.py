@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import time
+import tornado
+import tornado.web
 
 from base import BaseHandler
 from storage.mysql.database import session_manage
@@ -51,7 +53,8 @@ class LogoutHandler(BaseHandler):
     管理成员账号登出
     """
 
+    @tornado.web.authenticated
     def get(self):
-        self.clear_cookie('u_a')
-        self.clear_cookie('u_a_e')
-        return self.redirect("/")
+        self.clear_cookie('r_u_a')
+        self.clear_cookie('r_u_a_e')
+        return self.redirect('/')

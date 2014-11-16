@@ -115,7 +115,7 @@ class DefaultHandler(BaseHandler):
         logging.info(
             "revere index url : %s" % "index.html")
         self.render("index.html",
-                    data=dict(username=self.current_user.username))
+                    username=self.current_user.username)
 
 
 class GetTemplateHandler(BaseHandler):
