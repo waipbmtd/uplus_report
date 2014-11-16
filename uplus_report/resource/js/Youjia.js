@@ -47,8 +47,10 @@ _.api = {
 	albums: '/comm_report/album_image/list',
 	// 获取Message
 	message: '/comm_report/message/next',
+	// 审核未通过
+	punish: '/punish',
 	// 审核通过接口
-	pass: '/comm_report/pass'
+	pass: '/pass'
 },
 
 /* !!
@@ -582,7 +584,9 @@ $.extend({
 				type: 'ajax',
 				title: option.title,
 				closeClick: option.closeClick,
-				afterShow: $.fancyCall[ option.callback ],
+				afterShow: function(){
+					$.fancyCall[ option.callback ]( it );
+				},
 				helpers: {
 					title: {
 						type: 'inside',
@@ -616,7 +620,7 @@ $.extend({
 		}
 
 	},
-	punish: function(options, callback){
+	punish: function(options, api, callback){
 		options = options || {}
 		, options.callback = options.callback || $.noop
 
@@ -638,13 +642,15 @@ $.extend({
 		, options.msg_id = options.msg_id || ''
 		, options.owner = options.owner || '';
 
+		api = api || '/punish';
+
 		// This Option Is Merge By 2 Options
 		// console.log(options);
 
 		$.ajax({
 			type: 'post',
 			data: options,
-			url: '/punish',
+			url: api,
 			success: function(result){
 				$.checkResult(result, function( result ){
 					callback( result );
@@ -652,7 +658,7 @@ $.extend({
 			}
 		});
 	},
-	recursivePunish: function(options, often, callback){
+	recursivePunish: function(options, often, api, callback){
 
 		if( !$.isType(options, 'object') ){
 			return;
@@ -661,8 +667,8 @@ $.extend({
 		callback = callback || $.noop;
 
 		if( options.length ){
-			$.punish( $.mergeJSON( options.shift(), often ), function(){
-				$.recursivePunish( options, often, callback );
+			$.punish( $.mergeJSON( options.shift(), often ), api, function(){
+				$.recursivePunish( options, often, api, callback );
 			});
 			return false;
 		}

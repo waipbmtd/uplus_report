@@ -54,6 +54,29 @@ var
 			return options.database;
 		},
 
+		/* Get Info Active */
+		getInfoActive: function(options){
+			options = options || {}
+			, options.id = options.id || 0
+			, options.than = $.isType(options.than, 'object') ? options.than : []
+			, options.database = {};
+
+			if( options.than.length ){
+				$.each(options.than, function(i, data){
+					if( data.msgid == options.id ){
+						options.database = data;
+					}
+				});
+			}
+			else{
+				if( options.than.oid == options.id ){
+					options.database = options.than;
+				}
+			}
+
+			return options.database;
+		},
+
 		/* Get Data */
 		getImageData: function(it){
 			$.renderHTML({
@@ -137,7 +160,7 @@ var
 					});
 
 				// Punish - 递归
-				$.recursivePunish( database, {}, function(){
+				$.recursivePunish( database, {}, _.api.pass, function(){
 					$.trace('处理完成', function(){
 						iMasonry.find('span.active').fadeOut(function(){
 							$(this).remove();
@@ -293,12 +316,13 @@ var
 $.extend({
 	fancyCall: {
 		// Operat Base
-		operatBase: function(){
+		operatBase: function( it ){
 
 			var
 				form = $('.audit-operat form'),
 				associates = 'data-associate',
-				assos = 'data-assos';
+				assos = 'data-assos',
+				cancel = form.find('.form-submit button:eq(0)');
 
 			// 关联点击事件
 			form.find('[' + associates + ']').on( _.evt.click, function(e){
@@ -327,7 +351,15 @@ $.extend({
 					return false;
 				},
 				onKeyup: function(e){
-					e.target.setAttribute('data-value', e.target.value)
+					e.target.setAttribute('data-value', e.target.value);
+				}
+			});
+
+			// Textarea Input
+			$.sameInput({
+				input: '.audit-operat form [data-name=memo]',
+				onKeyup: function(e){
+					e.target.setAttribute('data-value', e.target.value);
 				}
 			});
 
@@ -350,17 +382,22 @@ $.extend({
 					}
 				}
 			});
+
+			// Popup Fancy Cancel
+			cancel.on( _.evt.click, function(){
+				$.fancybox.close();
+			});
 		},
 		// Operat Albums
-		operatSelect: function(){
+		operatSelect: function( it ){
 
 			// 隐藏不可用项
-			// $('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
 
 			// Default UI
 			$.fancyCall.operatBase();
 
-			// Get Selected Item's IDs
+			// Get Selected Item's Infomation From Cache
 			var database = kitFunction.getImageActive({
 					container: iMasonry.find('span.active'),
 					selector: 'data-id',
@@ -372,7 +409,7 @@ $.extend({
 				database: database,
 				instead: function(option){
 					// Punish - 递归
-					$.recursivePunish( option.database, option.data, function(){
+					$.recursivePunish( option.database, option.data, _.api.punish, function(){
 						$.trace('处理完成', function(){
 							iMasonry.find('span.active').fadeOut(function(){
 								$(this).remove();
@@ -382,32 +419,75 @@ $.extend({
 				}
 			});
 		},
+		// Operat Items
+		operatSelect_items: function( it ){
+
+			// Default UI
+			$.fancyCall.operatBase();
+			
+			var
+				// Get It(em) Data
+				itData = $.getData(it),
+
+				// Get Info Item's Infomation From Cache
+				database = [
+					kitFunction.getInfoActive({
+						id: itData.msgid,
+						than: _.cache.message.data.msgs
+					})
+				];
+
+			// Operat Submit
+			$.formSubmit({
+				database: database,
+				instead: function(option){
+
+					// For Merge Data, Delete Msgs
+					var mergeData = _.cache.message.data;
+					mergeData.u_id = itData.uid;
+					delete mergeData.msgs;
+
+					// Punish - 递归
+					$.recursivePunish( option.database, $.mergeJSON(option.data, mergeData), _.api.punish, function(){
+						$.trace('处理完成', function(){
+							(function(tr){
+								if( tr.length ){
+									tr.slideUp(function(){
+										tr.remove();
+									});
+								}
+							})( it.closest('tr') );
+						});
+					});
+				}
+			});
+		},
 		// Operat Dating
-		operatSelect_dating: function(){
+		operatSelect_dating: function( it ){
 
 			// 隐藏不可用项
 			$('.audit-operat form li:eq(1)').find('button:eq(1), button:eq(2), button:eq(3)').hide();
 
-			// Default UI
-			$.fancyCall.operatBase();
+			// Items Operat
+			$.fancyCall.operatSelect_items( it );
 		},
 		// Operat Xiuchang
-		operatSelect_xiuchang: function(){
+		operatSelect_xiuchang: function( it ){
 
 			// 隐藏不可用项
 			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(2)').hide();
 
-			// Default UI
-			$.fancyCall.operatBase();
+			// Items Operat
+			$.fancyCall.operatSelect_items( it );
 		},
 		// Operat Qun
-		operatSelect_qun: function(){
+		operatSelect_qun: function( it ){
 
 			// 隐藏不可用项
 			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
 
-			// Default UI
-			$.fancyCall.operatBase();
+			// Items Operat
+			$.fancyCall.operatSelect_items( it );
 		}
 	},
 	formCall: {

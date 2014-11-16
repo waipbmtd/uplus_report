@@ -37,7 +37,9 @@ switch( it.data.mod ){
 			<h2>{{!= it.data.profile.name }}</h2>
 			<p>{{!= it.data.profile.desc }}</p>
 			<menu>
+				{{!? operatModel != 'dating' }}
 				<button class="yellow" type="button" data-uid="{{!= it.data.profile.oid }}" data-fancy="/get_template?page=operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+				{{!?}}
 			</menu>
 		</div>
 		<div class="divider"></div>
@@ -83,7 +85,7 @@ switch( it.data.mod ){
 						<td>{{!= item.msg_type }}</td>
 						<td>
 							<menu>
-							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-fancy="/get_template?page=operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
 							</menu>
 						</td>
 					</tr>
