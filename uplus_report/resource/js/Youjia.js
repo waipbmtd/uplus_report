@@ -46,7 +46,9 @@ _.api = {
 	// 获取Album
 	albums: '/comm_report/album_image/list',
 	// 获取Message
-	message: '/comm_report/message/next'
+	message: '/comm_report/message/next',
+	// 审核通过接口
+	pass: '/comm_report/pass'
 },
 
 /* !!
@@ -517,7 +519,9 @@ $.extend({
 			it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
 		});
 	},
-	trace: function(text){
+	trace: function(text, callback){
+		callback = callback || $.noop;
+
 		$.fancybox.open({
 			content: '<div class="trace">' + text + '</div>',
 			minHeight: 20,
@@ -526,7 +530,7 @@ $.extend({
 		$.timeout({
 			time: 2000,
 			callback: function(){
-				$.fancybox.close();
+				$.fancybox.close(), callback();
 			}
 		});
 	},
@@ -634,6 +638,9 @@ $.extend({
 		, options.msg_id = options.msg_id || ''
 		, options.owner = options.owner || '';
 
+		// This Option Is Merge By 2 Options
+		// console.log(options);
+
 		$.ajax({
 			type: 'post',
 			data: options,
@@ -645,21 +652,22 @@ $.extend({
 			}
 		});
 	},
-	recursivePunish: function(options, often){
+	recursivePunish: function(options, often, callback){
 
 		if( !$.isType(options, 'object') ){
 			return;
 		}
-console.log(options);
-console.log('===== ===== =====');
-console.log(often);
-alert( options.length );
-return;
+
+		callback = callback || $.noop;
+
 		if( options.length ){
 			$.punish( $.mergeJSON( options.shift(), often ), function(){
-				$.recursivePunish( options );
+				$.recursivePunish( options, often, callback );
 			});
+			return false;
 		}
+
+		callback();
 
 		return false;
 

@@ -35,6 +35,25 @@ var
 
 		/* ** *** **** ***** Image ***** **** *** ** */
 
+		/* Get Images Active */
+		getImageActive: function(options){
+			options = options || {}
+			, options.container = options.container || undefined
+			, options.selector = $.isType(options.selector, 'string') ? options.selector : ''
+			, options.than = $.isType(options.than, 'object') ? options.than : []
+			, options.database = [];
+
+			$.each( options.container, function(x, item){
+				$.each( options.than, function(i, data){
+					if( data.id == item.getAttribute( options.selector ) ){
+						options.database.push( data );
+					}
+				});
+			});
+
+			return options.database;
+		},
+
 		/* Get Data */
 		getImageData: function(it){
 			$.renderHTML({
@@ -111,7 +130,20 @@ var
 
 			$.confirm('确定通过这些图片吗？', function(){
 				
-				alert('1');
+				var database = kitFunction.getImageActive({
+						container: iMasonry.find('span.active'),
+						selector: 'data-id',
+						than: _.cache.albums
+					});
+
+				// Punish - 递归
+				$.recursivePunish( database, {}, function(){
+					$.trace('处理完成', function(){
+						iMasonry.find('span.active').fadeOut(function(){
+							$(this).remove();
+						});
+					});
+				});
 
 				return true;
 			});
@@ -329,21 +361,24 @@ $.extend({
 			$.fancyCall.operatBase();
 
 			// Get Selected Item's IDs
-			var database = [];
-			$.each( iMasonry.find('span.active'), function(x, item){
-				$.each( _.cache.albums, function(i, data){
-					if( data.id == item.getAttribute('data-id') ){
-						database.push( data );
-					}
+			var database = kitFunction.getImageActive({
+					container: iMasonry.find('span.active'),
+					selector: 'data-id',
+					than: _.cache.albums
 				});
-			});
 
 			// Operat Submit
 			$.formSubmit({
 				database: database,
 				instead: function(option){
 					// Punish - 递归
-					$.recursivePunish( option.database, option.data );
+					$.recursivePunish( option.database, option.data, function(){
+						$.trace('处理完成', function(){
+							iMasonry.find('span.active').fadeOut(function(){
+								$(this).remove();
+							});
+						});
+					});
 				}
 			});
 		},
