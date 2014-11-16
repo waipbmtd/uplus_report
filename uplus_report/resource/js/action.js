@@ -35,6 +35,19 @@ var
 
 		/* ** *** **** ***** Image ***** **** *** ** */
 
+		/* Get Remain Length */
+		getRemain: function(options){
+			options = options || {}
+			, options.data = options.data || {}
+			, options.callback = options.callback || $.noop;
+
+			$.get( _.api.remain, options.data, function( result ){
+				$.checkResult(result, function( result ){
+					options.callback( result );
+				});
+			});
+		},
+
 		/* Get Images Active */
 		getImageActive: function(options){
 			options = options || {}
@@ -199,12 +212,15 @@ var
 
 		/* ** *** **** ***** Info ***** **** *** ** */
 
-		/* Get Data */
-		getInfoData: function(it){
+		/* 渲染页面 */
+		renderInfoPage: function(data){
+			data = data || {};
+
 			$.renderHTML({
 				element: report,
 				data: _.api.message,
 				html: _.tpl.message,
+				than: data,
 				type: 'get',
 				dataType: 'json',
 				callback: function(options){
@@ -212,9 +228,92 @@ var
 
 					// Append Html To Element
 					$(options.element).html( options.render );
-
 				}
 			});
+		},
+
+		/* Get Data */
+		getInfoData: function(it){
+
+			// 如果空(首次拉取数据)
+			if( iReport.find('.unPage').length ){
+
+				// 获取剩余消息数
+				kitFunction.getRemain({
+					callback: function(result){
+						kitFunction.renderInfoPage({ remain: result.data });
+					}
+				});
+
+				return;
+			}
+
+			// 1.递归->msgs, 2.提交->profle
+			var
+				// 存储数据
+				database = [],
+				// 对象集
+				items = iReport.find('.proinfo [data-msgid]'),
+				// 用于合并的数据
+				mergeData = _.cache.message.data;
+
+			$.each( items, function(i, item){
+
+				var
+					// It对象
+					it = $(item),
+
+					// Item对象的data数据
+					itData = $.getData(it),
+
+					// 固定参数
+					thanData = mergeData,
+
+					// 根据msgid获取的数据
+					itemData = kitFunction.getInfoActive({
+						id: itData.msgid,
+						than: thanData.msgs
+					});
+
+				// For Merge Data, Delete Msgs
+				thanData.u_id = itData.uid;
+
+				database.push( $.mergeJSON(thanData, itemData) );
+			});
+
+			// Punish - 递归
+			$.recursivePunish( database, {}, _.api.pass, function(){ // 1.递归msgs完成
+				
+				items.closest('tr').slideUp(function(){
+					items.closest('tr').remove();
+				});
+
+				var item = iReport.find('.profile [data-uid]');
+
+				// 分支情况 - 大厅
+				if( !item.length ){
+
+					iReport.html('<div class="unPage">'),
+					kitFunction.getInfoData( it );
+
+				}
+
+				var itData = $.getData( item );
+
+				// 常规情况
+				var database = _.cache.message.data;
+
+				database.u_id = itData.uid;
+
+				$.recursivePunish( [database], {}, _.api.pass, function(){ // 2.提交profile完成
+
+					iReport.html('<div class="unPage">'),
+					kitFunction.getInfoData( it );
+
+				});
+			});
+
+			return;
 		}
 
 		/* Choose Un */
@@ -274,42 +373,66 @@ var
 
 	};
 
-	/* Taber Change */
-	$.taber({
-		menus: 'aside a',
-		contents: 'section .main',
-		callback: function(it, index){
-			iKit.find('ul').hide().eq(index).show();
-			
-			// Init Kit Position
-			$.initPosition({
-				element: kit,
-				children: 'li',
-				self: true,
-				left: _.dom.win.width(),
-				top: _.dom.win.height() - _.dom.foot.outerHeight(),
-				off: {
-					x: -1, y: -35
-				}
-			});
-		}
-	});
+/* Socket Run */
+$.timeout({
+	count: (_.QQ, 312272592),
+	time: 6789,
+	def: true,
+	callback: function(){
 
-	/* Data-Function-Action */
-	$('[data-function]').on(_.evt.click, function(){
-		var it = $(this), fn = it.attr('data-function');
-		if( kitFunction[fn] ){
-			kitFunction[fn]( it );
-		}
-	});
+		// Get Remain Count Default
+		kitFunction.getRemain({
+			callback: function(result){
+				$('#remain_default').html( result.data.msg_remain + result.data.album_remain );
+			}
+		});
 
-	/* Drag Kit */
-	$.drag({
-		move: kit
-	});
+		// Get Remain Count Dangerous
+		kitFunction.getRemain({
+			data: { risk: 1 },
+			callback: function(result){
+				$('#remain_dangerous').html( result.data.msg_remain + result.data.album_remain );
+			}
+		});
+	}
+});
 
-	/* Fancy Pop */
-	$.fancyPop();
+/* Taber Change */
+$.taber({
+	menus: 'aside a',
+	contents: 'section .main',
+	callback: function(it, index){
+		iKit.find('ul').hide().eq(index).show();
+		
+		// Init Kit Position
+		$.initPosition({
+			element: kit,
+			children: 'li',
+			self: true,
+			left: _.dom.win.width(),
+			top: _.dom.win.height() - _.dom.foot.outerHeight(),
+			off: {
+				x: -1, y: -35
+			}
+		});
+	}
+});
+
+/* Data-Function-Action */
+$('[data-function]').on(_.evt.click, function(){
+	var it = $(this), fn = it.attr('data-function');
+	if( kitFunction[fn] ){
+		kitFunction[fn]( it );
+	}
+});
+
+/* Drag Kit */
+$.drag({
+	move: kit
+});
+
+/* Fancy Pop */
+$.fancyPop();
 
 
 /* Extend Callback */
@@ -336,9 +459,10 @@ $.extend({
 						item.show();
 					}
 				});
-
 				form.find('[' + assos + ']:not(:hidden):eq(0)').trigger( _.evt.click );
 			});
+
+			// form.find('[' + associates + ']:not(:hidden):eq(0)').trigger( _.evt.click );
 
 			// Input Press
 			$.sameInput({

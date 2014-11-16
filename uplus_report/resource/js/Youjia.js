@@ -43,10 +43,12 @@ _.path = {
  * ** *** **** ***** **** *** ** *
  */
 _.api = {
+	// 获取剩余消息数
+	remain: '/report/remain',
 	// 获取Album
-	albums: '/comm_report/album_image/list',
+	albums: '/report/album_image/list',
 	// 获取Message
-	message: '/comm_report/message/next',
+	message: '/report/message/next',
 	// 审核未通过
 	punish: '/punish',
 	// 审核通过接口
@@ -73,6 +75,7 @@ _.dom = {
 	bod:     $(document.body),
 	head:    $('header'),
 	foot:    $('footer'),
+	nav:     $('nav'),
 	aside:   $('aside'),
 	section: $('section')
 },
@@ -323,6 +326,7 @@ $.extend({
 		options = options || {}
 		, options.callback = options.callback || $.noop
 		, options.time = options.time || 150
+		, options.def = $.isType(options.def, 'boolean') ? options.def : false
 		, options.count = Math.abs( options.count || 1 )
 		, options.timeout
 		, options.action = function(){
@@ -337,6 +341,10 @@ $.extend({
 			}
 			return false;
 		};
+
+		if( options.def ){
+			options.callback();
+		}
 
 		options.action();
 	},
@@ -419,6 +427,7 @@ $.extend({
 		, options.element = options.element || undefined
 		, options.data = options.data || undefined
 		, options.html = options.html || undefined
+		, options.than = $.isType(options.than, 'object') ? options.than : undefined
 		, options.type = options.type || 'get'
 		, options.dataType = options.dataType || 'json'
 		, options.callback = options.callback || $.noop
@@ -457,6 +466,8 @@ $.extend({
 							return data;
 						}( data ):
 						data;
+
+					data = options.than ? $.mergeJSON(data, options.than) : data;
 
 					$.checkResult(data, function(){
 						options.action( data );
