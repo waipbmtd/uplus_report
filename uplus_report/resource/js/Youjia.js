@@ -63,9 +63,9 @@ _.api = {
  * ** *** **** ***** **** *** ** *
  */
 _.tpl = {
-	albums: _.path.template('albums'),
-	message: _.path.template('message'),
-	operat: _.path.template('operat')
+	albums: _.path.template('loaded/albums'),
+	message: _.path.template('loaded/message'),
+	operat: _.path.template('loaded/operat')
 },
 
 /* !!

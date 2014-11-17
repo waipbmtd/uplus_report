@@ -617,11 +617,7 @@
 	content: "\e200";
 }
 
-*{
--webkit-box-sizing: border-box;
-   -moz-box-sizing: border-box;
-        box-sizing: border-box;
-}
+*,
 *:before,
 *:after{
 -webkit-box-sizing: border-box;
@@ -1284,7 +1280,6 @@ textarea{
 			border: 5px solid transparent;
 
 			p{
-				height: 24px;
 				left: 0; right: 0; top: 100%;
 				.absolute;
 				.text-center;
@@ -1292,6 +1287,8 @@ textarea{
 				background: rgba(0, 0, 0, .5);
 
 				a{
+					.block;
+					line-height: 24px;
 					color: @color-white;
 				}
 			}
