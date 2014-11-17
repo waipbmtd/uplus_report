@@ -323,6 +323,10 @@ var
 				var database = _.cache.message.data;
 
 				database.u_id = itData.uid;
+				database.module_id = database.profile.mid;
+
+				// 数据适配
+				database = kitFunction.dataTolerance( database );
 
 				$.recursivePunish( [database], {}, _.api.pass, function(){ // 2.提交profile完成
 
