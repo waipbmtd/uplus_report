@@ -2,6 +2,8 @@
 
 _.console = _.console || { log: $.noop },
 
+_.risk = $.trim(_.risk).length ? Number(_.risk) : 0,
+
 /* !!
  * 路径
  * ** *** **** ***** **** *** ** *
@@ -49,15 +51,15 @@ _.path = {
  */
 _.api = {
 	// 获取剩余消息数
-	remain: '/report/remain',
+	remain: '/report/remain' + '?risk=' + _.risk,
 	// 获取Album
-	albums: '/report/album_image/list',
+	albums: '/report/album_image/list' + '?risk=' + _.risk,
 	// 获取Message
-	message: '/report/message/next',
+	message: '/report/message/next' + '?risk=' + _.risk,
 	// 审核未通过
-	punish: '/punish',
+	punish: '/punish' + '?risk=' + _.risk,
 	// 审核通过接口
-	pass: '/pass'
+	pass: '/pass' + '?risk=' + _.risk
 },
 
 /* !!
