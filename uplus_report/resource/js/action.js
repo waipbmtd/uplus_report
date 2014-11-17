@@ -35,6 +35,14 @@ var
 
 		/* ** *** **** ***** Image ***** **** *** ** */
 
+		/* Database Tolerance */
+		dataTolerance: function(data){
+			return (data = data || {})
+				, data.thumb_url = data.thumburl || ''
+				, data.msg_id = data.msgid || ''
+				, data;
+		},
+
 		/* Get Remain Length */
 		getRemain: function(options){
 			options = options || {}
@@ -556,6 +564,8 @@ $.extend({
 					than: _.cache.albums
 				});
 
+			console.log(database);
+
 			// Operat Submit
 			$.formSubmit({
 				database: database,
@@ -604,6 +614,9 @@ $.extend({
 							mergeData = $.mergeJSON( mergeData, item );
 						}
 					});
+
+					// 数据适配
+					mergeData = dataTolerance( mergeData );
 
 					delete mergeData.msgs;
 
