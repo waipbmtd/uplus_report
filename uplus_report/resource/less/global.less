@@ -1269,18 +1269,38 @@ textarea{
 		.in-block;
 
 		span{
-			max-width: @size-width; max-height: @size-height;
+			/* max-width: @size-width; max-height: @size-height; */
+			width: @size-width; height: @size-height;
 			.block;
 			.over-hide;
+			.relative;
 			border: 5px solid transparent;
 
-			&.active{
-				border-color: @color-choose;
+			p{
+				height: 24px;
+				left: 0; right: 0; top: 100%;
+				.absolute;
+				.text-center;
+				transition: @animate;
+				background: rgba(0, 0, 0, .5);
+
+				a{
+					color: @color-white;
+				}
 			}
 
 			img{
 				min-width: @size-width; min-height: @size-height;
 				max-width: 100%; max-height: 100%;
+			}
+
+			&.active{
+				border-color: @color-choose;
+			}
+			&:hover{
+				p{
+					margin-top: -24px;
+				}
 			}
 		}
 	}

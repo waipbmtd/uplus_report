@@ -115,6 +115,7 @@ var
 					// Choose Item
 					$.choose({
 						items: masonry + ' span',
+						block: 'p',
 						active: active
 					});
 				}
@@ -384,6 +385,7 @@ var
 	};
 
 /* Socket Run */
+/*
 $.timeout({
 	count: (_.QQ, 312272592),
 	time: 6789,
@@ -406,6 +408,7 @@ $.timeout({
 		});
 	}
 });
+*/
 
 /* Taber Change */
 $.taber({

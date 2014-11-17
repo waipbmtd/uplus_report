@@ -524,10 +524,14 @@ $.extend({
 	choose: function(options){
 		options = options || {}
 		, options.items = $( options.items || undefined )
+		, options.block = options.block || undefined
 		, options.event = options.event || _.evt.click
 		, options.active = options.active || 'active';
 
 		options.items.on(options.event, function(e){
+			if( options.block && $(e.target).closest( options.block ).length ){
+				return;
+			}
 			var it = $(this);
 			it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
 		});
