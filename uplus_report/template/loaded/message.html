@@ -88,13 +88,13 @@ switch( it.data.mod ){
 						<td>
 							<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
 						</td>
-						{{??}}
+						{{!??}}
 						<!-- 消息.无数据 -->
 						<td></td>
 						{{!?}}
 
 						<td>{{!= item.senderid }}</td>
-						<td>{{!= $.escape(item.msg_type, 'msg_types') }}</td>
+						<td>{{!= $.escape(item.msg_type, 'msg_types') || '' }}</td>
 						<td>
 							<menu>
 							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
