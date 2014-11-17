@@ -162,6 +162,9 @@ $.extend({
 		
 		/* Selector: Move Items */
 		, options.mover = options.move || '.drag-item'
+
+		/* Selector: Move Target */
+		, options.nation = options.nation || options.move
 		
 		/* Mouse Coordinates */
 		, options.mouseCoor = {
@@ -203,7 +206,11 @@ $.extend({
 			, e.clientY = e.clientY || 0;
 			
 			/* Get Item Target */
-			options.target =  $(this);// $(e.target);
+			if( e.target.tagName.toLowerCase() != options.nation ){
+				return;
+			}
+
+			options.target = $(e.target).closest( options.mover );
 			
 			options.initCoor.x = e.clientX,
 			options.initCoor.y = e.clientY;
@@ -256,7 +263,7 @@ $.extend({
 		, options.cancel = function(){
 			
 			/* Event Agent At Start */
-			options.board.undelegate( options.mover, $.evt.down, options.dragStartHandle );
+			options.board.undelegate( options.target, $.evt.down, options.dragStartHandle );
 			
 			/* Bind Event At Move */
 			options.win.off( $.evt.move, options.dragMoveHandle );
@@ -268,7 +275,7 @@ $.extend({
 		, options.init = function(){
 			
 			/* Event Agent At Start */
-			options.board.delegate( options.mover, _.evt.down, options.dragStartHandle ),
+			options.board.delegate( options.target, _.evt.down, options.dragStartHandle ),
 			
 			/* Bind Event At Move */
 			options.win.on( _.evt.move, options.dragMoveHandle ),
@@ -367,7 +374,7 @@ $.extend({
 			form = $(form);
 
 			form.on('submit', function(){
-				
+
 				var formData = $.getData( form ),
 					option = {
 						name: options.name || 'data-name',
@@ -516,11 +523,11 @@ $.extend({
 			options.long += $(item).outerWidth();
 		});
 
-		options.long += 2.5;
+		options.long += 5;
 
 		options.element.css({
-			width: options.long
-			,left: options.left - (options.self ? options.long : 0) + options.off.x
+			width: options.long + 10
+			,left: options.left - 10 - (options.self ? options.long : 0) + options.off.x
 			,top: options.top + options.off.y
 		});
 

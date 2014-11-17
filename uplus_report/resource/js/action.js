@@ -467,7 +467,8 @@ $('[data-function]').on(_.evt.click, function(){
 
 /* Drag Kit */
 $.drag({
-	move: kit
+	move: kit,
+	nation: 'bdo'
 });
 
 /* Fancy Pop */
