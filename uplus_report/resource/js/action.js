@@ -597,6 +597,14 @@ $.extend({
 					// For Merge Data, Delete Msgs
 					var mergeData = _.cache.message.data;
 					mergeData.u_id = itData.uid;
+					mergeData.module_id = mergeData.profile.mid;
+
+					$.each(mergeData.msgs, function(i, item){
+						if( item.msgid == itData.msgid ){
+							mergeData = $.mergeJSON( mergeData, item );
+						}
+					});
+
 					delete mergeData.msgs;
 
 					// Punish - 递归
