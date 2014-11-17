@@ -616,7 +616,7 @@ $.extend({
 					});
 
 					// 数据适配
-					mergeData = dataTolerance( mergeData );
+					mergeData = kitFunction.dataTolerance( mergeData );
 
 					delete mergeData.msgs;
 

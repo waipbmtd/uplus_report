@@ -367,7 +367,7 @@ $.extend({
 			form = $(form);
 
 			form.on('submit', function(){
-
+				
 				var formData = $.getData( form ),
 					option = {
 						name: options.name || 'data-name',
