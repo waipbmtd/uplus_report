@@ -16,8 +16,6 @@ routers = [
 
     # 获取页面
     url(r"/get_template", base.GetTemplateHandler),
-    # 获取模板
-    url(r"/render/(?P<path>\w+)", render.RenderHandler),
 
     # 获取举报原因枚举
     url(r"/enum/type", constantenu.TypeEnumHandler),
@@ -27,7 +25,7 @@ routers = [
     url(r"/enum/punish", constantenu.PunishEnumHandler),
     # 入口业务枚举
     url(r"/enum/entrance_mod", constantenu.EntranceModEnumHandler),
-    #所有枚举
+    # 所有枚举
     url(r"/enum/all", constantenu.ALLEnumHandler),
 
     #获取像册图片列表
@@ -65,3 +63,10 @@ routers = [
     url(r'/user/special', user.SpecialUserHandler),
     url(r'/user/special/list', user.SpecialUserListHandler)
 ]
+
+append_routers = [
+    # 获取模板
+    url(r"/(?P<path>\w+)", render.RenderHandler)
+]
+
+routers += append_routers
