@@ -30,7 +30,6 @@ switch( it.data.mod ){
 		<bdo>来源：{{!= $.escape(it.data.mod, 'mod') }}</bdo>
 		<label data-id="{{!= it.data.id }}"><span>ID：</span>{{!= it.data.id }}</label>
 		<label data-reporter="{{!= it.data.reporter }}"><span>举报人：</span>{{!= it.data.reporter }}</label>
-		<label data-buid="{{!= it.data.buid}}"><span>被举报人：</span>{{!= it.data.buid }}</label>
 		<label data-type="reason"><span>原因：</span>{{!= $.escape(it.data.type, 'type') }}</label>
 		<label><i>剩余：{{!= it.remain.msg_remain }}</i></label>
 	</dt>
@@ -62,7 +61,7 @@ switch( it.data.mod ){
 					<tr>
 						<td>{{!= item.msgid }}</td>
 
-						{{!? item.msg_type == 'text' }}
+						{{!? item.msg_type == 1 }}
 						<!-- 消息.文本 -->
 						<td>
 							<i class="glyphicon glyphicon-list-alt"></i>
@@ -70,22 +69,29 @@ switch( it.data.mod ){
 						</td>
 						{{!?}}
 
-						{{!? item.msg_type == 'audio' }}
+						{{!? item.msg_type == 3 }}
 						<!-- 消息.音频 -->
 						<td>
 							<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
 						</td>
 						{{!?}}
 
-						{{!? item.msg_type == 'video' }}
+						{{!? item.msg_type == 8 }}
 						<!-- 消息.视频 -->
 						<td>
-							<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-film"></i>点击访问视频</a>
+							<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
+						</td>
+						{{!?}}
+
+						{{!? item.msg_type == 2 }}
+						<!-- 消息.图片 -->
+						<td>
+							<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
 						</td>
 						{{!?}}
 
 						<td>{{!= item.senderid }}</td>
-						<td>{{!= item.msg_type }}</td>
+						<td>{{!= $.escape(item.msg_type, 'msg_types') }}</td>
 						<td>
 							<menu>
 							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>

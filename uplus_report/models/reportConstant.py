@@ -5,12 +5,19 @@
 REPORT_RISK_TRUE = 1
 REPORT_RISK_FALSE = 0
 
-#
-REPORT_RISK_ENUS = {
+#级别
+REPORT_RISK_ENUMS = {
     REPORT_RISK_TRUE: '高危',
     REPORT_RISK_FALSE: '普通'
 }
 
+#消息类型
+MESSAGE_TYPES_ENUMS = {
+    1: "文本",
+    2: "图片",
+    3: "声音",
+    4: "视频",
+}
 
 # 请求
 REQUEST_TYPES = {
