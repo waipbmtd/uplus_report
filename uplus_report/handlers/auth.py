@@ -23,7 +23,7 @@ class LoginHandler(BaseHandler):
             self.redirect('/')
             return 0
         return self.render("login.html", next=self.get_argument(
-            'next', default="/"))
+            'next', default="/"), name="hello")
 
     @session_manage
     def post(self):

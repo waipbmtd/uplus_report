@@ -3,7 +3,6 @@
 import tornado.web
 
 
-class Navbar(tornado.web.UIModule):
-    def render(self):
-        return self.render_string(
-            "partial/navbar.html", username=self.current_user.username)
+class PageInclude(tornado.web.UIModule):
+    def render(self, path):
+        return self.render_string("render/" + path + ".html")

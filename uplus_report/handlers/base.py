@@ -98,6 +98,8 @@ class BaseHandler(tornado.web.RequestHandler):
         return user
 
     def get(self):
+        path = self.get_argument("path")
+
         return self.render('login.html')
 
     @session_manage
@@ -119,7 +121,7 @@ class DefaultHandler(BaseHandler):
         logging.info(
             "revere index url : %s" % "index.html")
         self.render("index.html",
-                    username=self.current_user.username)
+                    username=self.current_user.username, path="blank")
 
 
 class GetTemplateHandler(BaseHandler):

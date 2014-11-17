@@ -3,7 +3,7 @@
 from tornado.web import url
 
 from handlers import base, auth, report, constantenu, punish, passed, \
-    hall, show, user
+    hall, show, user, render
 
 
 routers = [
@@ -16,6 +16,8 @@ routers = [
 
     # 获取页面
     url(r"/get_template", base.GetTemplateHandler),
+    # 获取模板
+    url(r"/render/(?P<path>\w+)", render.RenderHandler),
 
     # 获取举报原因枚举
     url(r"/enum/type", constantenu.TypeEnumHandler),
