@@ -410,6 +410,20 @@ $.timeout({
 });
 */
 
+/* Default High Light Nav */
+;(function( param ){
+
+$.each( _.dom.nav.find('a'), function(i, a){
+
+	if( !!~a.getAttribute('href').indexOf( param ) ){
+		$(a).addClass('active');
+	}
+});
+
+})
+( _.location.pathname.match(/\w{0,}$/g)[0] );
+
+
 /* Taber Change */
 $.taber({
 	menus: 'aside a',
