@@ -10,7 +10,8 @@ class RenderHandler(BaseHandler):
     def get(self, path):
         kwargs = dict(
             path=path,
-            username=self.current_user.username
+            username=self.current_user.username,
+            risk=0
         )
         if path == "report_risk":
             kwargs.update(dict(risk=1))
