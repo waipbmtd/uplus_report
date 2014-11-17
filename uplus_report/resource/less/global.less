@@ -663,6 +663,9 @@ address{
 ol, ul, li{
 	list-style: none;
 }
+input, button, textarea{
+	outline: none;
+}
 
 a         { color: dimgray; border-radius: 2px; text-decoration: none; }
 a:link    {}
@@ -1058,6 +1061,10 @@ a, button, input, textarea{
 	border-radius: @radius;
 	&[type=text], &[type=password]{
 
+	}
+	&:focus{
+		border-color: @color-light;
+		box-shadow: 0 0 3px rgba(38, 168, 228, .88);
 	}
 }
 .input-small{

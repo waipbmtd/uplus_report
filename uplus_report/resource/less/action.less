@@ -402,6 +402,79 @@ section{
 	}
 }
 
+.login{
+	width: 560px; height: 315px;
+	margin: -158px 0 0 -280px;
+	top: 50%; left: 50%;
+	.fixed;
+	.over-hide;
+	background: @color-white;
+	border-radius: @radius;
+	box-shadow:  0 0 3px rgba(0, 0, 0, .5);
+
+	h2{
+		padding: @distance / 2 @distance;
+		font-size: 16px;
+		background: @color-dim;
+	}
+
+	ul{
+		top: 60px;
+		left: 140px;
+		.relative;
+		color: @color-hazy;
+
+		li{
+			.clearfix;
+			.block;
+			&:after{
+				visibility: hidden;
+				display: block;
+				font-size: 0;
+				content: ' ';
+				clear: both;
+				height: 0;
+			}
+
+			margin-bottom: 1.5em;
+
+			label{
+				width: @distance * 4;
+				height: @distance * 4;
+				.text-center;
+				.v-middle;
+				.left;
+				border-width: 1px 0 1px 1px;
+				border-style: solid;
+				border-color: @color-ghost;
+				border-radius: @radius 0 0 @radius;
+
+				i{
+					.relative;
+					font-size: 1.35em;
+					top: 7px;
+					left: 3px;
+				}
+			}
+			div{
+				margin-left: @distance * 4;
+				input{
+					width: @distance * 24;
+					height: @distance * 4;
+					font-size: 14px;
+					padding-left: @distance;
+					padding-right: @distance;
+					border-radius: 0 @radius @radius 0;
+				}
+				button{
+					.btn-orange;
+					.btn-big;
+				}
+			}
+		}
+	}
+}
+
 .audit-operat{
 	min-width: 640px; min-height: 300px;
 	.relative;

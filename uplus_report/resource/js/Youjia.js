@@ -9,6 +9,9 @@ _.path = {
 	// Base Root
 	root: _.location.protocol + '//' + _.location.host,
 
+	// Base Domain: (No Port)
+	domain: _.location.protocol + '//' + _.location.hostname,
+
 	// Base Resource
 	resource: _.url.resource || '',
 
