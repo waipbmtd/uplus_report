@@ -21,6 +21,8 @@ class OpenMouthHallHandler(BaseHandler):
             uid=self.get_argument("u_id"),
             # 备注：
             memo=self.get_argument("memo", ""),
+            # 消息ID
+            msg_id=self.get_argument("msg_id", ""),
             # 客服id
             cid=self.current_user.id
         )
@@ -44,6 +46,7 @@ class OpenMouthHallHandler(BaseHandler):
                                            server_api,
                                            parameters=dict(
                                                uid=self.v("uid"),
+                                               msgId=self.v("msg_id"),
                                                cid=self.current_user.id,
                                            ))
         self.log_record_open_mouth()

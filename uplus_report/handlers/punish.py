@@ -69,7 +69,8 @@ class PunishBaseHandler(BaseHandler):
             rid=self.v("rid"),
             cid=self.v("cid"),
             reporter=self.v("reporter_id"),
-            owner=self.v("owner")
+            owner=self.v("owner"),
+            msgId=self.v("msg_id")
         )
 
     @property
@@ -81,7 +82,8 @@ class PunishBaseHandler(BaseHandler):
             timedelta=self.v("timedelta"),
             rid=self.v("rid"),
             cid=self.v("cid"),
-            reporter=self.v("reporter_id")
+            reporter=self.v("reporter_id"),
+            msgId=self.v("msg_id")
         )
 
     @property
@@ -96,7 +98,7 @@ class PunishBaseHandler(BaseHandler):
             msgId=self.v("msg_id"),
             timedelta=self.v("timedelta"),
             cid=self.v("cid"),
-            reporter=self.v("reporter_id")
+            reporter=self.v("reporter_id"),
         )
 
     def log_record_close(self):

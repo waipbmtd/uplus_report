@@ -21,6 +21,8 @@ class ShowBaseHandler(BaseHandler):
             uid=self.get_argument("u_id", ""),
             # 秀场id
             show_id=self.get_argument("module_id"),
+            # 消息id
+            msg_id=self.get_argument("msg_id"),
             # 备注：
             memo=self.get_argument("memo", ""),
             # 客服id
@@ -54,6 +56,7 @@ class OpenMouthShowHandler(ShowBaseHandler):
                                            parameters=dict(
                                                uid=self.v("uid"),
                                                cid=self.current_user.id,
+                                               msgId=self.v("msg_id")
                                            ))
         self.log_record_open_mouth()
         return self.send_success_json(json.loads(data))
@@ -83,6 +86,7 @@ class UnlockShowHandler(ShowBaseHandler):
                                            server_api,
                                            parameters=dict(
                                                cid=self.current_user.id,
+                                               msgId=self.v("msg_id")
                                            ))
         self.log_record_unlock()
         return self.send_success_json(json.loads(data))

@@ -75,6 +75,7 @@ class PassedHandler(BaseHandler):
                                            parameters=dict(
                                                rid=self.v("rid"),
                                                cid=self.current_user.id,
+                                               msgId=self.v("msg_id"),
                                                reporter=self.v("reporter_id")
                                            ))
         self.log_record_pass()

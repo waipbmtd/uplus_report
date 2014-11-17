@@ -8,5 +8,10 @@ import tornado.web
 class RenderHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self, path):
-        self.render("index.html", path=path,
-                    username=self.current_user.username)
+        kwargs = dict(
+            path=path,
+            username=self.current_user.username
+        )
+        if path == "report_risk":
+            kwargs.update(dict(risk=1))
+        self.render("index.html", **kwargs)

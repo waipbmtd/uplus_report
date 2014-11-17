@@ -101,6 +101,7 @@ class UnlockUserHandler(UserBaseHandler):
                                            parameters=dict(
                                                uid=self.v("uid"),
                                                cid=self.current_user.id,
+                                               msgId=self.v("msg_id"),
                                            ))
         self.log_record_unlock()
         return self.send_success_json(json.loads(data))
