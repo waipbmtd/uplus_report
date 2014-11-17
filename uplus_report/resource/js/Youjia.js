@@ -1,5 +1,7 @@
 ;(function(_, $, undefined){
 
+_.console = _.console || { log: $.noop },
+
 /* !!
  * 路径
  * ** *** **** ***** **** *** ** *
