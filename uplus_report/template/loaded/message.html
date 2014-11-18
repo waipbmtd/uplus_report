@@ -51,7 +51,7 @@ switch( it.data.mod ){
 					<tr>
 						<th width="10%">编号</th>
 						<th width="40%">内容</th>
-						<th width="20%">举报人ID</th>
+						<th width="20%">发送者ID</th>
 						<th width="10%">消息类型</th>
 						<th width="20%">操作</th>
 					</tr>
@@ -61,43 +61,59 @@ switch( it.data.mod ){
 					<tr>
 						<td>{{!= item.msgid }}</td>
 
-						{{!? item.msg_type == 1 }}
-						<!-- 消息.文本 -->
-						<td>
-							<i class="glyphicon glyphicon-list-alt"></i>
-							{{!= item.content }}
-						</td>
-						{{!?}}
+						{{! switch( item.msg_type ){ }}
 
-						{{!? item.msg_type == 3 }}
-						<!-- 消息.音频 -->
-						<td>
-							<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
-						</td>
-						{{!?}}
+							{{! case 1: }}
 
-						{{!? item.msg_type == 8 }}
-						<!-- 消息.视频 -->
-						<td>
-							<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
-						</td>
-						{{!?}}
+								<!-- 消息.文本 -->
+								<td>
+									<i class="glyphicon glyphicon-list-alt"></i>
+									{{!= item.content }}
+								</td>
 
-						{{!? item.msg_type == 2 }}
-						<!-- 消息.图片 -->
-						<td>
-							<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
-						</td>
-						{{!??}}
-						<!-- 消息.无数据 -->
-						<td></td>
-						{{!?}}
+							{{! break; }}
+
+							{{! case 2: }}
+
+								<!-- 消息.图片 -->
+								<td>
+									<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
+								</td>
+
+							{{! break; }}
+
+							{{! case 3: }}
+
+								<!-- 消息.音频 -->
+								<td>
+									<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
+								</td>
+
+							{{! break; }}
+
+							{{! case 8: }}
+
+								<!-- 消息.视频 -->
+								<td>
+									<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.thumburl}}"></a>
+								</td>
+
+							{{! break; }}
+
+							{{! default: }}
+
+								<!-- 消息.无消息 -->
+								<td></td>
+								
+							{{! break; }}
+
+						{{! } }}
 
 						<td>{{!= item.senderid }}</td>
 						<td>{{!= $.escape(item.msg_type, 'msg_types') || '' }}</td>
 						<td>
 							<menu>
-							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+								<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
 							</menu>
 						</td>
 					</tr>

@@ -424,6 +424,28 @@ section{
 			}
 		}
 	}
+
+	.report_user{
+		.report_search_panel{
+			.form-control;
+			padding-top: @distance;
+
+			button{
+				.btn-small;
+			}
+		}
+		.report_search_result{
+			padding: 0 @distance;
+
+			table{
+				width: 100%;
+
+				button{
+					.btn-red;
+				}
+			}
+		}
+	}
 }
 
 .login{
@@ -503,19 +525,11 @@ section{
 	min-width: 640px; min-height: 300px;
 	.relative;
 	padding-bottom: 6 * @distance;
+	.form-control;
 
 	li{
 		.over-hide;
 		margin-top: 1em;
-
-		&>label, &>div{
-			.left;
-		}
-		&>label{
-			.in-block;
-			.text-right;
-			width: 8em;
-		}
 
 		menu{
 			.over-hide;

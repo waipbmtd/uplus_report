@@ -866,7 +866,25 @@ a, button, input, textarea{
 
 
 /* General CSS */
+.font-default{
+	font-size: 12px;
+}
+.form-control{
+	li{
+		@long: 8em;
+		.clearfix;
+		&>label{
+			width: @long;
+			.text-right;
+			.left;
+		}
+		&>div{
+			margin-left: @long;
+		}
+	}
+}
 .table{
+	.font-default;
 	background: @color-white;
 }
 .table-theme{
@@ -877,7 +895,7 @@ a, button, input, textarea{
 	}
 	thead{
 		th{
-			font-size: 1.085em;
+			font-size: 1.1em;
 			font-weight: normal;
 			color: #eee;
 			border-width: 0 1px 0 0;
@@ -913,6 +931,10 @@ a, button, input, textarea{
 	}
 }
 
+button, input[type=button], input[type=submit], input[type=reset]{
+	.btn-black;
+	.btn-normal;
+}
 .btn{
 	color: @color-frivo;
 	border-width: 1px;
@@ -933,6 +955,10 @@ a, button, input, textarea{
 	&:focus{
 	    outline: 0;
 	} 
+}
+.btn-small{
+	padding: 0 6px;
+	font-size: 12px;
 }
 .btn-normal{
 	padding: 3px 9px;

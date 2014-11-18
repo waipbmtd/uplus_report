@@ -1,0 +1,24 @@
+<table class="table-theme">
+	<thead>
+		<tr>
+			<th width="20%">编号</th>
+			<th width="40%">创建时间</th>
+			<th width="20%">访问</th>
+			<th width="20%">操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{!~ it.data:item }}
+		<tr>
+			<td>{{!= item.user_id }}</td>
+			<td>{{!= item.create_time }}</td>
+			<td><a target="_blank" href="">点击查看</a></td>
+			<td>
+				<menu>
+					<button class="yellow" type="button" data-function="deleteUser" data-type="risk" data-uid="{{!= item.user_id }}">删除</button>
+				</menu>
+			</td>
+		</tr>
+		{{!~ }}
+	</tbody>
+</table>

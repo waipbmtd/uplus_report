@@ -15,7 +15,7 @@ _.cache = {
  * All Function Is In Plus
  * ** *** **** ***** **** *** ** *
  */
-;+function( kit, masonry, report, active ){
+;+function( kit, masonry, report, reportUser, active ){
 
 var
 	/* Kit Element */
@@ -29,6 +29,9 @@ var
 
 	/* Report Element */
 	iReport = $(report),
+
+	/* Report User */
+	iReportUser = $(reportUser),
 
 	/* Data-Function In Kit */
 	kitFunction = {
@@ -455,16 +458,18 @@ $.taber({
 		$.timeout({
 			callback: function(){
 				// 部分系统下会出现错位情况，所以加一个定时器，做复位用
-				$.initPosition({
-					element: kit,
-					children: 'li',
-					self: true,
-					left: _.dom.doc.width(),
-					top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
-					off: {
-						x: -1, y: -35
-					}
-				});
+				if( iKit.length ){
+					$.initPosition({
+						element: kit,
+						children: 'li',
+						self: true,
+						left: _.dom.doc.width(),
+						top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
+						off: {
+							x: -1, y: -35
+						}
+					});
+				}
 			},
 			time: 30
 		});
@@ -488,6 +493,9 @@ $.drag({
 /* Fancy Pop */
 $.fancyPop();
 
+
+/* All Form Control */
+$.formSubmit();
 
 /* Extend Callback */
 $.extend({
@@ -582,9 +590,6 @@ $.extend({
 					selector: 'data-id',
 					than: _.cache.albums
 				});
-
-			console.log(database);
-
 
 			// Operat Submit
 			$.formSubmit({
@@ -691,14 +696,30 @@ $.extend({
 		operatImage: function(result){
 			console.log( result );
 			alert('I am callback Image');
+		},
+		getUserRisk: function(result){
+			$.checkResult(result, function( result ){
+				var element_result = iReportUser.eq(0).find('.report_search_result');
 
+				$.renderHTML({
+					element: element_result,
+					data: result,
+					html: _.tpl.users,
+					type: 'get',
+					dataType: 'json',
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).html( options.render );
+					}
+				});
+			});
 		}
 	}
 });
 
 
 
-}( '.kit', '.masonry', '.report', 'active' );
+}( '.kit', '.masonry', '.report', '.report_user', 'active' );
 
 })
 (window, jQuery);
