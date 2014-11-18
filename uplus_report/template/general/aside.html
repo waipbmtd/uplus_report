@@ -1,11 +1,6 @@
 <aside>
+{{!? it.current == 'report_common' || it.current == 'report_risk' }}
 	<dl>
-		<!--
-		<dt>
-			<i class="icon"></i>
-			举报内容
-		</dt>
-		-->
 		<dd>
 			<ul>
 				<li><a class="active"><i class="glyphicon glyphicon-picture"></i>相册举报</a></li>
@@ -13,4 +8,15 @@
 			</ul>
 		</dd>
 	</dl>
+{{!?}}
+{{!? it.current == 'report_user' }}
+	<dl>
+		<dd>
+			<ul>
+				<li><a class="active"><i class="glyphicon glyphicon-picture"></i>相册举报</a></li>
+				<li><a><i class="glyphicon glyphicon-list-alt"></i>消息举报</a></li>
+			</ul>
+		</dd>
+	</dl>
+{{!?}}
 </aside>

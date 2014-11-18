@@ -17,7 +17,7 @@ _.path = {
 	domain: _.location.protocol + '//' + _.location.hostname,
 
 	// Base Resource
-	resource: _.url.resource || '',
+	resource: (_.url && _.url.resource) ? _.url.resource : '',
 
 	// Base Template
 	template: function(page){
@@ -435,6 +435,15 @@ $.extend({
 			});
 		});
 		return data;
+	},
+	reloadHTML: function(options){
+		options = options || {}
+		, options.element = options.element || ''
+		, options.data = options.data;
+
+		if( doT ){
+			options.element.html( doT.template( options.element.html() )( options.data ) );
+		}
 	},
 	renderHTML: function(options){
 		options = options || {}

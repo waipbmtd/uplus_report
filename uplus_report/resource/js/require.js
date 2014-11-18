@@ -11,7 +11,7 @@ strict = true
 ,root = _.location.protocol + '//' + _.location.host
 
 /* Resource: url.resource is get from python */
-,resource = root + _.url.resource + 'js/'
+,resource = root + ( (_.url && _.url.resource) ? _.url.resource : '/static/') + 'js/'
 
 /* Manifest */
 ,manifest = document.querySelector('[data-manifest]')

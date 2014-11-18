@@ -436,6 +436,14 @@ $.each( _.dom.nav.find('a'), function(i, a){
 ( _.location.pathname.match(/\w{0,}$/g)[0] );
 
 
+/* Reload Aside */
+$.reloadHTML({
+	element: _.dom.aside,
+	data: {
+		current: _.current
+	}
+});
+
 /* Taber Change */
 $.taber({
 	menus: 'aside a',
@@ -444,15 +452,21 @@ $.taber({
 		iKit.find('ul').hide().eq(index).show();
 		
 		// Init Kit Position
-		$.initPosition({
-			element: kit,
-			children: 'li',
-			self: true,
-			left: _.dom.win.width(),
-			top: _.dom.win.height() / 2, // - _.dom.foot.outerHeight(),
-			off: {
-				x: -1, y: -35
-			}
+		$.timeout({
+			callback: function(){
+				// 部分系统下会出现错位情况，所以加一个定时器，做复位用
+				$.initPosition({
+					element: kit,
+					children: 'li',
+					self: true,
+					left: _.dom.doc.width(),
+					top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
+					off: {
+						x: -1, y: -35
+					}
+				});
+			},
+			time: 30
 		});
 	}
 });
@@ -570,6 +584,7 @@ $.extend({
 				});
 
 			console.log(database);
+
 
 			// Operat Submit
 			$.formSubmit({
