@@ -8,7 +8,13 @@ _.cache = {
 	// 相册存储
 	albums: [],
 	// 消息存储
-	message: []
+	message: [],
+	// 用户存储
+	users: {
+		risk: [],
+		special: [],
+		system: []
+	}
 }
 
 /* !!
@@ -398,7 +404,53 @@ var
 		*/
 
 		deleteUser: function(it){
-			console.log(it);
+			$.confirm('确定删除该用户吗？', function(){
+				
+				var itData = $.getData(it),
+					database = {},
+					url = '';
+
+				$.each( _.cache.users.risk, function(i, data){
+					if( data.user_id == itData.user_id ){
+						database = data;
+					}
+				});
+
+				switch( itData.type ){
+					case 'risk':
+						url = _.api.user_risk;
+						break;
+					case 'special':
+						url = _.api.user_special;
+						break;
+					case 'system':
+						url = _.api.user_system;
+						break;
+					default:
+						break;
+				}
+
+				$.ajax({
+					type: 'delete',
+					url: url,
+					data: database,
+					success: function(result){
+						$.checkResult(result, function( result ){
+
+							(function(tr){
+								if( tr.length ){
+									tr.slideUp(function(){
+										tr.remove();
+									});
+								}
+							})( it.closest('tr') );
+
+						});
+					}
+				});
+
+				return true;
+			});
 		}
 
 	};
@@ -481,7 +533,7 @@ $.taber({
 });
 
 /* Data-Function-Action */
-$('[data-function]').on(_.evt.click, function(){
+_.dom.bod.delegate('[data-function]', _.evt.click, function(){
 	var it = $(this), fn = it.attr('data-function');
 	if( kitFunction[fn] ){
 		kitFunction[fn]( it );
@@ -701,13 +753,14 @@ $.extend({
 			console.log( result );
 			alert('I am callback Image');
 		},
-		getUserRisk: function(result){
+		getUsers: function(result, form){
 			$.checkResult(result, function( result ){
-				var element_result = iReportUser.eq(0).find('.report_search_result');
+
+				_.cache.users.risk = result.data;
 
 				$.renderHTML({
-					element: element_result,
-					data: result,
+					element: form.closest('.report_user').find('.report_search_result'),
+					data: $.mergeJSON(result, { type: form.attr('data-type') }),
 					html: _.tpl.users,
 					type: 'get',
 					dataType: 'json',

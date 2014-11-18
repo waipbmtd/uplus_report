@@ -419,7 +419,7 @@ $.extend({
 						data: option.data,
 						success: function(result){
 							$.checkResult(result, function( result ){
-								option.callback( result );
+								option.callback( result, form );
 							});
 						}
 					});

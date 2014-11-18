@@ -4,7 +4,7 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<form data-submit="ajax" data-callback="getUserRisk" method="get" action="/user/risk/list">
+				<form data-submit="ajax" data-callback="getUsers" data-type="risk" method="get" action="/user/risk/list">
 					<ul>
 						<li>
 							<label>关键字：</label>
@@ -26,16 +26,46 @@
 	<div class="main">
 		
 		<div class="report_user">
-			<div class="unPage">请点击按钮申领任务</div>
-			<!-- Get Page From <profile.html> -->
+			<div class="report_search_panel">
+				<form data-submit="ajax" data-callback="getUsers" data-type="special" method="get" action="/user/special/list">
+					<ul>
+						<li>
+							<label>关键字：</label>
+							<div>
+								<input type="text" autofocus />
+								<button>查询</button>
+							</div>
+						</li>
+					</ul>
+				</form>
+				<hr class="line-gray" />
+			</div>
+			<div class="report_search_result">
+				<!-- Get Page From <users.html> -->
+			</div>
 		</div>
 
 	</div>
 	<div class="main">
 		
 		<div class="report_user">
-			<div class="unPage">333请点击按钮申领任务</div>
-			<!-- Get Page From <profile.html> -->
+			<div class="report_search_panel">
+				<form data-submit="ajax" data-callback="getUsers" data-type="system" method="get" action="/user/system/list">
+					<ul>
+						<li>
+							<label>关键字：</label>
+							<div>
+								<input type="text" autofocus />
+								<button>查询</button>
+							</div>
+						</li>
+					</ul>
+				</form>
+				<hr class="line-gray" />
+			</div>
+			<div class="report_search_result">
+				<!-- Get Page From <users.html> -->
+			</div>
 		</div>
 
 	</div>
