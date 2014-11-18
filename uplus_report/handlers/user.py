@@ -110,11 +110,13 @@ class UnlockUserHandler(UserBaseHandler):
 class UplusUserListBaseHandler(BaseHandler):
     _redis = ""
     KEY = ""
+    TYPE = ""
 
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
         users = self._redis.zrangebyscore(self.KEY, 0, "+inf", withscores=True)
+        self.record_log(content=self.TYPE.decode('utf8') + u" 获取列表")
         return self.send_success_json(
             dict(data=[dict(user_id=x[0], create_time=x[1]) for x in users])
         )
@@ -123,12 +125,14 @@ class UplusUserListBaseHandler(BaseHandler):
 class UplusUserBaseHandler(BaseHandler):
     _redis = ""
     KEY = ""
+    TYPE = ""
 
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
         user_id = self.get_argument("user_id")
         score = self._redis.zscore(self.KEY, user_id)
+        self.record_log(content=self.TYPE.decode('utf8') + u" 获取用户 " + user_id)
         return self.send_success_json(
             dict(data=dict(user_id=user_id, create_time=score)))
 
@@ -138,6 +142,7 @@ class UplusUserBaseHandler(BaseHandler):
         user_id = self.get_argument("user_id")
         score = int(time.time() * 1000)
         self._redis.zadd(self.KEY, user_id, score)
+        self.record_log(content=self.TYPE.decode('utf8') + u" 添加用户 " + user_id)
         return self.send_success_json(
             dict(data=dict(user_id=user_id, create_time=score)))
 
@@ -146,24 +151,29 @@ class UplusUserBaseHandler(BaseHandler):
     def delete(self):
         user_id = self.get_argument("user_id")
         self._redis.zrem(self.KEY, user_id)
+        self.record_log(content=self.TYPE.decode('utf8') + u" 删除用户 " + user_id)
         return self.send_success_json(dict(data=dict(user_id=user_id)))
 
 
 class HighRiskUserListHandler(UplusUserListBaseHandler):
     _redis = redis_risk_user
     KEY = redisConstant.REDIS_HIGH_RISK_KEY
+    TYPE = reportConstant.USER_HIGH_RISK
 
 
 class HighRiskUserHandler(UplusUserBaseHandler):
     _redis = redis_risk_user
     KEY = redisConstant.REDIS_HIGH_RISK_KEY
+    TYPE = reportConstant.USER_HIGH_RISK
 
 
 class SpecialUserListHandler(UplusUserListBaseHandler):
     _redis = redis_special_user
     KEY = redisConstant.REDIS_SPECIAL_USER_KEY
+    TYPE = reportConstant.USER_SPECIAL
 
 
 class SpecialUserHandler(UplusUserBaseHandler):
     _redis = redis_special_user
     KEY = redisConstant.REDIS_SPECIAL_USER_KEY
+    TYPE = reportConstant.USER_SPECIAL

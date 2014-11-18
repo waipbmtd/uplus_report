@@ -106,6 +106,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def record_log(self, content="", memo=""):
         log = AdminOperationLog(content=content,
                                 memo=memo,
+                                create_time=datetime.now(),
                                 ip=self.request.remote_ip)
         if self.current_user:
             current_user = self.session.query(AdminUser).get(

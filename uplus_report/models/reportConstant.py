@@ -1,6 +1,11 @@
 #!/usr/bin/python
 # coding=utf-8
 
+# 用户区分
+USER_SYSTEM = "系统用户"
+USER_HIGH_RISK = "高危用户"
+USER_SPECIAL = "特殊用户"
+
 # 是否高危
 REPORT_RISK_TRUE = 1
 REPORT_RISK_FALSE = 0

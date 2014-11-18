@@ -7,8 +7,8 @@ from storage.mysql.models import AdminUser, AdminOperationLog
 from utils.util import hash_password
 
 
-def testAdminuser(session):
-    user1 = AdminUser(username='louxiaoqing',password=hash_password('qwe123'),
+def testAddAdminuser(session):
+    user1 = AdminUser(username='ruyi',password=hash_password('qwe123'),
                       role='admin',
                       state=True,
                       create_time=datetime.datetime.now(),
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     session = database.DB_Session()
 
     # getAllAdminuser(session)
-    # testAdminuser(session)
-    teatAddAdminLog(session)
+    testAddAdminuser(session)
+    # teatAddAdminLog(session)
     session.commit()
     session.close()
