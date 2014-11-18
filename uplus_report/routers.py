@@ -35,6 +35,8 @@ routers = [
     url(r"/report/message/next", report.MessageReportNextHandler),
     #获取还剩余的未处理的举报数
     url(r"/report/remain", report.RemainReportCountHandler),
+    #处理一条消息举报结束
+    url(r"/report/end", report.ReportEndHandler),
 
     #审核通过
     url(r"/pass", passed.PassedHandler),

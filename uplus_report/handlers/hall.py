@@ -24,7 +24,7 @@ class OpenMouthHallHandler(BaseHandler):
             # 消息ID
             msg_id=self.get_argument("msg_id", ""),
             # 客服id
-            cid=self.current_user.id
+            csid=self.current_user.id
         )
 
     def v(self, key):
@@ -47,7 +47,7 @@ class OpenMouthHallHandler(BaseHandler):
                                            parameters=dict(
                                                uid=self.v("uid"),
                                                msgId=self.v("msg_id"),
-                                               cid=self.current_user.id,
+                                               csid=self.current_user.id,
                                            ))
         self.log_record_open_mouth()
         return self.send_success_json(json.loads(data))

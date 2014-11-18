@@ -120,7 +120,7 @@ class DefaultHandler(BaseHandler):
     def get(self):
         logging.info(
             "revere index url : %s" % "index.html")
-        self.redirect("/report_comm")
+        self.redirect("/report_common")
 
 
 class GetTemplateHandler(BaseHandler):

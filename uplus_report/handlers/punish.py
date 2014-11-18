@@ -54,7 +54,7 @@ class PunishBaseHandler(BaseHandler):
             #拥有者ID
             owner=self.get_argument("owner", ""),
             #客服id
-            cid=self.current_user.id
+            csid=self.current_user.id
         )
 
 
@@ -67,7 +67,7 @@ class PunishBaseHandler(BaseHandler):
             reason=self.v("reason"),
             timedelta=self.v("timedelta"),
             rid=self.v("rid"),
-            cid=self.v("cid"),
+            csid=self.v("csid"),
             reporter=self.v("reporter_id"),
             owner=self.v("owner"),
             msgId=self.v("msg_id")
@@ -81,7 +81,7 @@ class PunishBaseHandler(BaseHandler):
             reason=self.v("reason"),
             timedelta=self.v("timedelta"),
             rid=self.v("rid"),
-            cid=self.v("cid"),
+            csid=self.v("csid"),
             reporter=self.v("reporter_id"),
             msgId=self.v("msg_id")
         )
@@ -97,7 +97,7 @@ class PunishBaseHandler(BaseHandler):
             thumb_url=self.v("thumb_url"),
             msgId=self.v("msg_id"),
             timedelta=self.v("timedelta"),
-            cid=self.v("cid"),
+            csid=self.v("csid"),
             reporter=self.v("reporter_id"),
         )
 

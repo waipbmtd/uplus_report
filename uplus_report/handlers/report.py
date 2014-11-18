@@ -83,3 +83,21 @@ class RemainReportCountHandler(BaseHandler):
                                                csid=self.current_user.id
                                            ))
         return self.send_success_json(json.loads(data))
+
+
+class ReportEndHandler(BaseHandler):
+    END_REPORT = config.api.report_check_end
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self):
+        rid = self.get_argument("id")
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           self.END_REPORT,
+                                           parameters=dict(
+                                               risk=risk,
+                                               rid=rid,
+                                               csid=self.current_user.id,
+                                           ))
+        return self.send_success_json(json.loads(data))

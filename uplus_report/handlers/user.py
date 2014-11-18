@@ -68,7 +68,7 @@ class UserBaseHandler(BaseHandler):
             # 备注：
             memo=self.get_argument("memo", ""),
             # 客服id
-            cid=self.current_user.id
+            csid=self.current_user.id
         )
 
     def v(self, key):
@@ -100,7 +100,7 @@ class UnlockUserHandler(UserBaseHandler):
                                            server_api,
                                            parameters=dict(
                                                uid=self.v("uid"),
-                                               cid=self.current_user.id,
+                                               csid=self.current_user.id,
                                                msgId=self.v("msg_id"),
                                            ))
         self.log_record_unlock()

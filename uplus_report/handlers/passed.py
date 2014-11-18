@@ -22,7 +22,7 @@ class PassedHandler(BaseHandler):
             # 举报人id
             reporter_id=self.get_argument("reporter"),
             # 被举报人id
-            uid=self.get_argument("u_id"),
+            uid=self.get_argument("u_id", ""),
             # report记录id
             rid=self.get_argument("id"),
 
@@ -41,7 +41,7 @@ class PassedHandler(BaseHandler):
             # 拥有者ID
             owner=self.get_argument("owner", ""),
             #客服id
-            cid=self.current_user.id
+            csid=self.current_user.id
         )
 
     def v(self, k):
@@ -74,7 +74,7 @@ class PassedHandler(BaseHandler):
                                            server_api,
                                            parameters=dict(
                                                rid=self.v("rid"),
-                                               cid=self.current_user.id,
+                                               csid=self.current_user.id,
                                                msgId=self.v("msg_id"),
                                                reporter=self.v("reporter_id")
                                            ))
