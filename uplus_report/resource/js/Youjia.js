@@ -372,6 +372,9 @@ $.extend({
 
 		options.action();
 	},
+	formatDate: function(time){
+		return new Date(time).toLocaleString();
+	},
 	checkResult: function(result, callback){
 		result = result || {}, callback = callback || $.noop;
 		return result.ret == 1 ? ($.trace( result.info || '错误' ), false) : (callback(result), true);

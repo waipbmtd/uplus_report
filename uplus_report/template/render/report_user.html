@@ -4,7 +4,7 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-fancy="/get_template?page=loaded/add_user.html" data-title="添加高危用户" data-type="risk" data-callback="addUsers">添加用户</button>
+				<button type="button" data-fancy="/get_template?page=loaded/add_user.html" data-title="添加高危用户" data-type="risk" data-callback="addUser">添加用户</button>
 				<form data-submit="ajax" data-callback="getUsers" data-type="risk" method="get" action="/user/risk/list">
 					<ul>
 						<li>
@@ -28,7 +28,7 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-function="addUser" data-type="special">添加用户</button>
+				<button type="button" data-fancy="/get_template?page=loaded/add_user.html" data-title="添加高危用户" data-type="special" data-callback="addUser">添加用户</button>
 				<form data-submit="ajax" data-callback="getUsers" data-type="special" method="get" action="/user/special/list">
 					<ul>
 						<li>

@@ -11,7 +11,7 @@
 		{{!~ it.data:item }}
 		<tr>
 			<td>{{!= item.user_id }}</td>
-			<td>{{!= item.create_time }}</td>
+			<td>{{!= $.formatDate(item.create_time) }}</td>
 			<td><a target="_blank" href="/user/{{!= it.type }}?user_id={{!= item.user_id }}">点击查看</a></td>
 			<td>
 				<menu>

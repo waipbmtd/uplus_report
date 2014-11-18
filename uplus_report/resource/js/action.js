@@ -750,7 +750,7 @@ $.extend({
 			$.fancyCall.operatSelect_items( it );
 		},
 		// Add User
-		addUsers: function( it ){
+		addUser: function( it ){
 			var itData = $.getData(it);
 
 			$.reloadHTML({
