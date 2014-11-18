@@ -433,11 +433,21 @@ section{
 
 	.report_user{
 		.report_search_panel{
-			.form-control;
+			.relative;
 			padding-top: @distance;
 
-			button{
-				.btn-small;
+			&>button{
+				.btn-green;
+				.absolute;
+				top: @distance / 2;
+				right: @distance / 2;
+			}
+
+			form{
+				.form-control;
+				button{
+					.btn-small;
+				}
 			}
 		}
 		.report_search_result{
@@ -586,6 +596,38 @@ section{
 
 		button{
 			.btn-big;
+		}
+	}
+}
+
+.audit-user{
+	min-width: 320px; min-height: 150px;
+	.relative;
+	padding-bottom: 6 * @distance;
+	.form-control;
+
+	ul{
+		padding-top: .5em;
+	}
+
+	li{
+		margin-top: 1em;
+
+		input{
+			width: 20 * @distance;
+			border-radius: @radius;
+
+		}
+	}
+
+	.form-submit{
+		left: 0; right: 0; bottom: 0;
+		.absolute;
+		.text-right;
+
+		button{
+			.btn-big;
+			margin-left: .5em;
 		}
 	}
 }

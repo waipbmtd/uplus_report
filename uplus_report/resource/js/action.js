@@ -556,6 +556,14 @@ $.formSubmit();
 /* Extend Callback */
 $.extend({
 	fancyCall: {
+		// Fancy Close
+		fancyClose: function( button ){
+			// Popup Fancy Cancel
+			button.on( _.evt.click, function(){
+				$.fancybox.close();
+			});
+		},
+
 		// Operat Base
 		operatBase: function( it ){
 
@@ -627,9 +635,7 @@ $.extend({
 			form.find('[' + associates + ']:not(:hidden):eq(0)').trigger( _.evt.click );
 
 			// Popup Fancy Cancel
-			cancel.on( _.evt.click, function(){
-				$.fancybox.close();
-			});
+			$.fancyCall.fancyClose( cancel );
 		},
 		// Operat Albums
 		operatSelect: function( it ){
@@ -742,14 +748,47 @@ $.extend({
 
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
+		},
+		// Add User
+		addUsers: function( it ){
+			var itData = $.getData(it);
+
+			$.reloadHTML({
+				element: $('.audit-user'),
+				data: {
+					type: itData.type
+				},
+				callback: function(){
+					// Popup Fancy Cancel
+					$.fancyCall.fancyClose( $('.audit-user form .form-submit button:eq(0)') );
+
+					// Input Press
+					$.sameInput({
+						input: '.audit-user form [data-name=user_id]',
+						onKeydown: function(e){
+							var code = e.keyCode;
+							if( (code == 8) || (code > 47 && code < 58) ){
+								return true;
+							}
+							return false;
+						},
+						onKeyup: function(e){
+							e.target.setAttribute('data-value', e.target.value);
+						}
+					});
+
+					// Add User Submit Control
+					$.formSubmit();
+				}
+			});
 		}
 	},
 	formCall: {
-		operatSubmit: function(result){
+		operatSubmit: function(result, form){
 			console.log( result );
 			alert('I am callback');
 		},
-		operatImage: function(result){
+		operatImage: function(result, form){
 			console.log( result );
 			alert('I am callback Image');
 		},
@@ -768,6 +807,13 @@ $.extend({
 						// Append Html To Element
 						$(options.element).html( options.render );
 					}
+				});
+			});
+		},
+		addUserCallback: function(result, form){
+			$.checkResult(result, function( result ){
+				$.trace('处理完成', function(){
+					$.fancybox.close();
 				});
 			});
 		}

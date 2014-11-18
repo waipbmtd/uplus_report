@@ -449,10 +449,11 @@ $.extend({
 	reloadHTML: function(options){
 		options = options || {}
 		, options.element = options.element || ''
-		, options.data = options.data;
+		, options.data = options.data
+		, options.callback = options.callback || $.noop;
 
 		if( doT && options.element.length ){
-			options.element.html( doT.template( options.element.html() )( options.data ) );
+			options.element.html( doT.template( options.element.html() )( options.data ) ), options.callback( options );
 		}
 	},
 	renderHTML: function(options){
@@ -569,8 +570,8 @@ $.extend({
 			it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
 		});
 	},
-	trace: function(text, callback){
-		callback = callback || $.noop;
+	trace: function(text, callback, time){
+		callback = callback || $.noop, time = time || 2000;
 
 		$.fancybox.open({
 			content: '<div class="trace">' + text + '</div>',
@@ -578,7 +579,7 @@ $.extend({
 			closeBtn: false
 		}),
 		$.timeout({
-			time: 2000,
+			time: time,
 			callback: function(){
 				$.fancybox.close(), callback();
 			}
