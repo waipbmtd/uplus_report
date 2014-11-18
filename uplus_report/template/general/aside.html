@@ -1,10 +1,20 @@
 <aside>
-{{!? it.current == 'report_common' || it.current == 'report_risk' }}
+{{!? it.current == 'report_common' }}
 	<dl>
 		<dd>
 			<ul>
 				<li><a class="active"><i class="glyphicon glyphicon-picture"></i>相册举报</a></li>
 				<li><a><i class="glyphicon glyphicon-list-alt"></i>消息举报</a></li>
+			</ul>
+		</dd>
+	</dl>
+{{!?}}
+{{!? it.current == 'report_risk' }}
+	<dl>
+		<dd>
+			<ul>
+				<li><a class="active"><i class="glyphicon glyphicon-picture"></i>相册审核</a></li>
+				<li><a><i class="glyphicon glyphicon-list-alt"></i>消息审核</a></li>
 			</ul>
 		</dd>
 	</dl>
