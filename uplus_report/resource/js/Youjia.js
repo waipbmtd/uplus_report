@@ -83,6 +83,21 @@ _.tpl = {
 },
 
 /* !!
+ * 键值
+ * ** *** **** ***** **** *** ** *
+ */
+_.keys = {
+	// 数字
+	number: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105],
+	// 负数
+	negative: [109, 173],
+	// 点
+	point: [110, 190],
+	// 退格
+	back: [8]
+},
+
+/* !!
  * 节点对象
  * ** *** **** ***** **** *** ** *
  */
@@ -449,6 +464,16 @@ $.extend({
 		});
 		return data;
 	},
+	mergeArray: function(){
+		var data = [],
+			doMerge = function( arr ){
+				if( arr.length ){
+					data = data.concat( arr.shift() ), doMerge( arr );
+				}
+			};
+		doMerge( Array.prototype.slice.call(arguments) );
+		return data;
+	},
 	reloadHTML: function(options){
 		options = options || {}
 		, options.element = options.element || ''
@@ -579,7 +604,8 @@ $.extend({
 		$.fancybox.open({
 			content: '<div class="trace">' + text + '</div>',
 			minHeight: 20,
-			closeBtn: false
+			closeBtn: false,
+			scrolling: 'no'
 		}),
 		$.timeout({
 			time: time,

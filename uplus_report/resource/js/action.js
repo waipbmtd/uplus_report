@@ -593,7 +593,7 @@ $.extend({
 				input: '.audit-operat form [data-name=timedelta]',
 				onKeydown: function(e){
 					var code = e.keyCode;
-					if( (code == 8) || (code > 47 && code < 58) ){
+					if( !!~$.inArray(code, $.mergeArray(_.keys.number, _.keys.negative, _.keys.point, _.keys.back)) ){
 						return true;
 					}
 					return false;
