@@ -12,7 +12,7 @@
 		<tr>
 			<td>{{!= item.user_id }}</td>
 			<td>{{!= item.create_time }}</td>
-			<td><a target="_blank" href="">点击查看</a></td>
+			<td><a target="_blank" href="/user/risk?user_id={{!= item.user_id }}">点击查看</a></td>
 			<td>
 				<menu>
 					<button class="yellow" type="button" data-function="deleteUser" data-type="risk" data-uid="{{!= item.user_id }}">删除</button>

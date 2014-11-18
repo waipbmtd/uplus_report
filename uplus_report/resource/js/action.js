@@ -340,7 +340,7 @@ var
 			});
 
 			return;
-		}
+		},
 
 		/* Choose Un */
 		/*
@@ -396,6 +396,10 @@ var
 		/*
 		isInfoBlock: function(it){}
 		*/
+
+		deleteUser: function(it){
+			console.log(it);
+		}
 
 	};
 
