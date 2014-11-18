@@ -2,16 +2,46 @@
 	
 	<div class="main">
 		
-		<div class="masonry">
-			<div class="unPage">请点击按钮申领任务</div>
-			<!-- Get Page From <albums.html> -->
+		<div class="report_user">
+			<table class="table-theme">
+				<thead>
+					<tr>
+						<th width="10%">编号</th>
+						<th width="40%">内容</th>
+						<th width="20%">举报人ID</th>
+						<th width="10%">消息类型</th>
+						<th width="20%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+
+						<td>{{!= item.senderid }}</td>
+						<td>{{!= $.escape(item.msg_type, 'msg_types') || '' }}</td>
+						<td>
+							<menu>
+							<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+							</menu>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 
 	</div>
 	<div class="main">
 		
-		<div class="report">
-			<div class="unPage">请点击按钮申领任务</div>
+		<div class="report_user">
+			<div class="unPage">222请点击按钮申领任务</div>
+			<!-- Get Page From <profile.html> -->
+		</div>
+
+	</div>
+	<div class="main">
+		
+		<div class="report_user">
+			<div class="unPage">333请点击按钮申领任务</div>
 			<!-- Get Page From <profile.html> -->
 		</div>
 

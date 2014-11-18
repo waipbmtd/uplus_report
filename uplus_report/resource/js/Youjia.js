@@ -59,7 +59,16 @@ _.api = {
 	// 审核未通过
 	punish: '/punish' + '?risk=' + _.risk,
 	// 审核通过接口
-	pass: '/pass' + '?risk=' + _.risk
+	pass: '/pass' + '?risk=' + _.risk,
+
+	// 获取高危用户列表
+	user_risk_list: '/user/risk/list',
+	// 获取特殊用户列表
+	user_special_list: '/user/special/list',
+	// 单个高危用户: Get->获取, Post->添加
+	user_risk: '/user/risk',
+	// 单个特殊用户: Get->获取, Post->添加
+	user_special: '/user/special'
 },
 
 /* !!
@@ -441,7 +450,7 @@ $.extend({
 		, options.element = options.element || ''
 		, options.data = options.data;
 
-		if( doT ){
+		if( doT && options.element.length ){
 			options.element.html( doT.template( options.element.html() )( options.data ) );
 		}
 	},
