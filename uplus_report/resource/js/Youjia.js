@@ -602,13 +602,13 @@ $.extend({
 		});
 	},
 	trace: function(text, callback, time){
-		callback = callback || $.noop, time = time || 600;
+		callback = callback || $.noop, time = time || 300;
 
 		$.fancybox.open({
 			content: '<div class="trace">' + text + '</div>',
 			minHeight: 20,
-			speedIn: 200,
-			speedOut: 200,
+			speedIn: 100,
+			speedOut: 100,
 			closeBtn: false,
 			scrolling: 'no'
 		}),
@@ -632,8 +632,8 @@ $.extend({
 		$.fancybox.open({
 			content: html,
 			closeBtn: false,
-			speedIn: 200,
-			speedOut: 200,
+			speedIn: 100,
+			speedOut: 100,
 			afterShow: function(){
 
 				$.each( $('.confirm'), function(i, dialog){
@@ -662,8 +662,8 @@ $.extend({
 			option.title = option.title || false,
 			option.closeBtn = options.closeBtn || true,
 			option.closeClick = options.closeClick || false,
-			option.speedIn = option.speedIn || 200,
-			option.speedOut = option.speedOut || 200,
+			option.speedIn = option.speedIn || 100,
+			option.speedOut = option.speedOut || 100,
 			option.callback = option.callback || $.noop;
 
 			$.fancybox.open({
@@ -684,6 +684,10 @@ $.extend({
 				}
 			});
 		});
+	},
+	mask: function(options){
+		options = options || {}
+		, options.mask = _.masker ? _.masker : $('<div class="masker">');
 	},
 	sameInput: function(options){
 		options = options || {}
@@ -765,6 +769,20 @@ $.extend({
 		callback();
 
 		return false;
+
+	},
+	reportEnd: function(options){
+
+		$.ajax({
+			type: 'get',
+			url: _.api.end,
+			data: { id: options.id },
+			success: function(result){
+				$.checkResult(result, function( result ){
+					options.callback();
+				});
+			}
+		});
 
 	}
 });
