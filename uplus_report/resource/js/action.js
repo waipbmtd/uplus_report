@@ -494,30 +494,43 @@ var
 	};
 
 /* Socket Run */
-/*
-$.timeout({
-	count: (_.QQ, 312272592),
-	time: 6789,
-	def: true,
-	callback: function(){
+;(function( time ){
 
-		// Get Remain Count Default
-		kitFunction.getRemain({
-			callback: function(result){
-				$('#remain_default').html( result.data.msg_remain + result.data.album_remain );
-			}
-		});
+	var cache = {
+			album: 0, msg: 0
+		},
+		timeResult = time;
 
-		// Get Remain Count Dangerous
-		kitFunction.getRemain({
-			data: { risk: 1 },
-			callback: function(result){
-				$('#remain_dangerous').html( result.data.msg_remain + result.data.album_remain );
-			}
-		});
-	}
-});
-*/
+	$.timeout({
+		count: (_.QQ, 312272592),
+		time: time,
+		def: true,
+		callback: function( options ){
+
+			// Get Remain Count In (Default Or Dangerous)
+			kitFunction.getRemain({
+				callback: function(result){
+					var element = _.risk ? $('#remain_dangerous') : $('#remain_default');
+					element.html( result.data.msg_remain + result.data.album_remain );
+
+					if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
+						cache = {
+							album: result.data.album_remain, msg: result.data.msg_remain
+						},
+						timeResult = time;
+						return;
+					}
+
+					timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+				}
+			});
+
+			return timeResult;
+		}
+	});
+
+})
+(4567);
 
 /* Default Welcome */
 ;(function(element){
@@ -532,10 +545,10 @@ $.timeout({
 	$.timeout({
 		count: vcount,
 		time: 50,
-		callback: function( count ){
-			items.eq( vcount - count ).addClass('active');
+		callback: function( options ){
+			items.eq( vcount - options.count ).addClass('active');
 
-			if( count == 1 ){
+			if( options.count == 1 ){
 				$.timeout({
 					time: 600,
 					callback: function(){

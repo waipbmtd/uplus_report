@@ -381,7 +381,12 @@ $.extend({
 		, options.action = function(){
 			if( options.count ){
 				options.timeout = _.setTimeout(function(){
-					options.callback( options.count );
+					var callResult = options.callback( options );
+					
+					if( $.isType(callResult, 'number') ){
+						options.time = callResult;
+					}
+
 					options.count--;
 					_.clearTimeout( options.timeout );
 					options.action();
@@ -392,7 +397,7 @@ $.extend({
 		};
 
 		if( options.def ){
-			options.callback();
+			options.callback( options );
 		}
 
 		options.action();
