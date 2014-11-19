@@ -860,7 +860,7 @@ $.extend({
 		operatSelect_qun: function( it ){
 
 			// 隐藏不可用项
-			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1)').hide();
 
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
