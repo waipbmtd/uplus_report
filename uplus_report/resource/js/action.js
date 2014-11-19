@@ -498,14 +498,13 @@ $.timeout({
 		count: vcount,
 		time: 50,
 		callback: function( count ){
-			items.eq( vcount - count ).animate({
-				top: 20
-			});
+			items.eq( vcount - count ).addClass('active');
 
 			if( count == 1 ){
 				$.timeout({
-					time: 1000,
+					time: 600,
 					callback: function(){
+						_.dom.aside.find('a:eq(0)').trigger( _.evt.click ),
 						element.fadeOut(function(){
 							element.remove();
 						});
@@ -536,13 +535,6 @@ $.reloadHTML({
 	element: _.dom.aside,
 	data: {
 		current: _.current
-	},
-	callback: function(){
-		$.timeout({
-			callback: function(){
-				_.dom.aside.find('a:eq(0)').trigger( _.evt.click );
-			}
-		}, 30);
 	}
 });
 

@@ -368,6 +368,9 @@ $.extend({
 
 		});
 	},
+	cookie: function(){
+		var cookie = document.cookie;
+	},
 	timeout: function(options){
 		options = options || {}
 		, options.callback = options.callback || $.noop
