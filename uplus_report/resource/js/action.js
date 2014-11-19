@@ -507,21 +507,32 @@ var
 		def: true,
 		callback: function( options ){
 
-			// Get Remain Count In (Default Or Dangerous)
+			// 临时方法 - 响应赠长
+			var calculateTime = function( result ){
+
+				if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
+					cache = {
+						album: result.data.album_remain, msg: result.data.msg_remain
+					},
+					timeResult = time;
+					return;
+				}
+
+				timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+			};
+
+			// Get Remain Count In (Default)
 			kitFunction.getRemain({
 				callback: function(result){
-					var element = _.risk ? $('#remain_dangerous') : $('#remain_default');
-					element.html( result.data.msg_remain + result.data.album_remain );
+					$('#remain_default').html( result.data.album_remain ), calculateTime( result );
+				}
+			});
 
-					if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
-						cache = {
-							album: result.data.album_remain, msg: result.data.msg_remain
-						},
-						timeResult = time;
-						return;
-					}
-
-					timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+			// Get Remain Count In (Dangerous)
+			kitFunction.getRemain({
+				data: { risk: 1 },
+				callback: function(result){
+					$('#remain_dangerous').html( result.data.msg_remain );
 				}
 			});
 
@@ -542,11 +553,18 @@ var
 
 	var items = element.find('bdo');
 	
+	$.each(items, function(i, item){
+		item = $(item);
+		item.css({
+			top: i%2 ? 100 : -100
+		});
+	});
+
 	$.timeout({
 		count: vcount,
-		time: 50,
+		time: 60,
 		callback: function( options ){
-			items.eq( vcount - options.count ).addClass('active');
+			items.eq( vcount - options.count ).animate({ top: 0 }, 180);
 
 			if( options.count == 1 ){
 				$.timeout({
@@ -607,7 +625,7 @@ $.taber({
 				children: 'li',
 				self: true,
 				left: _.dom.doc.width(),
-				top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
+				top: _.dom.doc.height() - _.dom.foot.outerHeight(),
 				off: {
 					x: -1, y: -35
 				}

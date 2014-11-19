@@ -54,7 +54,7 @@ _.api = {
 	end: '/report/end?risk=' + _.risk,
 
 	// 获取剩余消息数
-	remain: '/report/remain' + '?risk=' + _.risk,
+	remain: '/report/remain',
 	// 获取Album
 	albums: '/report/album_image/list' + '?risk=' + _.risk,
 	// 获取Message
@@ -386,7 +386,7 @@ $.extend({
 					if( $.isType(callResult, 'number') ){
 						options.time = callResult;
 					}
-
+					
 					options.count--;
 					_.clearTimeout( options.timeout );
 					options.action();
