@@ -24,6 +24,9 @@ _.cache = {
 ;+function( kit, masonry, report, reportUser, active ){
 
 var
+	/* Full Mask */
+	mask = $.mask(),
+
 	/* Kit Element */
 	iKit = $(kit),
 
@@ -487,7 +490,7 @@ $.timeout({
 $.each( _.dom.nav.find('a'), function(i, a){
 
 	if( !!~a.getAttribute('href').indexOf( param ) ){
-		$(a).addClass('active');
+		$(a).addClass('active').attr('href', 'javascript:void(0);');
 	}
 });
 

@@ -687,7 +687,26 @@ $.extend({
 	},
 	mask: function(options){
 		options = options || {}
-		, options.mask = _.masker ? _.masker : $('<div class="masker">');
+		, options.css = 'masker'
+		, options.mask = _.masker ? _.masker : $('<div class="' + options.css + '">')
+		, options.onOpen = options.onOpen || $.noop
+		, options.onClose = options.onClose || $.noop
+		, options.hasMask = function(){
+			return !!_.dom.bod.find('.' + options.css).length;
+		}
+		, options.open = function(fn){
+			options.hasMask() ? _.dom.bod.find('.' + options.css) : _.dom.bod.append( options.mask );
+			fn( options.onOpen );
+		}
+		, options.close = function(){
+			options.mask.remove(), _.dom.bod.find('.' + options.css).remove();
+			fn( options.onClose );
+		};
+
+		return {
+			open: options.open,
+			close: options.close
+		};
 	},
 	sameInput: function(options){
 		options = options || {}
