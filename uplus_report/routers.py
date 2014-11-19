@@ -59,6 +59,8 @@ routers = [
 
     #所有用户
     url(r'/user/list', user.UserListHandler),
+    #所有用户名
+    url(r'/user/name_id_list', user.UserNameIdListHandler),
 
     #高危用户
     url(r'/user/risk', user.HighRiskUserHandler),
@@ -69,8 +71,8 @@ routers = [
     url(r'/user/special/list', user.SpecialUserListHandler),
 
     #用户日志
-    url(r'/log', userlog.UserLogHandler),
-    url(r'/log/list', userlog.UserLogListHandler),
+    url(r'/user/log', userlog.UserLogHandler),
+    url(r'/user/log/list', userlog.UserLogListHandler),
 ]
 
 append_routers = [

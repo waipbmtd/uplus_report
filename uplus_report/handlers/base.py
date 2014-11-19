@@ -10,6 +10,7 @@ import jsonpickle.backend
 import tornado.web
 
 import config
+from models import userConstant
 from storage.mysql.database import session_manage
 from storage.mysql.models import AdminUser, AdminOperationLog
 from utils import util
@@ -114,6 +115,9 @@ class BaseHandler(tornado.web.RequestHandler):
             current_user.logs.append(log)
         else:
             self.session.add(log)
+
+    def is_admin(self):
+        return self.current_user.role == userConstant.USER_ROLE_ADMIN
 
 
 class DefaultHandler(BaseHandler):

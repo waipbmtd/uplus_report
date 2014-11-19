@@ -7,8 +7,8 @@ from storage.mysql.models import AdminUser, AdminOperationLog
 from utils.util import hash_password
 
 
-def testAddAdminuser(session):
-    user1 = AdminUser(username='ruyi',password=hash_password('qwe123'),
+def testAddAdminuser(session, username, password):
+    user1 = AdminUser(username=username, password=hash_password(password),
                       role='admin',
                       state=True,
                       create_time=datetime.datetime.now(),
@@ -16,8 +16,9 @@ def testAddAdminuser(session):
     session.add_all([user1])
     session.commit()
 
+
 def testAddEditoruser(session):
-    user1 = AdminUser(username='editor01',password=hash_password('qwe123'),
+    user1 = AdminUser(username='editor01', password=hash_password('qwe123'),
                       role='editor',
                       state=True,
                       create_time=datetime.datetime.now(),
@@ -25,9 +26,10 @@ def testAddEditoruser(session):
     session.add_all([user1])
     session.commit()
 
+
 def teatAddAdminLog(session):
     user1 = session.query(AdminUser).get(1)
-    log = AdminOperationLog(content="禁言" ,
+    log = AdminOperationLog(content="禁言",
                             create_time=datetime.datetime.now(),
                             ip="192.168.1.180")
     user1.logs.append(log)
@@ -35,11 +37,8 @@ def teatAddAdminLog(session):
 
 def getAllAdminuser(session):
     users = session.query(AdminUser).all()
-    for x in users :
+    for x in users:
         print x.__dict__
-
-
-
 
 
 if __name__ == "__main__":
@@ -47,8 +46,8 @@ if __name__ == "__main__":
     session = database.DB_Session()
 
     # getAllAdminuser(session)
-    # testAddAdminuser(session)
+    testAddAdminuser(session, 'chengyang', 'qwe123')
     # teatAddAdminLog(session)
-    testAddEditoruser(session)
+    # testAddEditoruser(session)
     session.commit()
     session.close()

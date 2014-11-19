@@ -12,11 +12,17 @@ class UserLogListHandler(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     @session_manage
-    def get(self, **kwargs):
+    def get(self):
         # 获取指定客服日志列表详细信息
-        csid=int(self.get_argument("csid", self.current_user.id))
-        logs = self.session.query(AdminOperationLog)\
-            .filter_by(admin_user_id=csid).all()
+        csid = self.get_argument("csid", "")
+        if not self.is_admin():
+            csid = self.current_user.id
+
+        if csid:
+            logs = self.session.query(AdminOperationLog) \
+                .filter_by(admin_user_id=csid)
+        else:
+            logs = self.session.query(AdminOperationLog).all()
         js_logs = [sqlalchemy_json(x) for x in logs]
         return self.send_success_json(dict(data=js_logs))
 

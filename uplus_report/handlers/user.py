@@ -5,7 +5,7 @@ import time
 import tornado
 import tornado.web
 from handlers.base import BaseHandler
-from models import reportConstant, redisConstant
+from models import reportConstant, redisConstant, userConstant
 from storage.mysql.database import session_manage, sqlalchemy_json
 from storage.mysql.models import AdminUser
 from storage.redis.redisClient import redis_risk_user, redis_special_user
@@ -25,13 +25,30 @@ class UserListHandler(BaseHandler):
     @session_manage
     @tornado.web.authenticated
     def get(self):
-        type = self.current_user.role
-        users = []
-        if type == "admin":
+        if self.is_admin():
             users = self.session.query(AdminUser).all()
-        elif type == "editor":
+        else:
             users = self.session.query(AdminUser).filter(
                 AdminUser.id == self.current_user.id)
+        return self.send_success_json(
+            dict(data=[sqlalchemy_json(x) for x in users]))
+
+
+class UserNameIdListHandler(BaseHandler):
+    """
+    获取所有用户列表
+    """
+
+    @util.exception_handler
+    @session_manage
+    @tornado.web.authenticated
+    def get(self):
+        if self.is_admin():
+            users = self.session.query(AdminUser.username, AdminUser.id).all()
+        else:
+            users = self.session.query(AdminUser.username,
+                                       AdminUser.id).\
+                filter(AdminUser.id == self.current_user.id)
         return self.send_success_json(
             dict(data=[sqlalchemy_json(x) for x in users]))
 
