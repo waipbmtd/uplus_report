@@ -33,7 +33,8 @@ Base = declarative_base()
 def sqlalchemy_json(self):
     obj_dict = self.__dict__
     return dict(
-        (key, obj_dict[key]) for key in obj_dict if not key.startswith("_"))
+        (key, obj_dict[key]) for key in obj_dict if
+        not key.startswith("_") and key != 'metadata')
 
 
 Base.__json__ = sqlalchemy_json

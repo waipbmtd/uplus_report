@@ -16,6 +16,15 @@ def testAddAdminuser(session):
     session.add_all([user1])
     session.commit()
 
+def testAddEditoruser(session):
+    user1 = AdminUser(username='editor01',password=hash_password('qwe123'),
+                      role='editor',
+                      state=True,
+                      create_time=datetime.datetime.now(),
+                      update_time=datetime.datetime.now())
+    session.add_all([user1])
+    session.commit()
+
 def teatAddAdminLog(session):
     user1 = session.query(AdminUser).get(1)
     log = AdminOperationLog(content="禁言" ,
@@ -38,7 +47,8 @@ if __name__ == "__main__":
     session = database.DB_Session()
 
     # getAllAdminuser(session)
-    testAddAdminuser(session)
+    # testAddAdminuser(session)
     # teatAddAdminLog(session)
+    testAddEditoruser(session)
     session.commit()
     session.close()

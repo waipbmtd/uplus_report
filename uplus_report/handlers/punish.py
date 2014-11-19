@@ -34,7 +34,7 @@ class PunishBaseHandler(BaseHandler):
             rid=self.get_argument("id"),
             # 违规类型
             reason=self.get_argument("reason"),
-            #惩罚类型
+            # 惩罚类型
             punish_type=int(self.get_argument("punish_type")),
             #惩罚时长
             timedelta=self.get_argument("timedelta", -1),
@@ -53,6 +53,9 @@ class PunishBaseHandler(BaseHandler):
             content=self.get_argument("content", ""),
             #拥有者ID
             owner=self.get_argument("owner", ""),
+            #uucid
+            uucid=self.get_argument("uucid",
+                                    "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
             #客服id
             csid=self.current_user.id
         )
@@ -98,7 +101,9 @@ class PunishBaseHandler(BaseHandler):
             msgId=self.v("msg_id"),
             timedelta=self.v("timedelta"),
             csid=self.v("csid"),
+            rid=self.v("rid"),
             reporter=self.v("reporter_id"),
+            uucid=self.v("uucid")
         )
 
     def log_record_close(self):

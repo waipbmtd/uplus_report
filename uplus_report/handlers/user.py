@@ -6,7 +6,7 @@ import tornado
 import tornado.web
 from handlers.base import BaseHandler
 from models import reportConstant, redisConstant
-from storage.mysql.database import session_manage
+from storage.mysql.database import session_manage, sqlalchemy_json
 from storage.mysql.models import AdminUser
 from storage.redis.redisClient import redis_risk_user, redis_special_user
 from utils import util, WebRequrestUtil
@@ -14,6 +14,26 @@ import config
 import json
 
 API_HOST = config.api.host
+
+
+class UserListHandler(BaseHandler):
+    """
+    获取所有用户列表
+    """
+
+    @util.exception_handler
+    @session_manage
+    @tornado.web.authenticated
+    def get(self):
+        type = self.current_user.role
+        users = []
+        if type == "admin":
+            users = self.session.query(AdminUser).all()
+        elif type == "editor":
+            users = self.session.query(AdminUser).filter(
+                AdminUser.id == self.current_user.id)
+        return self.send_success_json(
+            dict(data=[sqlalchemy_json(x) for x in users]))
 
 
 class UserHandler(BaseHandler):
@@ -56,7 +76,7 @@ class UserHandler(BaseHandler):
         self.send_error_json(info="删除失败")
 
 
-class UserBaseHandler(BaseHandler):
+class UplusUserBaseHandler(BaseHandler):
     def __init__(self, *args, **kwargs):
         super(BaseHandler, self).__init__(*args, **kwargs)
         self.args = {}
@@ -75,7 +95,7 @@ class UserBaseHandler(BaseHandler):
         return self.args.get(key)
 
 
-class UnlockUserHandler(UserBaseHandler):
+class UnlockUplusUserHandler(UplusUserBaseHandler):
     UNLOCK_API = config.api.user_unlock
     """
     用户解封
@@ -122,7 +142,7 @@ class UplusUserListBaseHandler(BaseHandler):
         )
 
 
-class UplusUserBaseHandler(BaseHandler):
+class UplusUserRedisBaseHandler(BaseHandler):
     _redis = ""
     KEY = ""
     TYPE = ""
@@ -161,7 +181,7 @@ class HighRiskUserListHandler(UplusUserListBaseHandler):
     TYPE = reportConstant.USER_HIGH_RISK
 
 
-class HighRiskUserHandler(UplusUserBaseHandler):
+class HighRiskUserHandler(UplusUserRedisBaseHandler):
     _redis = redis_risk_user
     KEY = redisConstant.REDIS_HIGH_RISK_KEY
     TYPE = reportConstant.USER_HIGH_RISK
@@ -173,7 +193,7 @@ class SpecialUserListHandler(UplusUserListBaseHandler):
     TYPE = reportConstant.USER_SPECIAL
 
 
-class SpecialUserHandler(UplusUserBaseHandler):
+class SpecialUserHandler(UplusUserRedisBaseHandler):
     _redis = redis_special_user
     KEY = redisConstant.REDIS_SPECIAL_USER_KEY
     TYPE = reportConstant.USER_SPECIAL

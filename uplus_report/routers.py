@@ -3,7 +3,7 @@
 from tornado.web import url
 
 from handlers import base, auth, report, constantenu, punish, passed, \
-    hall, show, user, render
+    hall, show, user, render, userlog
 
 
 routers = [
@@ -55,7 +55,10 @@ routers = [
     url(r'/show/un_clock', show.UnlockShowHandler),
 
     #用户解封
-    url(r'/user/un_clock', user.UnlockUserHandler),
+    url(r'/user/un_clock', user.UnlockUplusUserHandler),
+
+    #所有用户
+    url(r'/user/list', user.UserListHandler),
 
     #高危用户
     url(r'/user/risk', user.HighRiskUserHandler),
@@ -63,7 +66,11 @@ routers = [
 
     #特殊用户
     url(r'/user/special', user.SpecialUserHandler),
-    url(r'/user/special/list', user.SpecialUserListHandler)
+    url(r'/user/special/list', user.SpecialUserListHandler),
+
+    #用户日志
+    url(r'/log', userlog.UserLogHandler),
+    url(r'/log/list', userlog.UserLogListHandler),
 ]
 
 append_routers = [
