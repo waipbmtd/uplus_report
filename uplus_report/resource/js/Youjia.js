@@ -253,7 +253,7 @@ $.extend({
 			options.posiCoor.y = options.target.position().top;
 			
 			/* Capture Events */
-			window.captureEvents(Event.MOUSEMOVE);
+			if( window.captureEvents ) window.captureEvents(Event.MOUSEMOVE);
 			
 			/* Callback: On Drag Start */
 			options.onDragstart( options );
@@ -280,7 +280,7 @@ $.extend({
 		, options.dragUpHandle = function(e){
 			
 			/* Capture Events */
-			window.releaseEvents(Event.MOUSEMOVE);
+			if( window.releaseEvents ) window.releaseEvents(Event.MOUSEMOVE);
 			
 			/* Cache Mouse Coor */
 			options.mouseCoor.x = e.clientX,
@@ -460,6 +460,9 @@ $.extend({
 	},
 	getData: function(element){
 		var data = {}, it = $(element);
+		if( !it.length ){
+			return data;
+		}
 		it.prop('outerHTML').replace(/data-\w+/g, function(attr){
 			data[ attr.substr(5) ] = it.attr( attr );
 		});
@@ -798,18 +801,16 @@ $.extend({
 
 	},
 	reportEnd: function(options){
-
 		$.ajax({
 			type: 'get',
 			url: _.api.end,
-			data: { id: options.id },
+			data: options,
 			success: function(result){
 				$.checkResult(result, function( result ){
-					options.callback();
+					// options.callback();
 				});
 			}
 		});
-
 	}
 });
 

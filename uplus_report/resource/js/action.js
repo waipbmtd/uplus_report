@@ -18,6 +18,14 @@ _.cache = {
 }
 
 /* !!
+ * 设值全局Ajax
+ * ** *** **** ***** **** *** ** *
+ */
+$.ajaxSetup({
+	async: false
+});
+
+/* !!
  * All Function Is In Plus
  * ** *** **** ***** **** *** ** *
  */
@@ -265,18 +273,18 @@ var
 
 		/* Get Data */
 		getInfoData: function(it){
-
+			
 			// 如果空(首次拉取数据)
 			if( iReport.find('.unPage').length ){
 
-				// 获取剩余消息数
+				// 获取剩余消息数, 并渲染页面
 				kitFunction.getRemain({
 					callback: function(result){
 						kitFunction.renderInfoPage({ remain: result.data });
 					}
 				});
 
-				return;
+				return false;
 			}
 
 			// 1.递归->msgs, 2.提交->profle
@@ -288,6 +296,7 @@ var
 				// 用于合并的数据
 				mergeData = _.cache.message.data;
 
+			// 循环Items(Msgs), 获取数据
 			$.each( items, function(i, item){
 
 				var
@@ -302,31 +311,37 @@ var
 
 					// 根据msgid获取的数据
 					itemData = kitFunction.getInfoActive({
-						id: itData.msgid,
+						id: itData.msgid || '',
 						than: thanData.msgs
 					});
 
 				// For Merge Data, Delete Msgs
-				thanData.u_id = itData.uid;
+				thanData.u_id = itData.uid || '';
 
 				database.push( $.mergeJSON(thanData, itemData) );
 			});
-
+			
 			// Punish - 递归
 			$.recursivePunish( database, {}, _.api.pass, function(){ // 1.递归msgs完成
-				
+
 				items.closest('tr').slideUp(function(){
 					items.closest('tr').remove();
 				});
 
 				var item = iReport.find('.profile [data-uid]');
 
-				// 分支情况 - 大厅
+				// 分支情况 - 如果无数据, 则直接复位
 				if( !item.length ){
 
-					iReport.html('<div class="unPage">'),
-					kitFunction.getInfoData( it );
+					$.reportEnd({
+						id: _.cache.message.data.id,
+						callback: function(){
+							iReport.html('<div class="unPage">'),
+							kitFunction.getInfoData( it );
+						}
+					});
 
+					return false;
 				}
 
 				var itData = $.getData( item );
@@ -342,8 +357,14 @@ var
 
 				$.recursivePunish( [database], {}, _.api.pass, function(){ // 2.提交profile完成
 
-					iReport.html('<div class="unPage">'),
-					kitFunction.getInfoData( it );
+					// 完成所有report提交后，发送end请求
+					$.reportEnd({
+						id: _.cache.message.data.id,
+						callback: function(){
+							iReport.html('<div class="unPage">'),
+							kitFunction.getInfoData( it );
+						}
+					});
 
 				});
 			});
@@ -535,6 +556,13 @@ $.reloadHTML({
 	element: _.dom.aside,
 	data: {
 		current: _.current
+	},
+	callback: function(){
+		$.timeout({
+			callback: function(){
+				_.dom.aside.find('a:eq(0)').trigger( _.evt.click );
+			}
+		}, 30);
 	}
 });
 
