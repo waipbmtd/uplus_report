@@ -53,6 +53,11 @@ var
 	/* Data-Function In Kit */
 	kitFunction = {
 
+		hasMask: function(){
+			return !!$('#masker').length;
+		},
+
+
 		/* ** *** **** ***** Image ***** **** *** ** */
 
 		/* Database Tolerance */
@@ -211,6 +216,11 @@ var
 					$.trace('处理完成', function(){
 						iMasonry.find('span.active').fadeOut(function(){
 							$(this).remove();
+
+							// 交互 - 如果木有数据了, 就去拉一批
+							if( !iMasonry.find('span').length ){
+								kitFunction.getImageData();
+							}
 						});
 					});
 				});
@@ -273,7 +283,7 @@ var
 
 		/* Get Data */
 		getInfoData: function(it){
-			
+
 			// 如果空(首次拉取数据)
 			if( iReport.find('.unPage').length ){
 
@@ -321,6 +331,10 @@ var
 				database.push( $.mergeJSON(thanData, itemData) );
 			});
 			
+			// Loading UI
+			if( !kitFunction.hasMask() ){
+				mask.open();
+			}
 			// Punish - 递归
 			$.recursivePunish( database, {}, _.api.pass, function(){ // 1.递归msgs完成
 
@@ -606,7 +620,6 @@ $.drag({
 /* Fancy Pop */
 $.fancyPop();
 
-
 /* All Form Control */
 $.formSubmit();
 
@@ -714,11 +727,26 @@ $.extend({
 			$.formSubmit({
 				database: database,
 				instead: function(option){
+
+					// Loading UI
+					if( !kitFunction.hasMask() ){
+						mask.open();
+					}
+
 					// Punish - 递归
 					$.recursivePunish( option.database, option.data, _.api.punish, function(){
+
+						// Loading UI
+						mask.close();
+
 						$.trace('处理完成', function(){
 							iMasonry.find('span.active').fadeOut(function(){
 								$(this).remove();
+
+								// 交互 - 如果木有数据了, 就去拉一批
+								if( !iMasonry.find('span').length ){
+									kitFunction.getImageData();
+								}
 							});
 						});
 					});

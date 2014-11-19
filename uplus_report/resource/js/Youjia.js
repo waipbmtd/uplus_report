@@ -696,19 +696,44 @@ $.extend({
 		});
 	},
 	mask: function(options){
+		var loading = ''
+					+ '<div class="spinner">'
+					+ '<div class="spinner-container container1">'
+					+ '<div class="circle1"></div>'
+					+ '<div class="circle2"></div>'
+					+ '<div class="circle3"></div>'
+					+ '<div class="circle4"></div>'
+					+ '</div>'
+					+ '<div class="spinner-container container2">'
+					+ '<div class="circle1"></div>'
+					+ '<div class="circle2"></div>'
+					+ '<div class="circle3"></div>'
+					+ '<div class="circle4"></div>'
+					+ '</div>'
+					+ '<div class="spinner-container container3">'
+					+ '<div class="circle1"></div>'
+					+ '<div class="circle2"></div>'
+					+ '<div class="circle3"></div>'
+					+ '<div class="circle4"></div>'
+					+ '</div>'
+					+ '</div>';
+
 		options = options || {}
 		, options.css = 'masker'
-		, options.mask = _.masker ? _.masker : $('<div class="' + options.css + '">')
+		, options.mask = _.masker ? _.masker:
+			$('<div class="' + options.css + '">' + loading + '</div>')
 		, options.onOpen = options.onOpen || $.noop
 		, options.onClose = options.onClose || $.noop
 		, options.hasMask = function(){
 			return !!_.dom.bod.find('.' + options.css).length;
 		}
 		, options.open = function(fn){
+			fn = fn || $.noop;
 			options.hasMask() ? _.dom.bod.find('.' + options.css) : _.dom.bod.append( options.mask );
 			fn( options.onOpen );
 		}
-		, options.close = function(){
+		, options.close = function(fn){
+			fn = fn || $.noop;
 			options.mask.remove(), _.dom.bod.find('.' + options.css).remove();
 			fn( options.onClose );
 		};
@@ -801,6 +826,12 @@ $.extend({
 
 	},
 	reportEnd: function(options){
+
+		// Mask UI
+		if( $('.masker').length ){
+			$.mask().close();
+		}
+
 		$.ajax({
 			type: 'get',
 			url: _.api.end,
