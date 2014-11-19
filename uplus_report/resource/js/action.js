@@ -500,6 +500,13 @@ $.reloadHTML({
 	element: _.dom.aside,
 	data: {
 		current: _.current
+	},
+	callback: function(){
+		$.timeout({
+			callback: function(){
+				_.dom.aside.find('a:eq(0)').trigger( _.evt.click );
+			}
+		}, 30);
 	}
 });
 
@@ -511,24 +518,18 @@ $.taber({
 		iKit.find('ul').hide().eq(index).show();
 		
 		// Init Kit Position
-		$.timeout({
-			callback: function(){
-				// 部分系统下会出现错位情况，所以加一个定时器，做复位用
-				if( iKit.length ){
-					$.initPosition({
-						element: kit,
-						children: 'li',
-						self: true,
-						left: _.dom.doc.width(),
-						top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
-						off: {
-							x: -1, y: -35
-						}
-					});
+		if( iKit.length ){
+			$.initPosition({
+				element: kit,
+				children: 'li',
+				self: true,
+				left: _.dom.doc.width(),
+				top: _.dom.doc.height() / 2, // - _.dom.foot.outerHeight(),
+				off: {
+					x: -1, y: -35
 				}
-			},
-			time: 30
-		});
+			});
+		}
 	}
 });
 
