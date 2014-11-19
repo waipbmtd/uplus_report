@@ -241,6 +241,10 @@ $.extend({
 			}
 
 			options.target = $(e.target).closest( options.mover );
+
+			if( !options.target.length ){
+				return;
+			}
 			
 			options.initCoor.x = e.clientX,
 			options.initCoor.y = e.clientY;
@@ -374,7 +378,7 @@ $.extend({
 		, options.action = function(){
 			if( options.count ){
 				options.timeout = _.setTimeout(function(){
-					options.callback();
+					options.callback( options.count );
 					options.count--;
 					_.clearTimeout( options.timeout );
 					options.action();

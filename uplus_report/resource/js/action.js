@@ -484,6 +484,39 @@ $.timeout({
 });
 */
 
+/* Default Welcome */
+;(function(element){
+	var text = '', vs = element.text().split(''), vcount = vs.length;
+	$.each( vs, function(i, v){
+		text += '<bdo>' + v + '</bdo>';
+	});
+	element.html(text).css('line-height', _.dom.doc.height() + 'px').addClass('welcome');
+
+	var items = element.find('bdo');
+	
+	$.timeout({
+		count: vcount,
+		time: 50,
+		callback: function( count ){
+			items.eq( vcount - count ).animate({
+				top: 20
+			});
+
+			if( count == 1 ){
+				$.timeout({
+					time: 1000,
+					callback: function(){
+						element.fadeOut(function(){
+							element.remove();
+						});
+					}
+				});
+			}
+		}
+	});
+})
+( $('#welcome') );
+
 /* Default High Light Nav */
 ;(function( param ){
 
