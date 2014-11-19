@@ -71,7 +71,12 @@ _.api = {
 	// 单个高危用户: Get->获取, Post->添加
 	user_risk: '/user/risk',
 	// 单个特殊用户: Get->获取, Post->添加
-	user_special: '/user/special'
+	user_special: '/user/special',
+
+	// 获取用户(客服)列表
+	user_list: '/user/list',
+	// 获取用户详细
+	user_detail: '/user/log/list'
 },
 
 /* !!
@@ -82,7 +87,9 @@ _.tpl = {
 	albums: _.path.template('loaded/albums'),
 	message: _.path.template('loaded/message'),
 	operat: _.path.template('loaded/operat'),
-	users: _.path.template('loaded/users')
+	users: _.path.template('loaded/users'),
+	select_panel: _.path.template('loaded/select_panel'),
+	user_detail: _.path.template('loaded/user_detail')
 },
 
 /* !!
@@ -382,11 +389,11 @@ $.extend({
 			if( options.count ){
 				options.timeout = _.setTimeout(function(){
 					var callResult = options.callback( options );
-					
+
 					if( $.isType(callResult, 'number') ){
 						options.time = callResult;
 					}
-					
+
 					options.count--;
 					_.clearTimeout( options.timeout );
 					options.action();

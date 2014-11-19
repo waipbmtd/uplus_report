@@ -1,1 +1,23 @@
-report_log.html
+<section>
+	
+	<div class="main">
+		
+		<div class="report_log">
+			<div class="report_select_panel">
+				<label>客服清单：</label>
+				<ul>
+					<li data-id="" data-function="searchUserDetail">全部</li>
+					{{!~ it.data:item }}
+					<li data-id="{{!= item.id }}" data-function="searchUserDetail">{{!= item.username }}</li>
+					{{!~ }}
+				</ul>
+			</div>
+			<hr class="line-gray" />
+			<div class="report_select_result">
+				<!-- Get Page From <user_detail.html> -->
+			</div>
+		</div>
+
+	</div>
+
+</section>

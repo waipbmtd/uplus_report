@@ -489,7 +489,45 @@ var
 
 				return true;
 			});
-		}
+		},
+
+		// Search User Detail
+		searchUserDetail: function( it ){
+			var itData = $.getData(it);
+
+			$.renderHTML({
+				element: $('.report_select_result'),
+				data: _.api.user_detail + '?csid=' + itData.id,
+				html: _.tpl.user_detail,
+				type: 'get',
+				dataType: 'json',
+				callback: function(options){
+
+					// UI
+					it.addClass('active').siblings().removeClass('active');
+
+					// Append Html To Element
+					$(options.element).html( options.render );
+				}
+			});
+		},
+		searchCustomer: function( element ){
+
+			element = $(element);
+
+			if( element.length ){
+				$.get( _.api.user_list, function(result){
+					$.checkResult(result, function(result){
+
+						$.reloadHTML({
+							element: element.find('ul'),
+							data: result
+						});
+
+					});
+				});
+			}
+		}('.report_select_panel')
 
 	};
 
