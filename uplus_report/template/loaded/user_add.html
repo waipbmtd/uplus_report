@@ -1,0 +1,17 @@
+<div class="audit-user">
+	<form data-submit="ajax" data-callback="addUserCallback" method="post" action="/user/{{!=it.type}}">
+		<ul>
+			<li>
+				<label><i class="sign">*</i>用户ID：</label>
+				<div>
+					<input type="text" placeholder="请输入用户ID" autofocus data-name="user_id" data-value="0" />
+				</div>
+			</li>
+		</ul>
+		<div class="form-submit">
+			<hr class="line-gray" />
+			<button type="button" class="btn-gray">取消</button>
+			<button type="submit" class="btn-orange">确认添加</button>
+		</div>
+	</form>
+</div>
