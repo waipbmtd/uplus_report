@@ -50,6 +50,9 @@ _.path = {
  * ** *** **** ***** **** *** ** *
  */
 _.api = {
+	// Report End
+	end: '/report/end?risk=' + _.risk,
+
 	// 获取剩余消息数
 	remain: '/report/remain' + '?risk=' + _.risk,
 	// 获取Album
@@ -599,11 +602,13 @@ $.extend({
 		});
 	},
 	trace: function(text, callback, time){
-		callback = callback || $.noop, time = time || 2000;
+		callback = callback || $.noop, time = time || 600;
 
 		$.fancybox.open({
 			content: '<div class="trace">' + text + '</div>',
 			minHeight: 20,
+			speedIn: 200,
+			speedOut: 200,
 			closeBtn: false,
 			scrolling: 'no'
 		}),
@@ -627,6 +632,8 @@ $.extend({
 		$.fancybox.open({
 			content: html,
 			closeBtn: false,
+			speedIn: 200,
+			speedOut: 200,
 			afterShow: function(){
 
 				$.each( $('.confirm'), function(i, dialog){
@@ -655,6 +662,8 @@ $.extend({
 			option.title = option.title || false,
 			option.closeBtn = options.closeBtn || true,
 			option.closeClick = options.closeClick || false,
+			option.speedIn = option.speedIn || 200,
+			option.speedOut = option.speedOut || 200,
 			option.callback = option.callback || $.noop;
 
 			$.fancybox.open({
@@ -662,6 +671,8 @@ $.extend({
 				type: 'ajax',
 				title: option.title,
 				closeClick: option.closeClick,
+				speedIn: option.speedIn,
+				speedOut: option.speedOut,
 				afterShow: function(){
 					$.fancyCall[ option.callback ]( it );
 				},
