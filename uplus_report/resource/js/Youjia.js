@@ -901,6 +901,11 @@ $.extend({
 
 		often.items += ']';
 
+		// 临时方法 - 献给Deal
+		if( api == _.api.report_batch ){
+			often.deal = { pass: 1 };
+		}
+
 		$.punish( often, api, function(){
 			callback();
 		});
