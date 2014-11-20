@@ -796,6 +796,7 @@ $.extend({
 	punish: function(options, api, callback){
 		options = options || {}
 		, options.callback = options.callback || $.noop
+		, callback = callback || $.noop
 
 		// Must
 		, options.module_type = options.module_type || undefined
@@ -826,7 +827,7 @@ $.extend({
 			url: api,
 			success: function(result){
 				$.checkResult(result, function( result ){
-					options.callback( result );
+					options.callback( result ), callback();
 				});
 			}
 		});
