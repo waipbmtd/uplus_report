@@ -684,6 +684,17 @@ $.extend({
 					})
 				});
 
+				if( !_.conf_key ){
+					_.conf_key = true;
+
+					_.dom.doc.on('keydown', function(e){
+						var code = e.keyCode;
+						if( code == 13 || code == 32 ){
+							$('.confirm button:eq(1)').trigger( _.evt.click );
+						}
+					});
+				}
+
 			}
 		})
 	},
