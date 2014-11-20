@@ -562,7 +562,7 @@ var
 			// Get Remain Count In (Default)
 			kitFunction.getRemain({
 				callback: function(result){
-					$('#remain_default').html( result.data.album_remain ), calculateTime( result );
+					$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result );
 				}
 			});
 
@@ -570,7 +570,7 @@ var
 			kitFunction.getRemain({
 				data: { risk: 1 },
 				callback: function(result){
-					$('#remain_dangerous').html( result.data.msg_remain );
+					$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
 				}
 			});
 
