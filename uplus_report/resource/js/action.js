@@ -191,7 +191,7 @@ var
 				return;
 			}
 
-			var element = $( it.closest('[data-element]').attr('data-element') );
+			var element = it.hasClass('masonry') ? it : $( it.closest('[data-element]').attr('data-element') );
 			$.each( element.find('span'), function(i, item){
 				item = $(item), item.hasClass( active ) ? item.removeClass( active ) : item.addClass( active );
 			});
@@ -645,6 +645,10 @@ _.dom.doc.on('keydown', function(e){
 	if( !!~$.inArray(code, _.keys.number) && items.length ){
 		var i = code % 48 ? code % 48 : 10;
 		items.eq( i-1 ).trigger( _.evt.click );
+		return;
+	}
+	if( code == 65 ){
+		kitFunction.chooseRev( iMasonry );
 	}
 });
 
