@@ -900,21 +900,27 @@ a, button, input, textarea{
 .table-theme{
 	.table;
 	th, td{
+		border-width: 1px;
 		padding: @distance / 2 @distance;
 	}
-	thead th, tbody td{
+	thead th, tbody td, tfoot td{
 		border-style: solid;
+	}
+	thead th{
+		border-width: 0 1px 0 0;
+		border-right-color: @color-deep;
+		color: #eee;
+		background: @color-hazy;
+		font-size: 1.1em;
+		font-weight: normal;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
+	}
+	tbody td, tfoot td{
+		border-width: 0 1px 1px 0;
+		border-color: @color-frivo;
 	}
 	thead{
 		th{
-			font-size: 1.1em;
-			font-weight: normal;
-			color: #eee;
-			border-width: 0 1px 0 0;
-			border-right-color: @color-deep;
-			background: @color-hazy;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
-
 			&:first-child{
 				border-left: 0;
 				border-radius: @radius 0 0 0;
@@ -926,10 +932,6 @@ a, button, input, textarea{
 		}
 	}
 	tbody{
-		td{
-			border-width: 0 1px 1px 0;
-			border-color: @color-frivo;
-		}
 		tr:last-child{
 			td{
 				&:first-child{
@@ -941,12 +943,56 @@ a, button, input, textarea{
 			}
 		}
 	}
+	tfoot{
+		td{
+			padding: @distance;
+			.text-center;
+		}
+	}
 }
 
 .pagination{
-	.clearfix;
+	.over-hide;
+	.in-block;
 	li{
 		.left;
+		.over-hide;
+		.hand;
+
+		line-height: @distance * 2.5;
+		padding: 0 @distance;
+
+		color: @color-hazy;
+		border-width: 1px 1px 1px 0;
+		border-style: solid;
+		border-color: @color-frivo;
+		background: @color-white;
+
+		a{
+			color: inherit;
+		}
+
+		&:first-child{
+			border-left-width: 1px;
+			border-radius: @radius 0 0 @radius;
+		}
+		&:last-child{
+			border-radius: 0 @radius @radius 0;
+		}
+
+		&:hover{
+			background: #f6f6f6;
+		}
+
+		&.active{
+			color: @color-white;
+			background: @color-hazy;
+		}
+		&.disabled{
+			color: @color-smoke;
+			background: @color-white;
+			.no-allow;
+		}
 	}
 }
 
@@ -1198,6 +1244,9 @@ textarea{
 }
 .move{
 	cursor: move;
+}
+.no-allow{
+	cursor: not-allowed;
 }
 
 .over-auto{

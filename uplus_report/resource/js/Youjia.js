@@ -812,7 +812,7 @@ $.extend({
 			url: api,
 			success: function(result){
 				$.checkResult(result, function( result ){
-					callback( result );
+					options.callback( result );
 				});
 			}
 		});
@@ -836,6 +836,7 @@ $.extend({
 				_.masker.find('.text bdo').text( options.length );
 			}
 
+			// 执行请求
 			$.punish( $.mergeJSON( options.shift(), often ), api, function(){
 				$.recursivePunish( options, often, api, callback );
 			});
@@ -851,6 +852,22 @@ $.extend({
 
 		return false;
 
+	},
+	// 异步提交数据, 因为递归请求太慢了?
+	recursiveAsyc: function(options, often, api, callback){
+
+		if( !$.isType(options, 'object') ){
+			return;
+		}
+
+		callback = callback || $.noop;
+
+		$.each(options, function(i, option){
+			// 执行请求
+			$.punish( $.mergeJSON( option, often ), api );
+		});
+
+		callback();
 	},
 	reportEnd: function(options){
 
