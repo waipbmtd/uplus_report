@@ -892,8 +892,13 @@ $.extend({
 
 		callback = callback || $.noop;
 
-		often.items = options;
+		// 临时方法 - 献给Items
+		often.items = {};
 
+		$.each(options, function(i, option){
+			often.items[i] = JSON.stringify(option);
+		});
+		
 		$.punish( often, api, function(){
 			callback();
 		});
