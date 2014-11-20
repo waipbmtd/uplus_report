@@ -1231,11 +1231,20 @@ textarea{
 	z-index: 2147483647;
 	background: rgba(0, 0, 0, .5);
 
+	.text{
+		left: @long * 8; bottom: @long * 2;
+		.fixed;
+		font-size: 13px;
+	}
+
 	.spinner {
 		width: @long * 4;
 		height: @long * 4;
+		/*
 		left: 50%; top: 50%;
 		margin: @long * -2 0 0 @long * -2;
+		*/
+		left: @distance; bottom: @distance;
 		.fixed;
 	}
 	.container1 > div, .container2 > div, .container3 > div {

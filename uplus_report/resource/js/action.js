@@ -211,8 +211,17 @@ var
 						than: _.cache.albums
 					});
 
+				// Loading UI
+				if( !kitFunction.hasMask() ){
+					mask.open();
+				}
+
 				// Punish - 递归
 				$.recursivePunish( database, {}, _.api.pass, function(){
+
+					// Loading UI
+					mask.close();
+
 					$.trace('处理完成', function(){
 						iMasonry.find('span.active').fadeOut(function(){
 							$(this).remove();

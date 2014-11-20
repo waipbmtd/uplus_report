@@ -733,7 +733,7 @@ $.extend({
 		options = options || {}
 		, options.css = 'masker'
 		, options.mask = _.masker ? _.masker:
-			$('<div class="' + options.css + '">' + loading + '</div>')
+			( _.masker = $('<div class="' + options.css + '">' + loading + '</div>') )
 		, options.onOpen = options.onOpen || $.noop
 		, options.onClose = options.onClose || $.noop
 		, options.hasMask = function(){
@@ -826,10 +826,25 @@ $.extend({
 		callback = callback || $.noop;
 
 		if( options.length ){
+
+			// 数字UI, 说太慢了? 有值
+			if( _.masker ){
+				var text = _.masker.find('.text').length ?
+					_.masker.find('.text'):
+					$('<div class="text">剩余：<bdo></bdo></div>').prependTo( _.masker );
+
+				_.masker.find('.text bdo').text( options.length );
+			}
+
 			$.punish( $.mergeJSON( options.shift(), often ), api, function(){
 				$.recursivePunish( options, often, api, callback );
 			});
 			return false;
+		}
+
+		// 数字UI, 说太慢了? 无值
+		if( _.masker ){
+			_.masker.find('.text').remove();
 		}
 
 		callback();
