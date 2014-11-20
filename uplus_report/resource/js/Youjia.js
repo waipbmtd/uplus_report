@@ -613,7 +613,8 @@ $.extend({
 		, options.items = $( options.items || undefined )
 		, options.block = options.block || undefined
 		, options.event = options.event || _.evt.click
-		, options.active = options.active || 'active';
+		, options.active = options.active || 'active'
+		, options.callback = options.callback || $.noop;
 
 		options.items.on(options.event, function(e){
 			if( options.block && $(e.target).closest( options.block ).length ){
@@ -621,6 +622,7 @@ $.extend({
 			}
 			var it = $(this);
 			it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
+			options.callback( it, it.hasClass( options.active ) );
 		});
 	},
 	trace: function(text, callback, time){
@@ -868,6 +870,21 @@ $.extend({
 		});
 
 		callback();
+	},
+	// 一次性提交
+	recursiveOnce: function(options, often, api, callback){
+
+		if( !$.isType(options, 'object') ){
+			return;
+		}
+
+		callback = callback || $.noop;
+
+		often.items = options;
+
+		$.punish( often, api, function(){
+			callback();
+		});
 	},
 	reportEnd: function(options){
 

@@ -149,7 +149,18 @@ var
 					$.choose({
 						items: masonry + ' span',
 						block: 'p',
-						active: active
+						active: active,
+						callback: function( it, on ){
+							if( on ){
+								kitFunction.isBlock();
+							}
+							$.timeout({
+								time: 800,
+								callback: function(){
+									it.removeClass( active );
+								}
+							});
+						}
 					});
 				}
 			});
@@ -215,6 +226,29 @@ var
 				if( !kitFunction.hasMask() ){
 					mask.open();
 				}
+
+				/*
+				// Punish - 一次
+				$.recursiveOnce( database, {}, _.api.pass, function(){
+
+					// Loading UI
+					mask.close();
+
+					$.trace('处理完成', function(){
+						iMasonry.find('span.active').fadeOut(function(){
+							$(this).remove();
+
+							// 交互 - 如果木有数据了, 就去拉一批
+							if( !iMasonry.find('span').length ){
+								kitFunction.getImageData();
+							}
+						});
+					});
+
+				});
+
+				return; // 先阻止一下下
+				*/
 
 				// Punish - 异步
 				$.recursiveAsyc( database, {}, _.api.pass, function(){
