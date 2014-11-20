@@ -23,7 +23,9 @@ class UserLogListHandler(BaseHandler):
                 .filter_by(admin_user_id=csid)
         else:
             logs = self.session.query(AdminOperationLog).all()
-        js_logs = [sqlalchemy_json(x) for x in logs]
+        js_logs = [
+            dict(sqlalchemy_json(x), **dict(username=x.admin_user.username))
+            for x in logs]
         return self.send_success_json(dict(data=js_logs))
 
 

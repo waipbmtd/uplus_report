@@ -230,12 +230,15 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
             data = self._close()
+            self._close(reportConstant.REPORT_MODULE_TYPE_SHOW)
             self._delete_resource()
         return data
 
-    def _close(self):
-        # 封（封大厅或用户）
-        server_api = self.CLOSE_API % dict(mod_type=self.v("module_type"),
+    def _close(self, module_type=""):
+        # 封（封秀场或用户）
+        if not module_type:
+            module_type = self.v("module_type")
+        server_api = self.CLOSE_API % dict(mod_type=module_type,
                                            u_id=self.v("uid"))
 
         data = WebRequrestUtil.getRequest2(API_HOST,

@@ -1,23 +1,23 @@
 <table class="table-theme">
 	<thead>
 		<tr>
-			<th width="10%">编号</th>
-			<th width="10%">IP地址</th>
-			<th width="20%">memo</th>
-			<th width="20%">content</th>
+			<th width="8%">索引</th>
+			<th width="8%">客服</th>
+			<th width="30%">content</th>
+			<th width="14%">memo</th>
 			<th width="10%">创建时间</th>
-			<th width="10%">ID</th>
+			<th width="10%">IP地址</th>
 		</tr>
 	</thead>
 	<tbody>
 		{{!~ it.data:item }}
 		<tr>
-			<td>{{!= item.admin_user_id }}</td>
-			<td>{{!= item.ip }}</td>
-			<td>{{!= item.memo }}</td>
-			<td>{{!= item.content }}</td>
-			<td>{{!= item.create_time }}</td>
 			<td>{{!= item.id }}</td>
+			<td>{{!=item.username}}</td>
+			<td>{{!= item.content }}</td>
+			<td>{{!= item.memo }}</td>
+			<td>{{!= item.create_time }}</td>
+			<td>{{!= item.ip }}</td>
 		</tr>
 		{{!~ }}
 	</tbody>

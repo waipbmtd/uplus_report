@@ -38,7 +38,7 @@ class AlbumImageReportListHandler(BaseHandler):
                                            parameters=dict(
                                                risk=risk,
                                                csid=self.current_user.id,
-                                               size=2))
+                                               size=15))
         self.record_log(content=u"获取下一批图片 " +
                                 reportConstant.REPORT_RISK_ENUMS.get(
                                     int(risk)).decode('utf8'))
