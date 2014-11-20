@@ -612,16 +612,26 @@ $.extend({
 		options = options || {}
 		, options.items = $( options.items || undefined )
 		, options.block = options.block || undefined
+		, options.type = !!~$.inArray(options.type, 'only one'.split(' ')) ? options.type : 'one'
 		, options.event = options.event || _.evt.click
 		, options.active = options.active || 'active'
 		, options.callback = options.callback || $.noop;
-
+		
 		options.items.on(options.event, function(e){
 			if( options.block && $(e.target).closest( options.block ).length ){
 				return;
 			}
 			var it = $(this);
-			it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
+
+			switch( options.type ){
+				case 'one':
+					it.hasClass( options.active ) ? it.removeClass( options.active ) : it.addClass( options.active );
+				break;
+				case 'only':
+					options.items.removeClass( options.active ), it.addClass( options.active );
+				break;
+			}
+
 			options.callback( it, it.hasClass( options.active ) );
 		});
 	},

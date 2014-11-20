@@ -148,18 +148,13 @@ var
 					// Choose Item
 					$.choose({
 						items: masonry + ' span',
+						type: 'only',
 						block: 'p',
 						active: active,
 						callback: function( it, on ){
 							if( on ){
 								kitFunction.isBlock();
 							}
-							$.timeout({
-								time: 800,
-								callback: function(){
-									it.removeClass( active );
-								}
-							});
 						}
 					});
 				}
