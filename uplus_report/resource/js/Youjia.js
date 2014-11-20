@@ -63,6 +63,8 @@ _.api = {
 	punish: '/punish' + '?risk=' + _.risk,
 	// 审核通过接口
 	pass: '/pass' + '?risk=' + _.risk,
+	// 批量审核接口
+	report_batch: '/report/batch_deal' + '?risk=' + _.risk,
 
 	// 获取高危用户列表
 	user_risk_list: '/user/risk/list',
@@ -885,7 +887,7 @@ $.extend({
 	recursiveOnce: function(options, often, api, callback){
 
 		if( !$.isType(options, 'object') ){
-			return;
+			return; 
 		}
 
 		callback = callback || $.noop;

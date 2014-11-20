@@ -222,9 +222,8 @@ var
 					mask.open();
 				}
 
-				/*
 				// Punish - 一次
-				$.recursiveOnce( database, {}, _.api.pass, function(){
+				$.recursiveOnce( database, {}, _.api.report_batch, function(){
 
 					// Loading UI
 					mask.close();
@@ -243,7 +242,6 @@ var
 				});
 
 				return; // 先阻止一下下
-				*/
 
 				// Punish - 异步
 				$.recursiveAsyc( database, {}, _.api.pass, function(){
@@ -862,6 +860,27 @@ $.extend({
 						mask.open();
 					}
 
+					// Punish - 一次
+					$.recursiveOnce( option.database, option.data, _.api.report_batch, function(){
+
+						// Loading UI
+						mask.close();
+
+						$.trace('处理完成', function(){
+							iMasonry.find('span.active').fadeOut(function(){
+								$(this).remove();
+
+								// 交互 - 如果木有数据了, 就去拉一批
+								if( !iMasonry.find('span').length ){
+									kitFunction.getImageData();
+								}
+							});
+						});
+
+					});
+
+					return; // 先阻止一下下
+
 					$.recursiveAsyc( option.database, option.data, _.api.punish, function(){
 
 						// Loading UI
@@ -940,6 +959,26 @@ $.extend({
 					mergeData = kitFunction.dataTolerance( mergeData );
 
 					delete mergeData.msgs;
+
+					// Punish - 一次
+					/*
+					$.recursiveOnce( option.database, $.mergeJSON(option.data, mergeData), _.api.report_batch, function(){
+
+						// Loading UI
+						mask.close();
+
+						$.trace('处理完成', function(){
+							(function(tr){
+								if( tr.length ){
+									tr.slideUp(function(){
+										tr.remove();
+									});
+								}
+							})( it.closest('tr') );
+						});
+
+					});
+					*/
 
 					// Punish - 异步
 					$.recursiveAsyc( option.database, $.mergeJSON(option.data, mergeData), _.api.punish, function(){
