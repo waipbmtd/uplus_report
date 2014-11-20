@@ -223,7 +223,7 @@ var
 				}
 
 				// Punish - 一次
-				$.recursiveOnce( database, {}, _.api.report_batch, function(){
+				$.recursiveOnce( database, { pass: 1 }, _.api.report_batch, function(){
 
 					// Loading UI
 					mask.close();
@@ -638,6 +638,12 @@ var
 
 })
 (4567);
+
+/* Key Down For Choose Albums */
+_.dom.doc.on('keydown', function(e){
+	var code = e.keyCode;
+	if( $.inArray() ){}
+});
 
 /* Default Welcome */
 ;(function(element){
