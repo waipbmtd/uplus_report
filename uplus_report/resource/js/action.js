@@ -53,10 +53,10 @@ var
 	/* Data-Function In Kit */
 	kitFunction = {
 
+		/* 是否存在Mask */
 		hasMask: function(){
 			return !!$('#masker').length;
 		},
-
 
 		/* ** *** **** ***** Image ***** **** *** ** */
 
@@ -594,15 +594,16 @@ var
 	$.each(items, function(i, item){
 		item = $(item);
 		item.css({
-			top: i%2 ? 100 : -100
+			top: i%2 ? 60 : -60,
+			left: i%2 ? 60 : -60
 		});
 	});
 
 	$.timeout({
 		count: vcount,
-		time: 60,
+		time: 45,
 		callback: function( options ){
-			items.eq( vcount - options.count ).animate({ top: 0 }, 180);
+			items.eq( vcount - options.count ).animate({ top: 0, left: 0 }, 135);
 
 			if( options.count == 1 ){
 				$.timeout({
