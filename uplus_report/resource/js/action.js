@@ -148,12 +148,12 @@ var
 					// Choose Item
 					$.choose({
 						items: masonry + ' span',
-						type: 'only',
+						// type: 'only',
 						block: 'p',
 						active: active,
 						callback: function( it, on ){
 							if( on ){
-								kitFunction.isBlock();
+								// kitFunction.isBlock();
 							}
 						}
 					});
@@ -641,8 +641,11 @@ var
 
 /* Key Down For Choose Albums */
 _.dom.doc.on('keydown', function(e){
-	var code = e.keyCode;
-	if( $.inArray() ){}
+	var code = e.keyCode, items = iMasonry ? iMasonry.find('span') : [];
+	if( !!~$.inArray(code, _.keys.number) && items.length ){
+		var i = code % 48 ? code % 48 : 10;
+		items.eq( i-1 ).trigger( _.evt.click );
+	}
 });
 
 /* Default Welcome */
