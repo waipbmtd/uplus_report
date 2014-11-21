@@ -520,7 +520,7 @@ $.extend({
 				start = 1, end += (count - current);
 			}
 			if( current > (total - count) ){
-				end = total, start += (current - total);
+				end = total, start -= (count - (total - current));
 			}
 		}
 		// alert('start:' + start + ':::' + 'end:' + end + ':::' + 'current:' + current);
