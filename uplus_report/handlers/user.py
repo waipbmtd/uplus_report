@@ -30,8 +30,10 @@ class UserListHandler(BaseHandler):
         else:
             users = self.session.query(AdminUser).filter(
                 AdminUser.id == self.current_user.id)
-        return self.send_success_json(
+        data = self.send_success_json(
             dict(data=[sqlalchemy_json(x) for x in users]))
+        self.record_log(u" 获取系统用户列表 ")
+        return data
 
 
 class UserNameIdListHandler(BaseHandler):
@@ -49,8 +51,10 @@ class UserNameIdListHandler(BaseHandler):
             users = self.session.query(AdminUser.username,
                                        AdminUser.id).\
                 filter(AdminUser.id == self.current_user.id)
-        return self.send_success_json(
+        data = self.send_success_json(
             dict(data=[sqlalchemy_json(x) for x in users]))
+        self.record_log(u" 获取系统用户名称和编号列表 ")
+        return data
 
 
 class UserHandler(BaseHandler):
@@ -76,6 +80,8 @@ class UserHandler(BaseHandler):
         password = util.hash_password(password)
         user = AdminUser(username=username, password=password)
         self.session.add(user)
+        self.record_log(u"创建用户 " + username.encode("utf8"))
+        return self.send_success_json()
 
     @util.exception_handler
     @session_manage
@@ -88,9 +94,11 @@ class UserHandler(BaseHandler):
 
         user = self.session.query(AdminUser).get(userid)
         if user:
+            self.record_log(u"删除用户 " + user.username.encode("utf8"))
             self.session.delete(user)
             return self.send_success_json(info="删除成功")
         self.send_error_json(info="删除失败")
+
 
 
 class UplusUserBaseHandler(BaseHandler):

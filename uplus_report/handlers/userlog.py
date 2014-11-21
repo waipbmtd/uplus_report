@@ -26,6 +26,7 @@ class UserLogListHandler(BaseHandler):
         js_logs = [
             dict(sqlalchemy_json(x), **dict(username=x.admin_user.username))
             for x in logs]
+        self.record_log(u"获取指定客服日志列表详细信息 " + str(csid))
         return self.send_success_json(dict(data=js_logs))
 
 
@@ -34,7 +35,8 @@ class UserLogHandler(BaseHandler):
     @tornado.web.authenticated
     @session_manage
     def get(self):
-        # 获取日志列表详细信息
+        # 获取日志详细信息
         id = int(self.get_argument("id"))
         logs = self.session.query(AdminOperationLog).get(id)
+        self.record_log(u"获取日志详细信息 ")
         return self.send_success_json(dict(data=sqlalchemy_json(logs)))

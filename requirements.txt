@@ -6,3 +6,4 @@ python-dateutil
 south
 redis
 supervisor
+pycurl

@@ -101,3 +101,27 @@ class ReportEndHandler(BaseHandler):
                                                csid=self.current_user.id,
                                            ))
         return self.send_success_json(json.loads(data))
+
+
+class ReportBatchDealHandler(BaseHandler):
+    BATH_REPORT = config.api.report_batch_deal
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def post(self):
+        return self.send_success_json()
+
+    def on_finish(self):
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        items = self.get_argument("items")
+        deal = self.get_argument("deal")
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                            self.BATH_REPORT,
+                                            parameters=dict(
+                                                items=items,
+                                                deal=deal,
+                                                csid=self.current_user.id,
+                                            ))
+        self.record_log(content=u"通过" + reportConstant.REPORT_RISK_ENUMS.get(
+            int(risk)).decode('utf8'))
+        self.finish()

@@ -3,7 +3,9 @@
 import json
 
 import tornado
+# from tornado.httpclient import AsyncHTTPClient
 import tornado.web
+# from tornado import gen
 
 from handlers.base import BaseHandler
 import config
@@ -73,7 +75,10 @@ class PunishBaseHandler(BaseHandler):
             csid=self.v("csid"),
             reporter=self.v("reporter_id"),
             owner=self.v("owner"),
-            msgId=self.v("msg_id")
+            msgId=self.v("msg_id"),
+            url=self.v("url"),
+            thumb_url=self.v("thumb_url"),
+            uucid=self.v("uucid")
         )
 
     @property
@@ -86,7 +91,11 @@ class PunishBaseHandler(BaseHandler):
             rid=self.v("rid"),
             csid=self.v("csid"),
             reporter=self.v("reporter_id"),
-            msgId=self.v("msg_id")
+            msgId=self.v("msg_id"),
+            uid=self.v("uid"),
+            url=self.v("url"),
+            thumb_url=self.v("thumb_url"),
+            uucid=self.v("uucid")
         )
 
     @property
@@ -168,6 +177,9 @@ class PunishAdapterHandler(PunishBaseHandler):
         惩罚统一入口
         :return:
         """
+        return self.send_success_json()
+
+    def on_finish(self):
         self.parse_argument()
         module_type = int(self.v("module_type"))
         self.punish_type = int(self.v("punish_type"))
@@ -182,11 +194,8 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._punish_group()
         elif module_type == reportConstant.REPORT_MODULE_TYPE_USER:
             data = self._punish_user()
-
-        if not data:
-            return self.send_error_json(info="无返回值")
-
         return self.send_success_json(json.loads(data))
+
 
     def _punish_hall(self):
         # 对大厅用户惩罚
@@ -195,7 +204,6 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_SILENCE:
             data = self._silence()
-            self._delete_resource()
         return data
 
 
@@ -206,7 +214,6 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_SILENCE:
             data = self._silence()
-            self._delete_resource()
         elif self.punish_type == reportConstant.REPORT_PUNISH_CLOSE_SHOW:
             data = self._close()
         return data
@@ -220,7 +227,8 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._dismiss_group()
         elif self.punish_type == reportConstant.REPORT_PUNISH_KICK_OUT_GROUP:
             data = self._kick_out_group()
-            self._delete_resource()
+            # http_client = AsyncHTTPClient()
+            # http_client.fetch(self.reverse_url("punish"), method="post")
         return data
 
     def _punish_user(self):
@@ -231,7 +239,6 @@ class PunishAdapterHandler(PunishBaseHandler):
         elif self.punish_type == reportConstant.REPORT_PUNISH_LOGIN_LIMIT:
             data = self._close()
             self._close(reportConstant.REPORT_MODULE_TYPE_SHOW)
-            self._delete_resource()
         return data
 
     def _close(self, module_type=""):
@@ -247,6 +254,7 @@ class PunishAdapterHandler(PunishBaseHandler):
         self.log_record_close()
         return data
 
+    # @gen.coroutine
     def _silence(self):
         # 禁言
         server_api = self.SILENCE_API % dict(mod_type=self.v("module_type"),
@@ -256,7 +264,6 @@ class PunishAdapterHandler(PunishBaseHandler):
                                            server_api,
                                            parameters=self.feature_parameter)
         self.log_record_silence()
-        self._delete_resource()
         return data
 
     def _dismiss_group(self):

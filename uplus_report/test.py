@@ -46,7 +46,9 @@ if __name__ == "__main__":
     session = database.DB_Session()
 
     # getAllAdminuser(session)
-    testAddAdminuser(session, 'a3', 'qwe123')
+    testAddAdminuser(session, 'a4', 'qwe123')
+    testAddAdminuser(session, 'a5', 'qwe123')
+    testAddAdminuser(session, 'a6', 'qwe123')
     # teatAddAdminLog(session)
     # testAddEditoruser(session)
     session.commit()

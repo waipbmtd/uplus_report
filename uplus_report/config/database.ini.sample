@@ -5,4 +5,4 @@ user=report
 host=reportmaster.mysql.youja.cn:3306
 password=qwe123
 charset=utf8
-echo=False
+echo=True

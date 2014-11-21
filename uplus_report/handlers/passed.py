@@ -3,7 +3,9 @@
 import json
 
 import tornado
+from tornado.httpclient import AsyncHTTPClient
 import tornado.web
+from tornado import gen
 
 from handlers.base import BaseHandler
 import config
@@ -40,7 +42,7 @@ class PassedHandler(BaseHandler):
             content=self.get_argument("content", ""),
             # 拥有者ID
             owner=self.get_argument("owner", ""),
-            #客服id
+            # 客服id
             csid=self.current_user.id
         )
 
@@ -64,9 +66,21 @@ class PassedHandler(BaseHandler):
         self.record_log(content, memo=self.v("memo"))
 
 
-    @util.exception_handler
     @tornado.web.authenticated
     def post(self):
+        return self.send_success_json()
+
+    @gen.coroutine
+    def post(self):
+        self.parse_argument()
+        server_api = self.PASS_API
+        http_client = AsyncHTTPClient()
+        response = yield http_client.fetch(
+            "http://%s/%s" % (API_HOST, server_api), )
+        pass
+
+    @util.exception_handler
+    def on_finish(self):
         self.parse_argument()
         server_api = self.PASS_API
 
@@ -80,4 +94,3 @@ class PassedHandler(BaseHandler):
                                                reporter=self.v("reporter_id")
                                            ))
         self.log_record_pass()
-        return self.send_success_json(json.loads(data))

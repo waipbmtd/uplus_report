@@ -3,6 +3,7 @@
 
 import os
 import logging
+# from tornado.httpclient import AsyncHTTPClient
 
 import tornado.ioloop
 import tornado.web
@@ -61,12 +62,13 @@ def main():
     logging.info("server start...")
 
     from storage.mysql.database import init_db
-
     init_db()
+
+    # AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
     define("dev", default=False, help="Is development env?", type=bool)
     define("port", default=8205, help="run on the given port", type=int)
-    define("debug", default=True, help="is debug model?", type=bool)
+    define("debug", default=False, help="is debug model?", type=bool)
 
     tornado.options.parse_command_line()
 

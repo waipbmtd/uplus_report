@@ -38,6 +38,11 @@ def getRequest2(host, path, parameters={}):
     return getRequest(url, parameters)
 
 
+def postRequest2(host, path, parameters={}):
+    url = "http://%s/%s" % (host, path)
+    return postRequest(url, urllib.urlencode(parameters))
+
+
 
 def printHttpRequest(req):
     s = StringIO()

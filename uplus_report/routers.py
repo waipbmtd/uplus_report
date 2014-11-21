@@ -37,11 +37,13 @@ routers = [
     url(r"/report/remain", report.RemainReportCountHandler),
     #处理一条消息举报结束
     url(r"/report/end", report.ReportEndHandler),
+    #处理一条消息举报结束
+    url(r"/report/batch_deal", report.ReportBatchDealHandler),
 
     #审核通过
     url(r"/pass", passed.PassedHandler),
     #处罚
-    url(r"/punish", punish.PunishAdapterHandler),
+    url(r"/punish", punish.PunishAdapterHandler, name="punish"),
     #处罚关联
     url(r'/punish_enum_relation',
         constantenu.PunishRelationHandler),

@@ -46,7 +46,6 @@ class BaseHandler(tornado.web.RequestHandler):
         self.write(jsonpickle.encode(result,
                                      unpicklable=False,
                                      backend=backend))
-        self.finish()
 
     def send_error_json(self, data={}, info="", code=""):
         backend = jsonpickle.backend.JSONBackend()
@@ -87,13 +86,13 @@ class BaseHandler(tornado.web.RequestHandler):
         if expire < now:
             return None
 
+        user = self.session.query(AdminUser).get(int(user_id))
+        # user = AdminUser(id=1, username="daixuefeng", role="admin", state=True)
+        if not user or not user.state:
+            return None
+
         expire_time = now + idel
         self.set_secure_cookie("u_a_e", u'{}'.format(expire_time))
-
-        user = self.session.query(AdminUser).filter_by(id=int(user_id),
-                                                       state=True).first()
-        if not user:
-            return None
 
         self.session.expunge(user)
         return user

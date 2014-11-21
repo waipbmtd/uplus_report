@@ -1,6 +1,15 @@
 #!/usr/bin/python
 # coding=utf-8
 
+# 通过状态
+REPORT_PASS_YES = 1
+REPORT_PASS_NO = 0
+
+REPORT_PASS_ENUMS = {
+    REPORT_PASS_YES : "通过",
+    REPORT_PASS_NO  : "没有通过"
+}
+
 # 用户区分
 USER_SYSTEM = "系统用户"
 USER_HIGH_RISK = "高危用户"
