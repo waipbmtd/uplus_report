@@ -46,7 +46,7 @@ class UserLogListHandler(BaseHandler):
         return self.send_success_json(dict(
             data=dict(data=js_logs,
                       current=current,
-                      user_id=self.current_user.id,
+                      csid=self.get_argument("csid", ""),
                       total=math.ceil(float(total) / per))))
 
 
