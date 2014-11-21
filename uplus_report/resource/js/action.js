@@ -166,6 +166,9 @@ var
 							.on(_.evt.over, function(){
 								input.select();
 							})
+							.on('keyup', function(){
+								input.select();
+							})
 							.blur(function(){
 								var v = input.val().toUpperCase().substr(0, 1);
 
