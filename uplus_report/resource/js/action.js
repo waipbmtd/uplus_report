@@ -157,7 +157,7 @@ var
 							}
 						}
 					});
-
+					
 					/* Key Panel Choose */
 					var keyPanel = $('.key-panel').show();
 					$.each( keyPanel.find('input'), function(i, input){
@@ -167,7 +167,7 @@ var
 								input.select();
 							})
 							.blur(function(){
-								var v = input.val().toUpperCase();
+								var v = input.val().toUpperCase().substr(0, 1);
 
 								if( !v.length || v.charCodeAt(0) < 65 || v.charCodeAt(0) > 90 ){
 									v = input.attr('data-default').toUpperCase();
