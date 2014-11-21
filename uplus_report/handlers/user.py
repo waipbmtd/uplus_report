@@ -200,25 +200,25 @@ class UplusUserRedisBaseHandler(BaseHandler):
         return self.send_success_json(dict(data=dict(user_id=user_id)))
 
 
-class HighRiskUserListHandler(UplusUserListBaseHandler):
+class HighRiskUplusUserListHandler(UplusUserListBaseHandler):
     _redis = redis_risk_user
     KEY = redisConstant.REDIS_HIGH_RISK_KEY
     TYPE = reportConstant.USER_HIGH_RISK
 
 
-class HighRiskUserHandler(UplusUserRedisBaseHandler):
+class HighRiskUplusUserHandler(UplusUserRedisBaseHandler):
     _redis = redis_risk_user
     KEY = redisConstant.REDIS_HIGH_RISK_KEY
     TYPE = reportConstant.USER_HIGH_RISK
 
 
-class SpecialUserListHandler(UplusUserListBaseHandler):
+class SpecialUplusUserListHandler(UplusUserListBaseHandler):
     _redis = redis_special_user
     KEY = redisConstant.REDIS_SPECIAL_USER_KEY
     TYPE = reportConstant.USER_SPECIAL
 
 
-class SpecialUserHandler(UplusUserRedisBaseHandler):
+class SpecialUplusUserHandler(UplusUserRedisBaseHandler):
     _redis = redis_special_user
     KEY = redisConstant.REDIS_SPECIAL_USER_KEY
     TYPE = reportConstant.USER_SPECIAL

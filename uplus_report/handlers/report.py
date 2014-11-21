@@ -30,7 +30,6 @@ class AlbumImageReportListHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @session_manage
     def get(self):
         risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
         data = WebRequrestUtil.getRequest2(API_HOST,
@@ -116,12 +115,55 @@ class ReportBatchDealHandler(BaseHandler):
         items = self.get_argument("items")
         deal = self.get_argument("deal")
         data = WebRequrestUtil.getRequest2(API_HOST,
-                                            self.BATH_REPORT,
-                                            parameters=dict(
-                                                items=items,
-                                                deal=deal,
-                                                csid=self.current_user.id,
-                                            ))
-        self.record_log(content=u"通过" + reportConstant.REPORT_RISK_ENUMS.get(
-            int(risk)).decode('utf8'))
-        self.finish()
+                                           self.BATH_REPORT,
+                                           parameters=dict(
+                                               items=items,
+                                               deal=deal,
+                                               csid=self.current_user.id,
+                                           ))
+        s_content, s_memo = self._deal_detail()
+        s_content2 = self._items_detail()
+        self.record_log(content=s_content.decode("utf8")
+                                + s_content2,
+                        memo=s_memo)
+
+    def _deal_detail(self):
+        l_content = []
+        s_memo = ""
+
+        deal = self.get_argument("deal")
+        j_deal = json.loads(deal)
+
+        b_pass = int(j_deal.get("pass"))
+        s_deal = reportConstant.REPORT_PASS_ENUMS.get(b_pass)
+
+        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        s_risk = reportConstant.REPORT_RISK_ENUMS.get(int(risk))
+
+        l_content.append(s_deal)
+        l_content.append(s_risk)
+
+        if not b_pass:
+            s_reason = reportConstant.REPORT_REASONS.get(
+                int(j_deal.get("reason", reportConstant.REPORT_REASON_SEX)))
+            s_m_type = reportConstant.REPORT_MODULE_TYPES.get(
+                int(j_deal.get("module_type",
+                               reportConstant.REPORT_MODULE_TYPE_USER)))
+            s_p_type = reportConstant.REPORT_PUNISHES.get(
+                int(j_deal.get("punish_type",
+                               reportConstant.REPORT_PUNISH_DELETE_RESOURCE)))
+            s_timedelta = str(j_deal.get("timedelta", ""))
+            s_memo = str(j_deal.get("memo"))
+
+            l_content.append(s_reason)
+            l_content.append(s_m_type)
+            l_content.append(s_p_type)
+            l_content.append(s_timedelta)
+
+        return " ".join(l_content), s_memo
+
+    def _items_detail(self):
+        items = self.get_argument("items")
+        d_items = json.loads(items)
+        return "\n".join(
+            [x.get("url") + x.get("content", " ") for x in d_items])

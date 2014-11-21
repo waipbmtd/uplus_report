@@ -293,3 +293,11 @@ class PunishAdapterHandler(PunishBaseHandler):
         self.log_record_delete()
         return data
 
+
+class UplusUserPunishList(BaseHandler):
+    CLOSE_API = config.api.user_punish_log
+
+    def get(self):
+        u_id = self.get_argument("u_id")
+
+        return self.send_success_json()

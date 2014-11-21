@@ -59,20 +59,23 @@ routers = [
     #用户解封
     url(r'/user/un_clock', user.UnlockUplusUserHandler),
 
-    #所有用户
+    #高危友加用户
+    url(r'/user/risk', user.HighRiskUplusUserHandler),
+    url(r'/user/risk/list', user.HighRiskUplusUserListHandler),
+
+    #特殊友加用户
+    url(r'/user/special', user.SpecialUplusUserHandler),
+    url(r'/user/special/list', user.SpecialUplusUserListHandler),
+
+    #友加用户被惩罚日志
+    url(r'/user/punish/log', punish.UplusUserPunishList),
+
+    #所有系统用户
     url(r'/user/list', user.UserListHandler),
     #所有用户名
     url(r'/user/name_id_list', user.UserNameIdListHandler),
 
-    #高危用户
-    url(r'/user/risk', user.HighRiskUserHandler),
-    url(r'/user/risk/list', user.HighRiskUserListHandler),
-
-    #特殊用户
-    url(r'/user/special', user.SpecialUserHandler),
-    url(r'/user/special/list', user.SpecialUserListHandler),
-
-    #用户日志
+    #系统用户日志
     url(r'/user/log', userlog.UserLogHandler),
     url(r'/user/log/list', userlog.UserLogListHandler),
 ]
