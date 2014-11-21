@@ -168,6 +168,11 @@ var
 							})
 							.blur(function(){
 								var v = input.val().toUpperCase();
+
+								if( v.charCodeAt(0) < 65 || v.charCodeAt(0) > 90 ){
+									v = input.attr('data-default').toUpperCase();
+								}
+
 								input.val(v).attr('value', v);
 							});
 					});
