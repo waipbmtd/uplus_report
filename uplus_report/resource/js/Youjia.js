@@ -75,6 +75,9 @@ _.api = {
 	// 单个特殊用户: Get->获取, Post->添加
 	user_special: '/user/special',
 
+	// 获取用户日志
+	user_punish_log: '/user/punish/log',
+
 	// 获取用户(客服)列表
 	user_list: '/user/list',
 	// 获取用户详细
@@ -500,6 +503,28 @@ $.extend({
 			};
 		doMerge( Array.prototype.slice.call(arguments) );
 		return data;
+	},
+	pagination: function(current, total, count){
+		total, current;
+		var
+			count = count || 5,
+			diff = 0,
+			start = current - count,
+			end = current + count;
+
+		if( total <= count * 2 + 1 ){
+			start = 1, end = total;
+		}
+		else{
+			if( start < 1 ){
+				start = 1, end += (count - current);
+			}
+			if( current > (total - count) ){
+				end = total, start += (current - total);
+			}
+		}
+		// alert('start:' + start + ':::' + 'end:' + end + ':::' + 'current:' + current);
+		return { start: start, end: end }
 	},
 	reloadHTML: function(options){
 		options = options || {}

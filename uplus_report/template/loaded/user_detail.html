@@ -1,19 +1,35 @@
 <table class="table-theme">
+	{{!? it.data.total }}
+	<thead>
+		<tr>
+			<td colspan="6">
+				<ul class="pagination">
+					{{!
+						var page = $.pagination( it.data.current, it.data.total );
+					}}
+					{{! for( var i=page.start; i<=page.end; i++ ){ }}
+						<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.user_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
+					{{! } }}
+				</ul>
+			</td>
+		</tr>
+	</thead>
+	{{!? }}
 	<thead>
 		<tr>
 			<th width="8%">索引</th>
 			<th width="8%">客服</th>
-			<th width="30%">content</th>
+			<th width="30%">内容</th>
 			<th width="14%">memo</th>
 			<th width="10%">创建时间</th>
 			<th width="10%">IP地址</th>
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data:item }}
+		{{!~ it.data.data:item }}
 		<tr>
 			<td>{{!= item.id }}</td>
-			<td>{{!=item.username}}</td>
+			<td>{{!= item.username}}</td>
 			<td>{{!= item.content }}</td>
 			<td>{{!= item.memo }}</td>
 			<td>{{!= item.create_time }}</td>
@@ -21,18 +37,20 @@
 		</tr>
 		{{!~ }}
 	</tbody>
+	{{!? it.data.total }}
 	<tfoot>
 		<tr>
 			<td colspan="6">
 				<ul class="pagination">
-					<li class="active"><a>1</a></li>
-					<li><a>2</a></li>
-					<li class="disabled"><a>3</a></li>
-					<li><a>4</a></li>
-					<li><a>5</a></li>
-					<li><a>6</a></li>
+					{{!
+						var page = $.pagination( it.data.current, it.data.total );
+					}}
+					{{! for( var i=page.start; i<=page.end; i++ ){ }}
+						<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.user_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
+					{{! } }}
 				</ul>
 			</td>
 		</tr>
 	</tfoot>
+	{{!? }}
 </table>

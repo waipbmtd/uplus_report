@@ -72,5 +72,28 @@
 		</div>
 
 	</div>
+	<div class="main">
+		
+		<div class="report_user">
+			<div class="report_search_panel">
+				<form data-submit="ajax" data-callback="getUsers" data-type="system" method="get" action="/user/punish/log">
+					<ul>
+						<li>
+							<label>关键字：</label>
+							<div>
+								<input type="text" autofocus />
+								<button>查询</button>
+							</div>
+						</li>
+					</ul>
+				</form>
+				<hr class="line-gray" />
+			</div>
+			<div class="report_search_result">
+				<!-- Get Page From <users.html> -->
+			</div>
+		</div>
+
+	</div>
 
 </section>

@@ -373,7 +373,8 @@ var
 						reason: 2, // 色情
 						module_type: 4, // 用户
 						punish_type: 103, // 删除资源
-						memo: 'auto' // 备注
+						memo: 'auto', // 备注
+						pass: 1
 					}
 
 				// Loading UI
@@ -382,7 +383,7 @@ var
 				}
 
 				// Punish - 一次
-				$.recursiveOnce( database, often, _.api.report_batch, function(){
+				$.recursiveOnce( database, {deal: JSON.stringify(often)}, _.api.report_batch, function(){
 
 					// Loading UI
 					mask.close();
@@ -641,7 +642,7 @@ var
 
 			$.renderHTML({
 				element: $('.report_select_result'),
-				data: _.api.user_detail + '?csid=' + itData.id,
+				data: _.api.user_detail + '?csid=' + itData.id + '&current=' + (itData.current || 1),
 				html: _.tpl.user_detail,
 				type: 'get',
 				dataType: 'json',
