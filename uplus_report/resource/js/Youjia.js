@@ -935,7 +935,13 @@ $.extend({
 		often.items += ']';
 
 		// 临时方法 - 献给Deal
-		often.deal = {pass: 0};
+		often.deal = {
+			reason: 2, // 色情
+			module_type: 4, // 用户
+			punish_type: 103, // 删除资源
+			memo: 'auto', // 备注
+			pass: 0
+		};
 		if( often.pass ){
 			often.deal = {pass: 1};
 		}

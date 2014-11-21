@@ -366,16 +366,7 @@ var
 						container: iMasonry.find('span.active'),
 						selector: 'data-id',
 						than: _.cache.albums
-					}),
-
-					// 固定参数
-					often = {
-						reason: 2, // 色情
-						module_type: 4, // 用户
-						punish_type: 103, // 删除资源
-						memo: 'auto', // 备注
-						pass: 1
-					}
+					});
 
 				// Loading UI
 				if( !kitFunction.hasMask() ){
@@ -383,7 +374,7 @@ var
 				}
 
 				// Punish - 一次
-				$.recursiveOnce( database, {deal: JSON.stringify(often)}, _.api.report_batch, function(){
+				$.recursiveOnce( database, {}, _.api.report_batch, function(){
 
 					// Loading UI
 					mask.close();

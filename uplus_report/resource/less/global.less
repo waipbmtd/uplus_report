@@ -935,14 +935,23 @@ a, button, input, textarea{
 		}
 	}
 	tbody{
-		tr:last-child{
-			td{
-				&:first-child{
-					border-radius: 0 0 0 @radius;
+		tr{
+			&:last-child{
+				td{
+					&:first-child{
+						border-radius: 0 0 0 @radius;
+					}
+					&:last-child{
+						border-radius: 0 0 @radius 0;
+					}
 				}
-				&:last-child{
-					border-radius: 0 0 @radius 0;
-				}
+			}
+			&:nth-of-type(odd){
+				background: @color-odd;
+			}
+			&:nth-of-type(even){
+			}
+			&:hover{
 			}
 		}
 	}
@@ -983,7 +992,7 @@ a, button, input, textarea{
 		}
 
 		&:hover{
-			background: #f6f6f6;
+			background: @color-hover;
 		}
 
 		&.active{
