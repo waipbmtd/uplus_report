@@ -2,7 +2,27 @@
 host = 192.168.1.185:8180
 report_album_image_list = uplus-report/api/get_pic_list
 report_message_next = uplus-report/api/get_next_report
-report_close_api = uplus-report/close/mt/%(mod_type)s/uid/%(u_id)s
-report_silence_api = uplus-report/silence/mt/%(mod_type)s/uid/%(u_id)s
-report_delete_resource = uplus-report/del
-report_punish_business  = uplus-report/
+report_remain_count = uplus-report/api/get_remain_report
+
+report_close_api = uplus-report/api/close/mt/%(mod_type)s/uid/%(u_id)s
+report_silence_api = uplus-report/api/silence/mt/%(mod_type)s/uid/%(u_id)s
+report_delete_resource = uplus-report/api/res/del
+
+report_pass = uplus-report/api/pass
+
+report_dismiss_group = uplus-report/api/dismiss
+report_kick_out = uplus-report/api/kickout
+
+report_check_end = uplus-report/api/check_end
+
+report_batch_deal = uplus-report/api/batch_deal_album
+
+user_punish_log = uplus-report/api/user_punish_log
+
+hall_openmouth = openmouth/hall
+
+show_openmouth = openmouth/show/%(showId)s
+show_unlock = unlock/show/%(showId)s
+
+user_unlock= unlock/user/%(uid)s
+
