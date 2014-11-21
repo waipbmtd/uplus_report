@@ -39,8 +39,9 @@ class UserLogListHandler(BaseHandler):
                 per * current)
             total = self.session.query(AdminOperationLog).count()
         js_logs = [
-            dict(sqlalchemy_json(x), **dict(username=x.admin_user.username))
-            for x in logs]
+            dict(sqlalchemy_json(x), **dict(
+                username=x.admin_user and x.admin_user.username or None)) for x
+            in logs]
         self.record_log(u"获取指定客服日志列表详细信息 " + str(csid))
         return self.send_success_json(dict(
             data=dict(data=js_logs,
