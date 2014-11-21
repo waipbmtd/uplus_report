@@ -140,7 +140,7 @@ var
 					// Masonry Water Fall
 					iMasonry.imagesLoaded(function(){
 						$.initMasonry({
-							element: masonry + ' .album',
+							element: masonry,
 							selector: 'li'
 						});
 					});
@@ -159,7 +159,7 @@ var
 					});
 
 					/* Key Panel Choose */
-					var keyPanel = $('.key-panel');
+					var keyPanel = $('.key-panel').show();
 					$.each( keyPanel.find('input'), function(i, input){
 						input = $(input);
 						input
