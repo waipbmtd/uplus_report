@@ -17,7 +17,7 @@ user = statistics_db.get("user")
 host = statistics_db.get("host")
 password = statistics_db.get("password")
 charset = statistics_db.get("charset")
-echo = str(statistics_db.get) == "True"
+echo = str(statistics_db.get("echo")) == "True"
 
 db_path = "%s://%s:%s@%s/%s?charset=%s" % (
     dialect, user, password, host, db_name, charset)

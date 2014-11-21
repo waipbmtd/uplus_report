@@ -18,7 +18,7 @@ class UserLogListHandler(BaseHandler):
         # 获取指定客服日志列表详细信息
         csid = self.get_argument("csid", "")
 
-        current = int(self.get_argument("current", 0))
+        current = int(self.get_argument("current", 1))
         per = int(self.get_argument("per", 15))
 
         total = 0
@@ -30,13 +30,13 @@ class UserLogListHandler(BaseHandler):
             logs = self.session.query(AdminOperationLog) \
                 .filter_by(admin_user_id=csid).order_by(
                 AdminOperationLog.create_time.desc()).limit(per).offset(
-                per * current)
+                per * (current-1))
             total = self.session.query(AdminOperationLog) \
                 .filter_by(admin_user_id=csid).count()
         else:
             logs = self.session.query(AdminOperationLog).order_by(
                 AdminOperationLog.create_time.desc()).limit(per).offset(
-                per * current)
+                per * (current-1))
             total = self.session.query(AdminOperationLog).count()
         js_logs = [
             dict(sqlalchemy_json(x), **dict(

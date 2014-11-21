@@ -6,7 +6,6 @@ import urllib
 import urllib2
 import logging
 from StringIO import StringIO
-import datetime
 
 
 def postRequest(url, data=""):
