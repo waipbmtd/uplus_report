@@ -169,9 +169,17 @@ var
 							.blur(function(){
 								var v = input.val().toUpperCase();
 
-								if( v.charCodeAt(0) < 65 || v.charCodeAt(0) > 90 ){
+								if( !v.length || v.charCodeAt(0) < 65 || v.charCodeAt(0) > 90 ){
 									v = input.attr('data-default').toUpperCase();
 								}
+
+								$.each( keyPanel.find('input:not(:eq(' + i + '))'), function(x, item){
+									v = input.val().toUpperCase();
+									if( v == $(item).val() ){
+										v = input.attr('data-default').toUpperCase();
+										return false;
+									}
+								});
 
 								input.val(v).attr('value', v);
 							});
