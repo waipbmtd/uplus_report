@@ -337,6 +337,23 @@ section{
 
 		.scroll;
 
+		.key-panel{
+			right: @distance * 2.5; top: @distance;
+			.absolute;
+
+			ul{
+				.form-control;
+
+				li{
+					margin-bottom: @distance / 2;
+				}
+
+				input{
+					width: @distance * 6;
+				}
+			}
+		}
+
 		.album{
 			width: 100%; height: 100%;
 			li{

@@ -140,7 +140,7 @@ var
 					// Masonry Water Fall
 					iMasonry.imagesLoaded(function(){
 						$.initMasonry({
-							element: masonry,
+							element: masonry + ' .album',
 							selector: 'li'
 						});
 					});
@@ -157,6 +157,20 @@ var
 							}
 						}
 					});
+
+					/* Key Panel Choose */
+					var keyPanel = $('.key-panel');
+					$.each( keyPanel.find('input'), function(i, input){
+						input = $(input);
+						input
+							.on(_.evt.over, function(){
+								input.select();
+							})
+							.blur(function(){
+								var v = input.val().toUpperCase();
+								input.val(v).attr('value', v);
+							});
+					});
 				}
 			});
 
@@ -169,7 +183,7 @@ var
 				return;
 			}
 
-			var element = $( it.closest('[data-element]').attr('data-element') );
+			var element = it.hasClass('masonry') ? it : $( it.closest('[data-element]').attr('data-element') );
 			element.find('span').addClass( active );
 		},
 
@@ -180,7 +194,7 @@ var
 				return;
 			}
 
-			var element = $( it.closest('[data-element]').attr('data-element') );
+			var element = it.hasClass('masonry') ? it : $( it.closest('[data-element]').attr('data-element') );
 			element.find('span').removeClass( active );
 		},
 
@@ -209,7 +223,7 @@ var
 				return;
 			}
 
-			$.confirm('确定通过这些图片吗？', function(){
+			// $.confirm('确定通过这些图片吗？', function(){
 				
 				var database = kitFunction.getImageActive({
 						container: iMasonry.find('span.active'),
@@ -283,7 +297,7 @@ var
 				});
 
 				return true;
-			});
+			// });
 		},
 
 		/* Do Block */
@@ -313,6 +327,63 @@ var
 
 					$('.fancybox-overlay form[data-submit]').attr('data-callback', 'operatImage');
 				}
+			});
+		},
+
+		/* Do Block Fast */
+		isBlockFast: function(it){
+			if( !iMasonry.find('li').length ){
+				$.trace('请先申领任务');
+				return;
+			}
+
+			if( !iMasonry.find('span.active').length ){
+				$.trace('至少选择一张图片');
+				return;
+			}
+
+			$.confirm('确定设置这些图片为不合格吗？', function(){
+
+				var
+					// Get Selected Item's Infomation From Cache
+					database = kitFunction.getImageActive({
+						container: iMasonry.find('span.active'),
+						selector: 'data-id',
+						than: _.cache.albums
+					}),
+
+					// 固定参数
+					often = {
+						reason: 2, // 色情
+						module_type: 4, // 用户
+						punish_type: 103, // 删除资源
+						memo: 'auto' // 备注
+					}
+
+				// Loading UI
+				if( !kitFunction.hasMask() ){
+					mask.open();
+				}
+
+				// Punish - 一次
+				$.recursiveOnce( database, often, _.api.report_batch, function(){
+
+					// Loading UI
+					mask.close();
+
+					$.trace('处理完成', function(){
+						iMasonry.find('span.active').fadeOut(function(){
+							$(this).remove();
+
+							// 交互 - 如果木有数据了, 就去拉一批
+							if( !iMasonry.find('span').length ){
+								kitFunction.getImageData();
+							}
+						});
+					});
+
+				});
+
 			});
 		},
 
@@ -641,14 +712,43 @@ var
 
 /* Key Down For Choose Albums */
 _.dom.doc.on('keydown', function(e){
-	var code = e.keyCode, items = iMasonry ? iMasonry.find('span') : [];
-	if( !!~$.inArray(code, _.keys.number) && items.length ){
+	var code = e.keyCode, isOff = iMasonry.is(':hidden'), items = iMasonry ? iMasonry.find('span') : [];
+
+	// 如果不在Masonry区
+	if( isOff || !items.length ){
+		return;
+	}
+
+	// 如果焦点在输入框内
+	if( e.target.tagName == 'INPUT' ){
+		return;
+	}
+
+	// 数字快捷键
+	if( !!~$.inArray(code, _.keys.number) ){
 		var i = code % 48 ? code % 48 : 10;
 		items.eq( i-1 ).trigger( _.evt.click );
 		return;
 	}
-	if( code == 65 ){
-		kitFunction.chooseRev( iMasonry );
+
+	// 快捷键 - 字母
+	if( code > 64 && code < 91 ){
+
+		var keyPanel = $('.key-panel'), keys = {};
+		if( !keyPanel.length ){
+			return;
+		}
+
+		$.each( keyPanel.find('[data-name]'), function(i, item){
+
+			keys[ item.getAttribute('data-name') ] = item.value.charCodeAt(0);
+
+			if( code == item.value.charCodeAt(0) ){
+				kitFunction[ item.getAttribute('data-name') ]( iMasonry );
+			}
+
+		});
+		console.log(code, keys);
 	}
 });
 
