@@ -705,7 +705,7 @@ var
 
 			// Get Remain Count In (Dangerous)
 			kitFunction.getRemain({
-				data: { risk: 1 },
+				data: { report_type: 1 },
 				callback: function(result){
 					$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
 				}
@@ -713,7 +713,7 @@ var
 
 			// Get Remain Count In (Resource)
 			kitFunction.getRemain({
-				data: { risk: 2 },
+				data: { report_type: 2 },
 				callback: function(result){
 					$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
 				}

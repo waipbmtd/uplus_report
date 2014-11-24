@@ -51,20 +51,20 @@ _.path = {
  */
 _.api = {
 	// Report End
-	end: '/report/end?risk=' + _.report_type,
+	end: '/report/end?report_type=' + _.report_type,
 
 	// 获取剩余消息数
 	remain: '/report/remain',
 	// 获取Album
-	albums: '/report/album_image/list' + '?risk=' + _.report_type,
+	albums: '/report/album_image/list' + '?report_type=' + _.report_type,
 	// 获取Message
-	message: '/report/message/next' + '?risk=' + _.report_type,
+	message: '/report/message/next' + '?report_type=' + _.report_type,
 	// 审核未通过
-	punish: '/punish' + '?risk=' + _.report_type,
+	punish: '/punish' + '?report_type=' + _.report_type,
 	// 审核通过接口
-	pass: '/pass' + '?risk=' + _.report_type,
+	pass: '/pass' + '?report_type=' + _.report_type,
 	// 批量审核接口
-	report_batch: '/report/batch_deal' + '?risk=' + _.report_type,
+	report_batch: '/report/batch_deal' + '?report_type=' + _.report_type,
 
 	// 获取高危用户列表
 	user_risk_list: '/user/risk/list',
@@ -854,7 +854,7 @@ $.extend({
 		// console.log(options);
 
 		// Msgs 传数组获取不到
-		if( options.msgs ){
+		if( $.isType(options.msgs, 'object') ){
 			options.msgs = JSON.stringify( options.msgs );
 		}
 
