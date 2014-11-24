@@ -39,7 +39,7 @@ class AlbumImageReportListHandler(BaseHandler):
                                            parameters=dict(
                                                report_type=report_type,
                                                csid=self.current_user.id,
-                                               size=6))
+                                               size=15))
         self.record_log(content=u"获取下一批图片 " +
                                 reportConstant.REPORT_TYPE_ENUMS.get(
                                     int(report_type)).decode('utf8'))
