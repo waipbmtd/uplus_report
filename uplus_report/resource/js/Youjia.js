@@ -853,6 +853,11 @@ $.extend({
 		// This Option Is Merge By 2 Options
 		// console.log(options);
 
+		// Msgs 传数组获取不到
+		if( options.msgs ){
+			options.msgs = JSON.stringify( options.msgs );
+		}
+
 		$.ajax({
 			type: 'post',
 			data: options,
