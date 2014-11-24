@@ -22,7 +22,8 @@ _.cache = {
  * ** *** **** ***** **** *** ** *
  */
 $.ajaxSetup({
-	async: true
+	async: true,
+	cache: false
 });
 
 /* !!
@@ -876,6 +877,21 @@ $.drag({
 
 /* Fancy Pop */
 $.fancyPop();
+
+/* Same Input Press */
+$.sameInput({
+	input: '[data-input="same"]',
+	onKeydown: function(e){
+		var code = e.keyCode;
+		if( (code == 8) || (code > 47 && code < 58) ){
+			return true;
+		}
+		return false;
+	},
+	onKeyup: function(e){
+		e.target.setAttribute('data-value', e.target.value);
+	}
+});
 
 /* All Form Control */
 $.formSubmit();
