@@ -711,6 +711,14 @@ var
 				}
 			});
 
+			// Get Remain Count In (Resource)
+			kitFunction.getRemain({
+				data: { risk: 2 },
+				callback: function(result){
+					$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
+				}
+			});
+
 			return timeResult;
 		}
 	});
@@ -1164,7 +1172,7 @@ $.extend({
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
 		},
- 		// Operat shiliao
+ 		// Operat Siliao
 		operatSelect_shiliao: function( it ){
 
 			// 隐藏不可用项
@@ -1173,8 +1181,7 @@ $.extend({
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
 		},
-
- 		// Operat shiliao
+ 		// Operat Geren
 		operatSelect_geren: function( it ){
 
 			// 隐藏不可用项
