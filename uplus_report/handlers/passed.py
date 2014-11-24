@@ -65,19 +65,18 @@ class PassedHandler(BaseHandler):
 
         self.record_log(content, memo=self.v("memo"))
 
-
     @tornado.web.authenticated
     def post(self):
         return self.send_success_json()
 
-    @gen.coroutine
-    def post(self):
-        self.parse_argument()
-        server_api = self.PASS_API
-        http_client = AsyncHTTPClient()
-        response = yield http_client.fetch(
-            "http://%s/%s" % (API_HOST, server_api), )
-        pass
+    # @gen.coroutine
+    # def post(self):
+    #     self.parse_argument()
+    #     server_api = self.PASS_API
+    #     http_client = AsyncHTTPClient()
+    #     response = yield http_client.fetch(
+    #         "http://%s/%s" % (API_HOST, server_api), )
+    #     pass
 
     @util.exception_handler
     def on_finish(self):

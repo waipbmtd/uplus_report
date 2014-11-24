@@ -68,7 +68,21 @@ class MessageReportNextHandler(BaseHandler):
         self.record_log(content=u"获取下一条消息 " +
                                 reportConstant.REPORT_TYPE_ENUMS.get(
                                     int(report_type)).decode('utf8'))
-        return self.send_success_json(json.loads(data))
+
+        j_data = json.loads(data)
+        ret = int(j_data.get("ret"))
+        if ret == 0:
+            data = j_data.get("data",{})
+            data.update(
+                {"profile": data.get("profile", dict(name="",
+                                                     desc="",
+                                                     oid="",
+                                                     mid="")
+                )
+                })
+            j_data.update({"data": data})
+
+        return self.send_success_json(j_data)
 
 
 class RemainReportCountHandler(BaseHandler):
