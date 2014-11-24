@@ -1,0 +1,80 @@
+<section>
+	
+	<div class="kit">
+		<bdo></bdo>
+		<ul data-element=".masonry">
+			<li class="sky" data-function="getImageData">申请任务</li>
+			<li data-function="chooseAll">全选</li>
+			<li data-function="chooseNon">不选</li>
+			<li data-function="chooseRev">反选</li>
+			<li class="green" data-function="isPass">合格</li>
+			<li class="red" data-function="isBlockFast">不合格</li>
+		</ul>
+		<ul data-element=".report">
+			<li class="sky" data-function="getInfoData">申请下一条</li>
+		</ul>
+	</div>
+
+	<div class="main">
+
+		<div class="key-panel">
+			<ul>
+				<li>
+					<label>全选(A)：</label>
+					<div>
+						<input type="text" data-name="chooseAll" data-default="A" value="A" />
+					</div>
+				</li>
+				<li>
+					<label>不选(D)：</label>
+					<div>
+						<input type="text" data-name="chooseNon" data-default="D" value="D" />
+					</div>
+				</li>
+				<li>
+					<label>反选(F)：</label>
+					<div>
+						<input type="text" data-name="chooseRev" data-default="F" value="F" />
+					</div>
+				</li>
+			</ul>
+			<hr class="line-gray" />
+			<ul>
+				<li>
+					<label>合格(Y)：</label>
+					<div>
+						<input type="text" data-name="isPass" data-default="Y" value="Y" />
+					</div>
+				</li>
+				<li>
+					<label>不合格(O)：</label>
+					<div>
+						<input type="text" data-name="isBlockFast" data-default="O" value="O" />
+					</div>
+				</li>
+				<li>
+					<label>处理对话框(Q)：</label>
+					<div>
+						<input type="text" data-name="isBlock" data-default="Q" value="Q" />
+					</div>
+				</li>
+
+			</ul>
+		</div>
+		
+		<div class="masonry">
+			<div class="unPage">请点击按钮申领任务</div>
+			<!-- Get Page From <albums.html> -->
+		</div>
+
+	</div>
+	<div class="main">
+		
+		<div class="report">
+			<div class="unPage">请点击按钮申领任务</div>
+			<!-- Get Page From <profile.html> -->
+		</div>
+
+	</div>
+
+</section>
