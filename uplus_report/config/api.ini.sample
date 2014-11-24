@@ -17,7 +17,7 @@ report_check_end = uplus-report/api/check_end
 
 report_batch_deal = uplus-report/api/batch_deal_album
 
-user_punish_log = uplus-report/api/user_punish_log
+user_punish_log = uplus-report/api/get_deal_result
 
 hall_openmouth = openmouth/hall
 
@@ -25,4 +25,3 @@ show_openmouth = openmouth/show/%(showId)s
 show_unlock = unlock/show/%(showId)s
 
 user_unlock= unlock/user/%(uid)s
-
