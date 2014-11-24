@@ -3,6 +3,7 @@
 from handlers.base import BaseHandler
 import tornado
 import tornado.web
+from models import reportConstant
 
 
 class RenderHandler(BaseHandler):
@@ -11,8 +12,10 @@ class RenderHandler(BaseHandler):
         kwargs = dict(
             path=path,
             username=self.current_user.username,
-            risk=0
+            report_type=reportConstant.REPORT_TYPE_COMM
         )
         if path == "report_risk":
-            kwargs.update(dict(risk=1))
+            kwargs.update(dict(report_type=reportConstant.REPORT_TYPE_RISK))
+        if path == "report_resource":
+            kwargs.update(dict(report_type=reportConstant.REPORT_TYPE_RESOURCE))
         self.render("index.html", **kwargs)

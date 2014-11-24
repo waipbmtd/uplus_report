@@ -3,6 +3,7 @@
 import json
 import tornado
 import tornado.web
+from tornado import websocket
 import config
 from handlers.base import BaseHandler
 from models import reportConstant
@@ -31,16 +32,17 @@ class AlbumImageReportListHandler(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.LIST_ALBUM_IMAGE,
                                            parameters=dict(
-                                               risk=risk,
+                                               report_type=report_type,
                                                csid=self.current_user.id,
                                                size=15))
         self.record_log(content=u"获取下一批图片 " +
-                                reportConstant.REPORT_RISK_ENUMS.get(
-                                    int(risk)).decode('utf8'))
+                                reportConstant.REPORT_TYPE_ENUMS.get(
+                                    int(report_type)).decode('utf8'))
         return self.send_success_json(json.loads(data))
 
     post = get
@@ -56,15 +58,16 @@ class MessageReportNextHandler(BaseHandler):
     @tornado.web.authenticated
     @session_manage
     def get(self):
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.NEXT_MESSAGE,
                                            parameters=dict(
-                                               risk=risk,
+                                               report_type=report_type,
                                                csid=self.current_user.id))
         self.record_log(content=u"获取下一条消息 " +
-                                reportConstant.REPORT_RISK_ENUMS.get(
-                                    int(risk)).decode('utf8'))
+                                reportConstant.REPORT_TYPE_ENUMS.get(
+                                    int(report_type)).decode('utf8'))
         return self.send_success_json(json.loads(data))
 
 
@@ -74,14 +77,26 @@ class RemainReportCountHandler(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.REMAIN_REPORT,
                                            parameters=dict(
-                                               risk=risk,
+                                               report_type=report_type,
                                                csid=self.current_user.id
                                            ))
         return self.send_success_json(json.loads(data))
+
+
+class RemainReportCountHandler2(websocket.WebSocketHandler):
+    def open(self):
+        print "WebSocket opened"
+
+    def on_message(self, message):
+        self.write_message(u"You said: " + message)
+
+    def on_close(self):
+        print "WebSocket closed"
 
 
 class ReportEndHandler(BaseHandler):
@@ -91,11 +106,12 @@ class ReportEndHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         rid = self.get_argument("id")
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         data = WebRequrestUtil.getRequest2(API_HOST,
                                            self.END_REPORT,
                                            parameters=dict(
-                                               risk=risk,
+                                               report_type=report_type,
                                                rid=rid,
                                                csid=self.current_user.id,
                                            ))
@@ -111,16 +127,18 @@ class ReportBatchDealHandler(BaseHandler):
         return self.send_success_json()
 
     def on_finish(self):
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         items = self.get_argument("items")
         deal = self.get_argument("deal")
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.BATH_REPORT,
-                                           parameters=dict(
-                                               items=items,
-                                               deal=deal,
-                                               csid=self.current_user.id,
-                                           ))
+        WebRequrestUtil.getRequest2(API_HOST,
+                                    self.BATH_REPORT,
+                                    parameters=dict(
+                                        items=items,
+                                        deal=deal,
+                                        report_type=report_type,
+                                        csid=self.current_user.id,
+                                    ))
         s_content, s_memo = self._deal_detail()
         s_content2 = self._items_detail()
         self.record_log(content=s_content.decode("utf8")
@@ -137,11 +155,12 @@ class ReportBatchDealHandler(BaseHandler):
         b_pass = int(j_deal.get("pass"))
         s_deal = reportConstant.REPORT_PASS_ENUMS.get(b_pass)
 
-        risk = self.get_argument("risk", reportConstant.REPORT_RISK_FALSE)
-        s_risk = reportConstant.REPORT_RISK_ENUMS.get(int(risk))
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
+        s_report_type = reportConstant.REPORT_TYPE_ENUMS.get(int(report_type))
 
         l_content.append(s_deal)
-        l_content.append(s_risk)
+        l_content.append(s_report_type)
 
         if not b_pass:
             s_reason = reportConstant.REPORT_REASONS.get(
