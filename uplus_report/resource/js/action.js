@@ -1164,6 +1164,25 @@ $.extend({
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
 		},
+ 		// Operat shiliao
+		operatSelect_shiliao: function( it ){
+
+			// 隐藏不可用项
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+
+			// Items Operat
+			$.fancyCall.operatSelect_items( it );
+		},
+
+ 		// Operat shiliao
+		operatSelect_geren: function( it ){
+
+			// 隐藏不可用项
+			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
+
+			// Items Operat
+			$.fancyCall.operatSelect_items( it );
+		},
 		// Add User
 		addUser: function( it ){
 			var itData = $.getData(it);
