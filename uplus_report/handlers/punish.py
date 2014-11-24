@@ -38,7 +38,7 @@ class PunishBaseHandler(BaseHandler):
             reason=self.get_argument("reason"),
             # 惩罚类型
             punish_type=int(self.get_argument("punish_type")),
-            #惩罚时长
+            # 惩罚时长
             timedelta=self.get_argument("timedelta", -1),
 
             #举报入口
@@ -295,9 +295,21 @@ class PunishAdapterHandler(PunishBaseHandler):
 
 
 class UplusUserPunishList(BaseHandler):
-    CLOSE_API = config.api.user_punish_log
+    PUNISH_LOG_API = config.api.user_punish_log
 
+    @util.exception_handler
+    @tornado.web.authenticated
     def get(self):
         u_id = self.get_argument("u_id")
-
-        return self.send_success_json()
+        current = self.get_argument("current", 1)
+        per = self.get_argument("per", self.per_page_num)
+        server_api = self.PUNISH_LOG_API
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           server_api,
+                                           parameters=dict(
+                                               u_id=u_id,
+                                               current=current,
+                                               per=per,
+                                           ))
+        self.record_log(content=u"获取用户被惩罚日志 " + u_id)
+        return self.send_success_json(json.loads(data))

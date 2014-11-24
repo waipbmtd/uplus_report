@@ -19,7 +19,7 @@ class UserLogListHandler(BaseHandler):
         csid = self.get_argument("csid", "")
 
         current = int(self.get_argument("current", 1))
-        per = int(self.get_argument("per", 15))
+        per = int(self.get_argument("per", self.per_page_num))
 
         total = 0
 

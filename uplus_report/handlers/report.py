@@ -39,7 +39,7 @@ class AlbumImageReportListHandler(BaseHandler):
                                            parameters=dict(
                                                report_type=report_type,
                                                csid=self.current_user.id,
-                                               size=15))
+                                               size=6))
         self.record_log(content=u"获取下一批图片 " +
                                 reportConstant.REPORT_TYPE_ENUMS.get(
                                     int(report_type)).decode('utf8'))
@@ -145,12 +145,14 @@ class ReportBatchDealHandler(BaseHandler):
                                         reportConstant.REPORT_TYPE_COMM)
         items = self.get_argument("items")
         deal = self.get_argument("deal")
+        timedelta=self.get_argument("timedelta", -1),
         WebRequrestUtil.getRequest2(API_HOST,
                                     self.BATH_REPORT,
                                     parameters=dict(
                                         items=items,
                                         deal=deal,
                                         report_type=report_type,
+                                        timedelta=timedelta,
                                         csid=self.current_user.id,
                                     ))
         s_content, s_memo = self._deal_detail()

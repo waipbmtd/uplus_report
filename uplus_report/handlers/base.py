@@ -19,6 +19,7 @@ from utils import util
 class BaseHandler(tornado.web.RequestHandler):
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
+        self.per_page_num = config.app.layout.get("items_per_page")
         self.session = None
 
     def initialize(self):
