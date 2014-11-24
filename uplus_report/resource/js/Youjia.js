@@ -2,7 +2,7 @@
 
 _.console = _.console || { log: $.noop },
 
-_.risk = $.trim(_.risk).length ? Number(_.risk) : 0,
+_.report_type = $.trim(_.report_type).length ? Number(_.report_type) : 0,
 
 /* !!
  * 路径
@@ -51,20 +51,20 @@ _.path = {
  */
 _.api = {
 	// Report End
-	end: '/report/end?risk=' + _.risk,
+	end: '/report/end?risk=' + _.report_type,
 
 	// 获取剩余消息数
 	remain: '/report/remain',
 	// 获取Album
-	albums: '/report/album_image/list' + '?risk=' + _.risk,
+	albums: '/report/album_image/list' + '?risk=' + _.report_type,
 	// 获取Message
-	message: '/report/message/next' + '?risk=' + _.risk,
+	message: '/report/message/next' + '?risk=' + _.report_type,
 	// 审核未通过
-	punish: '/punish' + '?risk=' + _.risk,
+	punish: '/punish' + '?risk=' + _.report_type,
 	// 审核通过接口
-	pass: '/pass' + '?risk=' + _.risk,
+	pass: '/pass' + '?risk=' + _.report_type,
 	// 批量审核接口
-	report_batch: '/report/batch_deal' + '?risk=' + _.risk,
+	report_batch: '/report/batch_deal' + '?risk=' + _.report_type,
 
 	// 获取高危用户列表
 	user_risk_list: '/user/risk/list',
