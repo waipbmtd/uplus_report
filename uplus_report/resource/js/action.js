@@ -700,6 +700,11 @@ var
 			// Get Remain Count In (Default)
 			kitFunction.getRemain({
 				callback: function(result){
+					if( !result.data ){
+						_.clearTimeout( options.timeout );
+						return;
+					}
+
 					$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result );
 				}
 			});
@@ -708,6 +713,11 @@ var
 			kitFunction.getRemain({
 				data: { report_type: 1 },
 				callback: function(result){
+					if( !result.data ){
+						_.clearTimeout( options.timeout );
+						return;
+					}
+
 					$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
 				}
 			});
@@ -716,6 +726,11 @@ var
 			kitFunction.getRemain({
 				data: { report_type: 2 },
 				callback: function(result){
+					if( !result.data ){
+						_.clearTimeout( options.timeout );
+						return;
+					}
+
 					$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
 				}
 			});
