@@ -13,6 +13,9 @@ _.path = {
 	// Base Root
 	root: _.location.protocol + '//' + _.location.host,
 
+	// Base webSocket
+	ws: 'ws://' + _.location.host,
+
 	// Base Domain: (No Port)
 	domain: _.location.protocol + '//' + _.location.hostname,
 
@@ -55,6 +58,8 @@ _.api = {
 
 	// 获取剩余消息数
 	remain: '/report/remain',
+	// 获取所有剩余消息数
+	remain_all: '/report/remain/all',
 	// 获取Album
 	albums: '/report/album_image/list' + '?report_type=' + _.report_type,
 	// 获取Message

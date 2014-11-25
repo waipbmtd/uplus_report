@@ -6,6 +6,7 @@ _.modules = 'plugin/jQuery/jQuery.min'
 + ' plugin/imagesloaded/imagesloaded.pkgd.min'
 + ' plugin/masonry/masonry.min'
 + ' plugin/fancybox/jquery.fancybox.pack'
++ ' plugin/socketio/socket.io'
 + ' Youjia action'
 
 })

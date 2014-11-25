@@ -677,67 +677,116 @@ var
 		},
 		timeResult = time;
 
-	$.timeout({
-		count: (_.QQ, 312272592),
-		time: time,
-		def: true,
-		callback: function( options ){
+	// WebSocket: IO
+	/*
+	var socket = io( _.path.root + _.api.remain_all );
 
-			// 临时方法 - 响应赠长
-			var calculateTime = function( result ){
+	socket
+		.on('connect', function( result ){
+			console.log( result );
+			return;
 
-				if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
-					cache = {
-						album: result.data.album_remain, msg: result.data.msg_remain
-					},
-					timeResult = time;
-					return;
-				}
+			$.each( $('#remain_default, #remain_dangerous, #remain_resource'), function(x, element){
 
-				timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+				element = $(element);
+
+				var data = result.data[ x ];
+
+				element.html( data.album_remain + data.msg_remain );
+
+			});
+		})
+		.on('event', function( result ){
+			console.log( result );
+		})
+		.on('disconnect', function( result ){
+			console.log( result );
+		});
+	*/
+
+		// WebSocket
+		var socket = new WebSocket( _.path.ws + _.api.remain_all ); 
+
+		// 打开Socket 
+		socket.onopen = function(event){
+
+			// 发送一个初始化消息
+			socket.send('Whos Your Daddy !!');
+
+			// 监听消息
+			socket.onmessage = function(result){
+				console.log( result );
 			};
-
-			// Get Remain Count In (Default)
-			kitFunction.getRemain({
-				callback: function(result){
-					if( !result.data ){
-						_.clearTimeout( options.timeout );
-						return;
-					}
-
-					$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result );
-				}
-			});
-
-			// Get Remain Count In (Dangerous)
-			kitFunction.getRemain({
-				data: { report_type: 1 },
-				callback: function(result){
-					if( !result.data ){
-						_.clearTimeout( options.timeout );
-						return;
-					}
-
-					$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
-				}
-			});
-
-			// Get Remain Count In (Resource)
-			kitFunction.getRemain({
-				data: { report_type: 2 },
-				callback: function(result){
-					if( !result.data ){
-						_.clearTimeout( options.timeout );
-						return;
-					}
-
-					$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
-				}
-			});
-
-			return timeResult;
 		}
-	});
+
+	try{
+
+	}
+	catch(e){
+
+		// 非WebSocket
+		$.timeout({
+			count: (_.QQ, 312272592),
+			time: time,
+			def: true,
+			callback: function( options ){
+
+				// 临时方法 - 响应赠长
+				var calculateTime = function( result ){
+
+					if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
+						cache = {
+							album: result.data.album_remain, msg: result.data.msg_remain
+						},
+						timeResult = time;
+						return;
+					}
+
+					timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+				};
+
+				// Get Remain Count In (Default)
+				kitFunction.getRemain({
+					callback: function(result){
+						if( !result.data ){
+							_.clearTimeout( options.timeout );
+							return;
+						}
+
+						$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result );
+					}
+				});
+
+				// Get Remain Count In (Dangerous)
+				kitFunction.getRemain({
+					data: { report_type: 1 },
+					callback: function(result){
+						if( !result.data ){
+							_.clearTimeout( options.timeout );
+							return;
+						}
+
+						$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
+					}
+				});
+
+				// Get Remain Count In (Resource)
+				kitFunction.getRemain({
+					data: { report_type: 2 },
+					callback: function(result){
+						if( !result.data ){
+							_.clearTimeout( options.timeout );
+							return;
+						}
+
+						$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
+					}
+				});
+
+				return timeResult;
+			}
+		});
+	}
 
 })
 (4567);
@@ -747,7 +796,7 @@ _.dom.doc.on('keydown', function(e){
 	var code = e.keyCode, isOff = iMasonry.is(':hidden'), items = iMasonry ? iMasonry.find('span') : [];
 
 	// Only For Key Code
-	console.log(code, keys);
+	console.log(code);
 
 	// 如果不在Masonry区
 	if( isOff || !items.length ){
