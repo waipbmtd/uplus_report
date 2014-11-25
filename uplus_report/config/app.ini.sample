@@ -22,3 +22,6 @@ format="%(asctime)s %(pathname)s[line:%(lineno)d] %(levelname)s : "
 debug=False
 port=51234
 host=192.168.1.180
+
+[websocket]
+remain_delta=20
