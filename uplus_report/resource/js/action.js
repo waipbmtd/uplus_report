@@ -755,7 +755,7 @@ _.dom.doc.on('keydown', function(e){
 	}
 
 	// 如果焦点在输入框内
-	if( e.target.tagName == 'INPUT' ){
+	if( e.target.tagName == 'INPUT' || e.target.tagName == 'TEXTAREA' ){
 		return;
 	}
 
