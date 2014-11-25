@@ -939,11 +939,21 @@ $.extend({
 
 		often.items += ']';
 
+		// T.T
+		var punish_type;
+		try{
+			punish_type = often.punish_type || options.punish_type || 103;
+		}
+		catch(e){
+			console.log(e);
+			punish_type = 103;
+		}
+
 		// 临时方法 - 献给Deal
 		often.deal = {
 			reason: 2, // 色情
 			module_type: 4, // 用户
-			punish_type: 103, // 删除资源
+			punish_type: punish_type, // 删除资源
 			memo: 'auto', // 备注
 			pass: 0
 		};
