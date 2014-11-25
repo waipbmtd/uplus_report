@@ -109,7 +109,7 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     REMAIN_REPORT = config.api.report_remain_count
     remain_gap = int(config.app.websocket.get("remain_delta", 20))
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def open(self):
         WSRemainReportCountHandler.clients.add(self)
         while self.ws_connection:
@@ -123,7 +123,7 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     @tornado.web.authenticated
     def on_close(self):
         WSRemainReportCountHandler.clients.remove(self)
-        # logging.info("webSocket Close %s" % self.current_user.id)
+        logging.info("webSocket Close %s" % self.current_user.id)
 
     def _build_message(self):
         data = []
@@ -132,8 +132,8 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
                                                  self.REMAIN_REPORT,
                                                  parameters=dict(
                                                      report_type=report_type,
-                                                     csid=1
-                                                     # csid=self.current_user.id
+                                                     # csid=1
+                                                     csid=self.current_user.id
                                                  ))
             i_j_data = json.loads(i_data)
             ret = i_j_data.get("ret", reportConstant.API_RET_NO)
