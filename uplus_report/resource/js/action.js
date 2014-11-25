@@ -731,6 +731,9 @@ var
 _.dom.doc.on('keydown', function(e){
 	var code = e.keyCode, isOff = iMasonry.is(':hidden'), items = iMasonry ? iMasonry.find('span') : [];
 
+	// Only For Key Code
+	console.log(code, keys);
+
 	// 如果不在Masonry区
 	if( isOff || !items.length ){
 		return;
@@ -765,7 +768,6 @@ _.dom.doc.on('keydown', function(e){
 			}
 
 		});
-		console.log(code, keys);
 	}
 });
 
