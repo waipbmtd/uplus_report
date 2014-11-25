@@ -1284,6 +1284,24 @@ $.extend({
 				});
 			});
 		},
+		getUsersPunish: function(result, form){
+			$.checkResult(result, function( result ){
+
+				_.cache.users.risk = result.data;
+
+				$.renderHTML({
+					element: form.closest('.report_user').find('.report_search_result'),
+					data: $.mergeJSON(result, { type: form.attr('data-type') }),
+					html: _.tpl.users_punish,
+					type: 'get',
+					dataType: 'json',
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).html( options.render );
+					}
+				});
+			});
+		},
 		addUserCallback: function(result, form){
 			$.checkResult(result, function( result ){
 				$.trace('处理完成', function(){

@@ -93,6 +93,7 @@ _.tpl = {
 	message: _.path.template('loaded/message'),
 	operat: _.path.template('loaded/operat'),
 	users: _.path.template('loaded/users'),
+	users_punish: _.path.template('loaded/users_punish'),
 	select_panel: _.path.template('loaded/select_panel'),
 	user_detail: _.path.template('loaded/user_detail')
 },
@@ -954,6 +955,7 @@ $.extend({
 			reason: 2, // 色情
 			module_type: 4, // 用户
 			punish_type: punish_type, // 删除资源
+			timedelta: often.timedelta || -1, // 限制登录时间
 			memo: 'auto', // 备注
 			pass: 0
 		};
