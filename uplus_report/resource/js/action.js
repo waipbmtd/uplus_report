@@ -704,6 +704,8 @@ var
 		});
 	*/
 
+	try{
+
 		// WebSocket
 		var socket = new WebSocket( _.path.ws + _.api.remain_all ); 
 
@@ -715,11 +717,15 @@ var
 
 			// 监听消息
 			socket.onmessage = function(result){
-				console.log( result );
+				var
+					database = $.parseJSON( result.data );
+					elements = $('#remain_default, #remain_dangerous, #remain_resource');
+
+				$.each( database.data, function(i, data){
+					elements.eq(i).html( data.album_remain + data.msg_remain );
+				});
 			};
 		}
-
-	try{
 
 	}
 	catch(e){
