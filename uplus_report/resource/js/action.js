@@ -675,7 +675,21 @@ var
 	var cache = {
 			album: 0, msg: 0
 		},
-		timeResult = time;
+		// 时间间隔
+		timeResult = time,
+		// 临时方法 - 响应赠长
+		calculateTime = function( data ){
+
+			if( data.album_remain != cache.album || data.msg_remain != cache.msg ){
+				cache = {
+					album: data.album_remain, msg: data.msg_remain
+				},
+				timeResult = time;
+				return;
+			}
+
+			timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+		};
 
 	// WebSocket: IO
 	/*
@@ -712,19 +726,33 @@ var
 		// 打开Socket 
 		socket.onopen = function(event){
 
-			// 发送一个初始化消息
-			socket.send('Whos Your Daddy !!');
-
 			// 监听消息
 			socket.onmessage = function(result){
 				var
 					database = $.parseJSON( result.data );
 					elements = $('#remain_default, #remain_dangerous, #remain_resource');
 
+				// 如果缓存里木有，则置入并重置时间
+				calculateTime( database.data );
+
 				$.each( database.data, function(i, data){
 					elements.eq(i).html( data.album_remain + data.msg_remain );
 				});
 			};
+
+			$.timeout({
+				count: (_.QQ, 312272592),
+				time: time,
+				def: true,
+				callback: function( options ){
+
+					// 发送一个初始化消息
+					socket.send('Whos Your Daddy ?!');
+
+					return timeResult;
+				}
+			});
+
 		}
 
 	}
@@ -737,20 +765,6 @@ var
 			def: true,
 			callback: function( options ){
 
-				// 临时方法 - 响应赠长
-				var calculateTime = function( result ){
-
-					if( result.data.album_remain != cache.album || result.data.msg_remain != cache.msg ){
-						cache = {
-							album: result.data.album_remain, msg: result.data.msg_remain
-						},
-						timeResult = time;
-						return;
-					}
-
-					timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
-				};
-
 				// Get Remain Count In (Default)
 				kitFunction.getRemain({
 					callback: function(result){
@@ -759,7 +773,7 @@ var
 							return;
 						}
 
-						$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result );
+						$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result.data );
 					}
 				});
 
