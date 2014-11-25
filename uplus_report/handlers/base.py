@@ -8,6 +8,7 @@ import time
 import jsonpickle
 import jsonpickle.backend
 import tornado.web
+from tornado import websocket
 
 import config
 from models import userConstant
@@ -16,9 +17,42 @@ from storage.mysql.models import AdminUser, AdminOperationLog
 from utils import util
 
 
-class BaseHandler(tornado.web.RequestHandler):
+class JsonBaseHandler(object):
+    def build_json(self, data):
+        """
+
+        :rtype : object
+        """
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
+        return jsonpickle.encode(data, unpicklable=False, backend=backend)
+
+    def build_success_json(self, data={}, info="", code=""):
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
+        result = {'ret': 0, 'code': code, 'info': info}
+        result.update(data)
+        return jsonpickle.encode(result,
+                                 unpicklable=False,
+                                 backend=backend)
+
+    def build_error_json(self, data={}, info="", code=""):
+        backend = jsonpickle.backend.JSONBackend()
+        backend.set_encoder_options("json", default=util.dthandler,
+                                    ensure_ascii=False)
+        result = {'ret': 1, 'code': code, 'info': info}
+        result.update(data)
+        return jsonpickle.encode(result,
+                                 unpicklable=False,
+                                 backend=backend)
+
+
+class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
+        super(JsonBaseHandler, self).__init__()
         self.per_page_num = config.app.layout.get("items_per_page")
         self.session = None
 
@@ -30,35 +64,16 @@ class BaseHandler(tornado.web.RequestHandler):
 
         :rtype : object
         """
-        backend = jsonpickle.backend.JSONBackend()
-        backend.set_encoder_options("json", default=util.dthandler,
-                                    ensure_ascii=False)
-        self.write(jsonpickle.encode(data, unpicklable=False, backend=backend))
-
         self.set_header('Content-Type', 'application/json; charset=UTF-8')
+        self.write(self.build_json(data))
 
     def send_success_json(self, data={}, info="", code=""):
-        backend = jsonpickle.backend.JSONBackend()
-        backend.set_encoder_options("json", default=util.dthandler,
-                                    ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        result = {'ret': 0, 'code': code, 'info': info}
-        result.update(data)
-        self.write(jsonpickle.encode(result,
-                                     unpicklable=False,
-                                     backend=backend))
+        self.write(self.build_success_json(data, info, code))
 
     def send_error_json(self, data={}, info="", code=""):
-        backend = jsonpickle.backend.JSONBackend()
-        backend.set_encoder_options("json", default=util.dthandler,
-                                    ensure_ascii=False)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        result = {'ret': 1, 'code': code, 'info': info}
-        result.update(data)
-        self.write(jsonpickle.encode(result,
-                                     unpicklable=False,
-                                     backend=backend))
-        self.finish()
+        self.write(self.build_error_json(data, info, code))
 
     def handle_http_arguments(self, arguments):
         if not isinstance(arguments, dict):
@@ -88,7 +103,6 @@ class BaseHandler(tornado.web.RequestHandler):
             return None
 
         user = self.session.query(AdminUser).get(int(user_id))
-        # user = AdminUser(id=1, username="daixuefeng", role="admin", state=True)
         if not user or not user.state:
             return None
 
@@ -118,6 +132,22 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def is_admin(self):
         return self.current_user.role == userConstant.USER_ROLE_ADMIN
+
+
+class BaseWebSocketHandler(websocket.WebSocketHandler, JsonBaseHandler):
+    def __init__(self, application, request, **kwargs):
+        super(BaseWebSocketHandler, self).__init__(application, request,
+                                                   **kwargs)
+        super(JsonBaseHandler, self).__init__()
+
+    def json(self, data):
+        self.write(self.build_json(data))
+
+    def send_success_json(self, data={}, info="", code=""):
+        self.write(self.build_success_json(data, info, code))
+
+    def send_error_json(self, data={}, info="", code=""):
+        self.write(self.build_error_json(data, info, code))
 
 
 class DefaultHandler(BaseHandler):

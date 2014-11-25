@@ -35,6 +35,8 @@ routers = [
     url(r"/report/message/next", report.MessageReportNextHandler),
     #获取还剩余的未处理的举报数
     url(r"/report/remain", report.RemainReportCountHandler),
+    #获取所有还剩余的未处理的举报数（长连）
+    url(r"/report/remain/all", report.WSRemainReportCountHandler),
     #处理一条消息举报结束
     url(r"/report/end", report.ReportEndHandler),
     #处理一条消息举报结束
@@ -70,6 +72,8 @@ routers = [
     #友加用户被惩罚日志
     url(r'/user/punish/log', punish.UplusUserPunishList),
 
+    #系统用户维护
+    url(r'/user', user.UserHandler),
     #所有系统用户
     url(r'/user/list', user.UserListHandler),
     #所有用户名

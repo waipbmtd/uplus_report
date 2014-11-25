@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # coding=utf-8
 import json
+import logging
+import time
 import tornado
 import tornado.web
 from tornado import websocket
 import config
-from handlers.base import BaseHandler
+from handlers.base import BaseHandler, BaseWebSocketHandler
 from models import reportConstant
 from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
@@ -72,7 +74,7 @@ class MessageReportNextHandler(BaseHandler):
         j_data = json.loads(data)
         ret = int(j_data.get("ret"))
         if ret == 0:
-            data = j_data.get("data",{})
+            data = j_data.get("data", {})
             data.update(
                 {"profile": data.get("profile", dict(name="",
                                                      desc="",
@@ -102,15 +104,46 @@ class RemainReportCountHandler(BaseHandler):
         return self.send_success_json(json.loads(data))
 
 
-class RemainReportCountHandler2(websocket.WebSocketHandler):
+class WSRemainReportCountHandler(BaseWebSocketHandler):
+    clients = set()
+    REMAIN_REPORT = config.api.report_remain_count
+
+    @tornado.web.authenticated
     def open(self):
-        print "WebSocket opened"
+        WSRemainReportCountHandler.clients.add(self)
+        while self.ws_connection:
+            self._build_message()
+            time.sleep(20)
 
     def on_message(self, message):
-        self.write_message(u"You said: " + message)
+        logging.info("receive message %s" % message)
+        self.write_message("you say : %s" % message)
 
+    @tornado.web.authenticated
     def on_close(self):
-        print "WebSocket closed"
+        WSRemainReportCountHandler.clients.remove(self)
+        logging.info("webSocket Close %s" % self.current_user.id)
+
+    def _build_message(self):
+        data = []
+        for report_type in reportConstant.REPORT_TYPE_ENUMS:
+            i_data = WebRequrestUtil.getRequest2(API_HOST,
+                                                 self.REMAIN_REPORT,
+                                                 parameters=dict(
+                                                     report_type=report_type,
+                                                     csid=self.current_user.id
+                                                 ))
+            i_j_data = json.loads(i_data)
+            ret = i_j_data.get("ret", reportConstant.API_RET_NO)
+            if ret == reportConstant.API_RET_NO:
+                self.write_message(self.build_error_json(
+                    info=i_j_data.get("info", ""),
+                    code=i_j_data.get("code", "")))
+                return
+            else:
+                data.append(i_j_data.get("data"))
+        r_j_data = dict(data=data)
+        self.write_message(self.build_success_json(r_j_data))
 
 
 class ReportEndHandler(BaseHandler):
@@ -145,7 +178,7 @@ class ReportBatchDealHandler(BaseHandler):
                                         reportConstant.REPORT_TYPE_COMM)
         items = self.get_argument("items")
         deal = self.get_argument("deal")
-        timedelta=self.get_argument("timedelta", -1),
+        timedelta = self.get_argument("timedelta", -1),
         WebRequrestUtil.getRequest2(API_HOST,
                                     self.BATH_REPORT,
                                     parameters=dict(

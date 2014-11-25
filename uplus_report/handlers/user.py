@@ -77,8 +77,13 @@ class UserHandler(BaseHandler):
         # 创建用户
         username = self.get_argument("username")
         password = self.get_argument("password")
+        role = self.get_argument("role", userConstant.USER_ROLE_EDITOR)
+        real_name = self.get_argument("real_name", "")
+        state = int(self.get_argument("state", 0)) == 1
+
         password = util.hash_password(password)
-        user = AdminUser(username=username, password=password)
+        user = AdminUser(username=username, password=password, role=role,
+                         real_name=real_name, state=state)
         self.session.add(user)
         self.record_log(u"创建用户 " + username.encode("utf8"))
         return self.send_success_json()

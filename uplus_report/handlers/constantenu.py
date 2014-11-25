@@ -77,10 +77,12 @@ class ALLEnumHandler(BaseHandler):
         request = reportConstant.REQUEST_TYPES
         report_type = reportConstant.REPORT_TYPE_ENUMS
         msg_types = reportConstant.MESSAGE_TYPES_ENUMS
+        punish_types = reportConstant.REPORT_PUNISHES
 
         return self.json(dict(mod=ent_enum_dic,
                               type=reasons,
                               ret=request,
                               report_type=report_type,
-                              msg_types=msg_types)
+                              msg_types=msg_types,
+                              punish_types=punish_types)
                         )
