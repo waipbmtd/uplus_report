@@ -2,10 +2,8 @@
 # coding=utf-8
 import json
 import logging
-import time
 import tornado
 import tornado.web
-from tornado import websocket
 import config
 from handlers.base import BaseHandler, BaseWebSocketHandler
 from models import reportConstant
@@ -107,7 +105,6 @@ class RemainReportCountHandler(BaseHandler):
 class WSRemainReportCountHandler(BaseWebSocketHandler):
     clients = set()
     REMAIN_REPORT = config.api.report_remain_count
-    remain_gap = int(config.app.websocket.get("remain_delta", 30))
 
     def open(self):
         WSRemainReportCountHandler.clients.add(self)
@@ -185,7 +182,7 @@ class ReportBatchDealHandler(BaseHandler):
                                     ))
         s_content, s_memo = self._deal_detail()
         s_content2 = self._items_detail()
-        self.record_log(content=s_content.decode("utf8")
+        self.record_log(content=s_content.decode("utf8") + "<br/>"
                                 + s_content2,
                         memo=s_memo)
 
@@ -216,6 +213,10 @@ class ReportBatchDealHandler(BaseHandler):
                 int(j_deal.get("punish_type",
                                reportConstant.REPORT_PUNISH_DELETE_RESOURCE)))
             s_timedelta = str(j_deal.get("timedelta", ""))
+            if s_timedelta == "-1":
+                s_timedelta = u"永久".encode('utf8')
+            elif s_timedelta != "":
+                s_timedelta += u"小时".encode('utf8')
             s_memo = str(j_deal.get("memo"))
 
             l_content.append(s_reason)
@@ -223,10 +224,11 @@ class ReportBatchDealHandler(BaseHandler):
             l_content.append(s_p_type)
             l_content.append(s_timedelta)
 
-        return " ".join(l_content), s_memo
+        return ",".join(l_content), s_memo
 
     def _items_detail(self):
         items = self.get_argument("items")
         d_items = json.loads(items)
-        return "\n".join(
-            [x.get("url") + x.get("content", " ") for x in d_items])
+        return "<br/>".join(
+            [x.get("url") + x.get("content", " ") + u"(用户ID:" + x.get(
+                "u_id") + ")" for x in d_items])

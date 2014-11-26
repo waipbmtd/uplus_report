@@ -312,4 +312,8 @@ class UplusUserPunishList(BaseHandler):
                                                per=per,
                                            ))
         self.record_log(content=u"获取用户被惩罚日志 " + u_id)
-        return self.send_success_json(json.loads(data))
+        data = json.loads(data)
+        j_data = data.get("data", {})
+        j_data.update(dict(u_id=u_id))
+        data.update(dict(data=j_data))
+        return self.send_success_json(data)
