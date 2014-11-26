@@ -41,6 +41,7 @@ def exception_handler(func):
         except Exception, e:
             exc_info = traceback.format_exc()
             logging.error("exception is %s" % exc_info)
+            cls.clear() #清除掉之前写的response
             return cls.send_error_json(code=500, info=exc_info)
 
     return wrapper

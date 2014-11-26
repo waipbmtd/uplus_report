@@ -9,7 +9,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.escape
 from tornado.options import define, options
-import tornado.log
 
 import config
 from handlers import uimodules
@@ -62,6 +61,7 @@ def main():
     logging.info("server start...")
 
     from storage.mysql.database import init_db
+
     init_db()
 
     # AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")

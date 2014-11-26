@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import datetime
 import tornado
 import tornado.web
 
@@ -43,6 +44,8 @@ class LoginHandler(BaseHandler):
             return self.redirect("/")
 
         self.record_log(content=u"登录成功：" + username)
+        self.session.query(models.AdminUser).filter_by(id=user.id). \
+            update({"update_time": datetime.datetime.now()})
 
         now = time.time()
         expire_time = now + int(config.app.max_idle_time)

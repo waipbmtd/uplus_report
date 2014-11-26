@@ -12,6 +12,7 @@ class RenderHandler(BaseHandler):
         kwargs = dict(
             path=path,
             username=self.current_user.username,
+            role=self.current_user.role,
             report_type=reportConstant.REPORT_TYPE_COMM
         )
         if path == "report_risk":

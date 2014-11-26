@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 # Admin account manager
 import time
+import datetime
 import tornado
 import tornado.web
 from handlers.base import BaseHandler
@@ -49,7 +50,7 @@ class UserNameIdListHandler(BaseHandler):
             users = self.session.query(AdminUser.username, AdminUser.id).all()
         else:
             users = self.session.query(AdminUser.username,
-                                       AdminUser.id).\
+                                       AdminUser.id). \
                 filter(AdminUser.id == self.current_user.id)
         data = self.send_success_json(
             dict(data=[sqlalchemy_json(x) for x in users]))
@@ -83,14 +84,16 @@ class UserHandler(BaseHandler):
 
         password = util.hash_password(password)
         user = AdminUser(username=username, password=password, role=role,
-                         real_name=real_name, state=state)
-        self.session.add(user)
+                         real_name=real_name, state=state,
+                         create_time=datetime.datetime.now(),
+                         update_time=datetime.datetime.now())
         self.record_log(u"创建用户 " + username.encode("utf8"))
+        self.session.add(user)
         return self.send_success_json()
 
     @util.exception_handler
-    @session_manage
     @tornado.web.authenticated
+    @session_manage
     def delete(self):
         # 删除某个用户
         userid = int(self.get_argument("userid", -1))
@@ -104,6 +107,17 @@ class UserHandler(BaseHandler):
             return self.send_success_json(info="删除成功")
         self.send_error_json(info="删除失败")
 
+
+class UserNameExistCheckHandler(BaseHandler):
+    @util.exception_handler
+    @session_manage
+    @tornado.web.authenticated
+    def get(self):
+        username = self.get_argument("username")
+        num = self.session.query(AdminUser).filter_by(
+            username=username).count()
+        return self.send_success_json(
+            dict(data=dict(exist=num > 0 and 1 or 0)))
 
 
 class UplusUserBaseHandler(BaseHandler):

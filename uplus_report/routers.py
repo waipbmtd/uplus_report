@@ -78,6 +78,9 @@ routers = [
     url(r'/user/list', user.UserListHandler),
     #所有用户名
     url(r'/user/name_id_list', user.UserNameIdListHandler),
+    #检查用户名是否存在：
+    url(r'/user/check_name', user.UserNameExistCheckHandler),
+
 
     #系统用户日志
     url(r'/user/log', userlog.UserLogHandler),

@@ -3,9 +3,7 @@
 import json
 
 import tornado
-from tornado.httpclient import AsyncHTTPClient
 import tornado.web
-from tornado import gen
 
 from handlers.base import BaseHandler
 import config
@@ -90,6 +88,7 @@ class PassedHandler(BaseHandler):
                                                csid=self.current_user.id,
                                                msgId=self.v("msg_id"),
                                                mod=self.v("mod"),
+                                               u_id=self.v("uid"),
                                                reporter=self.v("reporter_id")
                                            ))
         self.log_record_pass()
