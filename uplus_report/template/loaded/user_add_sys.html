@@ -1,0 +1,47 @@
+<div class="audit-user">
+	<form data-submit="ajax" data-callback="addUserCallback" method="post" action="/user">
+		<ul>
+			<li>
+				<label><i class="sign">*</i>用户名：</label>
+				<div>
+					<input type="text" placeholder="请输入用户名" autofocus required data-name="username" data-value="" />
+				</div>
+			</li>
+			<li>
+				<label><i class="sign">*</i>密码：</label>
+				<div>
+					<input type="password" placeholder="请输入密码" required data-name="password" data-value="" />
+				</div>
+			</li>
+			<li>
+				<label>真实姓名：</label>
+				<div>
+					<input type="text" placeholder="请输入真实姓名" data-name="real_name" data-value="" />
+				</div>
+			</li>
+			<li>
+				<label data-name="role">角色：</label>
+				<div>
+					<menu>
+						<button type="button" data-option="editor">Editor</button>
+						<button type="button" data-option="admin">Admin</button>
+					</menu>
+				</div>
+			</li>
+			<li>
+				<label data-name="state">激活：</label>
+				<div>
+					<menu>
+						<button type="button" data-option="1">激活</button>
+						<button type="button" data-option="0">未激活</button>
+					</menu>
+				</div>
+			</li>
+		</ul>
+		<div class="form-submit">
+			<hr class="line-gray" />
+			<button type="button" class="btn-gray">取消</button>
+			<button type="submit" class="btn-orange">确认添加</button>
+		</div>
+	</form>
+</div>

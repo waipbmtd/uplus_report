@@ -4,6 +4,30 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
+				<form data-submit="ajax" data-callback="getUsersPunish" data-type="system" method="get" action="/user/punish/log">
+					<ul>
+						<li>
+							<label>关键字：</label>
+							<div>
+								<input type="text" data-input="same" data-name="u_id" data-value="0" autofocus />
+								<button>查询</button>
+							</div>
+						</li>
+					</ul>
+				</form>
+				<hr class="line-gray" />
+			</div>
+			<div class="report_search_result">
+				<!-- Get Page From <users.html> -->
+			</div>
+		</div>
+
+	</div>
+
+	<div class="main">
+		
+		<div class="report_user">
+			<div class="report_search_panel">
 				<button type="button" data-fancy="/get_template?page=loaded/user_add.html" data-title="添加高危用户" data-type="risk" data-callback="addUser">添加用户</button>
 				<form data-submit="ajax" data-callback="getUsers" data-type="risk" method="get" action="/user/risk/list">
 					<ul>
@@ -24,6 +48,7 @@
 		</div>
 
 	</div>
+
 	<div class="main">
 		
 		<div class="report_user">
@@ -48,40 +73,18 @@
 		</div>
 
 	</div>
+	
 	<div class="main">
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-fancy="/get_template?page=loaded/user_add.html" data-title="添加系统用户" data-type="special" data-callback="addUser">添加用户</button>
+				<button type="button" data-fancy="/get_template?page=loaded/user_add_sys.html" data-title="添加系统用户" data-type="special" data-callback="addUserSys">添加用户</button>
 				<form data-submit="ajax" data-callback="getUsers" data-type="system" method="get" action="/user/system/list">
 					<ul>
 						<li>
 							<label>关键字：</label>
 							<div>
 								<input type="text" autofocus />
-								<button>查询</button>
-							</div>
-						</li>
-					</ul>
-				</form>
-				<hr class="line-gray" />
-			</div>
-			<div class="report_search_result">
-				<!-- Get Page From <users.html> -->
-			</div>
-		</div>
-
-	</div>
-	<div class="main">
-		
-		<div class="report_user">
-			<div class="report_search_panel">
-				<form data-submit="ajax" data-callback="getUsersPunish" data-type="system" method="get" action="/user/punish/log">
-					<ul>
-						<li>
-							<label>关键字：</label>
-							<div>
-								<input type="text" data-input="same" data-name="u_id" data-value="0" autofocus />
 								<button>查询</button>
 							</div>
 						</li>

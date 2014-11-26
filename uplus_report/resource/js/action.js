@@ -1324,6 +1324,77 @@ $.extend({
 					$.formSubmit();
 				}
 			});
+		},
+		// Add User Sys
+		addUserSys: function( it ){
+			var itData = $.getData(it);
+
+			$.reloadHTML({
+				element: $('.audit-user'),
+				data: {
+					type: itData.type
+				},
+				callback: function(){
+					// Popup Fancy Cancel
+					$.fancyCall.fancyClose( $('.audit-user form .form-submit button:eq(0)') );
+
+					// Input Press
+					$.sameInput({
+						input: '.audit-user form [data-name=user_id]',
+						onKeydown: function(e){
+							var code = e.keyCode;
+							if( (code == 8) || (code > 47 && code < 58) ){
+								return true;
+							}
+							return false;
+						},
+						onKeyup: function(e){
+							e.target.setAttribute('data-value', e.target.value);
+						}
+					});
+
+					var
+						form = $('.audit-user form'),
+						cancel = form.find('.form-submit button:eq(0)');
+
+					// Input Press
+					$.sameInput({
+						input: '.audit-operat form input[data-name]',
+						onKeydown: function(e){
+							return false;
+						},
+						onKeyup: function(e){
+							e.target.setAttribute('data-value', e.target.value);
+						}
+					});
+
+					// Tab 切换事件
+					$.taber({
+						container: '.audit-user form menu',
+						menus: 'button',
+						callback: function(it, index){
+							it = $(it);
+
+							var
+								parent = it.closest('li'),
+								next = it.next();
+
+							parent.find('[data-name]:eq(0)').attr('data-value', it.attr('data-option')),
+							parent.find('span').hide();
+
+							if( next.is('span') ){
+								next.show();
+							}
+						}
+					});
+
+					// Popup Fancy Cancel
+					$.fancyCall.fancyClose( cancel );
+
+					// Add User Submit Control
+					$.formSubmit();
+				}
+			});
 		}
 	},
 	formCall: {

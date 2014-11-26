@@ -684,6 +684,45 @@ section{
 	li{
 		margin-top: 1em;
 
+		menu{
+			.over-hide;
+			button{
+				.btn-none;
+				.left;
+				margin-right: .5em;
+
+				&.active{
+					text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+					border-radius: @radius;
+					color: @color-white;
+					background: @color-dim;
+				}
+			}
+			.input-time-hour{
+				.left;
+				.over-hide;
+				margin-right: .5em;
+
+				input, bdo{
+					.left;
+				}
+				input{
+					width: 6 * @distance;
+					border-radius: @radius 0 0 @radius;
+				}
+				bdo{
+					line-height: 22px;
+					padding: 0 .5em;
+					border-radius: 0 @radius @radius 0;
+					color: #000;
+					border-width: 1px 1px 1px 0;
+					border-style: solid;
+					border-color: @color-ghost;
+					background: @color-frivo;
+				}
+			}
+		}
+
 		input{
 			width: 20 * @distance;
 			border-radius: @radius;
