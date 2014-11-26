@@ -3,14 +3,16 @@
 	<thead>
 		<tr>
 			<td colspan="6">
-				<ul class="pagination">
-					{{!
-						var page = $.pagination( it.data.current, it.data.total );
-					}}
-					{{! for( var i=page.start; i<=page.end; i++ ){ }}
-						<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-					{{! } }}
-				</ul>
+				<div class="pagination">
+					<ul>
+						{{!
+							var page = $.pagination( it.data.current, it.data.total );
+						}}
+						{{! for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
+						{{! } }}
+					</ul>
+				</div>
 			</td>
 		</tr>
 	</thead>

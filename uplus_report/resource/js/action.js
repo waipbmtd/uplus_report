@@ -669,319 +669,6 @@ var
 	};
 
 
-/* Socket Run */
-;(function( time ){
-
-	var cache = {
-			album: 0, msg: 0
-		},
-		// 时间间隔
-		timeResult = time,
-		// 临时方法 - 响应赠长
-		calculateTime = function( data ){
-
-			if( data.album_remain != cache.album || data.msg_remain != cache.msg ){
-				cache = {
-					album: data.album_remain, msg: data.msg_remain
-				},
-				timeResult = time;
-				return;
-			}
-
-			timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
-		};
-
-	// WebSocket: IO
-	/*
-	var socket = io( _.path.root + _.api.remain_all );
-
-	socket
-		.on('connect', function( result ){
-			console.log( result );
-			return;
-
-			$.each( $('#remain_default, #remain_dangerous, #remain_resource'), function(x, element){
-
-				element = $(element);
-
-				var data = result.data[ x ];
-
-				element.html( data.album_remain + data.msg_remain );
-
-			});
-		})
-		.on('event', function( result ){
-			console.log( result );
-		})
-		.on('disconnect', function( result ){
-			console.log( result );
-		});
-	*/
-
-	try{
-
-		// WebSocket
-		var socket = new WebSocket( _.path.ws + _.api.remain_all ); 
-
-		// 打开Socket 
-		socket.onopen = function(event){
-
-			// 监听消息
-			socket.onmessage = function(result){
-				var
-					database = $.parseJSON( result.data );
-					elements = $('#remain_default, #remain_dangerous, #remain_resource');
-
-				// 如果缓存里木有，则置入并重置时间
-				calculateTime( database.data );
-
-				$.each( database.data, function(i, data){
-					elements.eq(i).html( data.album_remain + data.msg_remain );
-				});
-			};
-
-			$.timeout({
-				count: (_.QQ, 312272592),
-				time: time,
-				def: true,
-				callback: function( options ){
-
-					// 发送一个初始化消息
-					socket.send('Whos Your Daddy ?!');
-
-					return timeResult;
-				}
-			});
-
-		}
-
-	}
-	catch(e){
-
-		// 非WebSocket
-		$.timeout({
-			count: (_.QQ, 312272592),
-			time: time,
-			def: true,
-			callback: function( options ){
-
-				// Get Remain Count In (Default)
-				kitFunction.getRemain({
-					callback: function(result){
-						if( !result.data ){
-							_.clearTimeout( options.timeout );
-							return;
-						}
-
-						$('#remain_default').html( result.data.album_remain + result.data.msg_remain ), calculateTime( result.data );
-					}
-				});
-
-				// Get Remain Count In (Dangerous)
-				kitFunction.getRemain({
-					data: { report_type: 1 },
-					callback: function(result){
-						if( !result.data ){
-							_.clearTimeout( options.timeout );
-							return;
-						}
-
-						$('#remain_dangerous').html( result.data.album_remain + result.data.msg_remain );
-					}
-				});
-
-				// Get Remain Count In (Resource)
-				kitFunction.getRemain({
-					data: { report_type: 2 },
-					callback: function(result){
-						if( !result.data ){
-							_.clearTimeout( options.timeout );
-							return;
-						}
-
-						$('#remain_resource').html( result.data.album_remain + result.data.msg_remain );
-					}
-				});
-
-				return timeResult;
-			}
-		});
-	}
-
-})
-(4567);
-
-/* Key Down For Choose Albums */
-_.dom.doc.on('keydown', function(e){
-	var code = e.keyCode, isOff = iMasonry.is(':hidden'), items = iMasonry ? iMasonry.find('span') : [];
-
-	// Only For Key Code
-	console.log(code);
-
-	// 如果不在Masonry区
-	if( isOff || !items.length ){
-		return;
-	}
-
-	// 如果焦点在输入框内
-	if( e.target.tagName == 'INPUT' || e.target.tagName == 'TEXTAREA' ){
-		return;
-	}
-
-	// 数字快捷键
-	if( !!~$.inArray(code, _.keys.number) ){
-		var i = code % 48 ? code % 48 : 10;
-		items.eq( i-1 ).trigger( _.evt.click );
-		return;
-	}
-
-	// 快捷键 - 字母
-	if( code > 64 && code < 91 ){
-
-		var keyPanel = $('.key-panel'), keys = {};
-		if( !keyPanel.length ){
-			return;
-		}
-
-		$.each( keyPanel.find('[data-name]'), function(i, item){
-
-			keys[ item.getAttribute('data-name') ] = item.value.charCodeAt(0);
-
-			if( code == item.value.charCodeAt(0) ){
-				kitFunction[ item.getAttribute('data-name') ]( iMasonry );
-			}
-
-		});
-	}
-});
-
-/* Default Welcome */
-;(function(element){
-	var text = '', vs = element.text().split(''), vcount = vs.length;
-	$.each( vs, function(i, v){
-		text += '<bdo>' + v + '</bdo>';
-	});
-	element.html(text).css('line-height', _.dom.doc.height() + 'px').addClass('welcome');
-
-	var items = element.find('bdo');
-	
-	$.each(items, function(i, item){
-		item = $(item);
-		item.css({
-			top: i%2 ? 60 : -60,
-			left: i%2 ? 60 : -60
-		});
-	});
-
-	$.timeout({
-		count: vcount,
-		time: 45,
-		callback: function( options ){
-			items.eq( vcount - options.count ).animate({ top: 0, left: 0 }, 135);
-
-			if( options.count == 1 ){
-				$.timeout({
-					time: 600,
-					callback: function(){
-						_.dom.aside.find('a:eq(0)').trigger( _.evt.click ),
-						element.fadeOut(function(){
-							element.remove();
-						});
-					}
-				});
-			}
-		}
-	});
-})
-( $('#welcome') );
-
-/* Default High Light Nav */
-;(function( param ){
-
-$.each( _.dom.nav.find('a'), function(i, a){
-
-	if( !!~a.getAttribute('href').indexOf( param ) ){
-		$(a).addClass('active').attr('href', 'javascript:void(0);');
-	}
-});
-
-})
-( _.location.pathname.match(/\w{0,}$/g)[0] );
-
-
-/* Reload Aside */
-$.reloadHTML({
-	element: _.dom.aside,
-	data: {
-		current: _.current
-	},
-	callback: function(){
-		$.timeout({
-			callback: function(){
-				_.dom.aside.find('a:eq(0)').trigger( _.evt.click );
-			}
-		}, 30);
-	}
-});
-
-/* Taber Change */
-$.taber({
-	menus: 'aside a',
-	contents: 'section .main',
-	callback: function(it, index){
-		iKit.find('ul').hide().eq(index).show();
-		
-		// Init Kit Position
-		if( iKit.length ){
-			$.initPosition({
-				element: kit,
-				children: 'li',
-				self: true,
-				left: _.dom.doc.width(),
-				top: _.dom.doc.height() - _.dom.foot.outerHeight(),
-				off: {
-					x: -1, y: -35
-				}
-			});
-		}
-	}
-});
-
-/* Data-Function-Action */
-_.dom.bod.delegate('[data-function]', _.evt.click, function(){
-	var it = $(this), fn = it.attr('data-function');
-	if( kitFunction[fn] ){
-		kitFunction[fn]( it );
-	}
-});
-
-/* Drag Kit */
-$.drag({
-	move: kit,
-	nation: 'bdo'
-});
-
-/* Fancy Pop */
-$.fancyPop();
-
-/* Same Input Press */
-$.sameInput({
-	input: '[data-input="same"]',
-	onKeydown: function(e){
-		var code = e.keyCode;
-		if( (code == 8) || (code > 47 && code < 58) ){
-			return true;
-		}
-		return false;
-	},
-	onKeyup: function(e){
-		e.target.setAttribute('data-value', e.target.value);
-	}
-});
-
-/* All Form Control */
-$.formSubmit();
-
 /* Extend Callback */
 $.extend({
 	fancyCall: {
@@ -1449,7 +1136,324 @@ $.extend({
 				});
 			});
 		}
-	}
+	},
+	init: +function(){
+
+		/* Socket Run */
+		;(function( time ){
+
+			var cache = {
+					album: 0, msg: 0
+				},
+				// 时间间隔
+				timeResult = time,
+				// 节点集
+				elements = $('#remain_default, #remain_dangerous, #remain_resource'),
+				// 临时方法 - 响应赠长
+				calculateTime = function( data ){
+
+					if( data.album_remain != cache.album || data.msg_remain != cache.msg ){
+						cache = {
+							album: data.album_remain, msg: data.msg_remain
+						},
+						timeResult = time;
+						return;
+					}
+
+					timeResult = (timeResult > 30000) ? 30000 : (timeResult + 999);
+				};
+
+			// WebSocket: IO
+			/*
+			var socket = io( _.path.root + _.api.remain_all );
+
+			socket
+				.on('connect', function( result ){
+					console.log( result );
+					return;
+
+					$.each( $('#remain_default, #remain_dangerous, #remain_resource'), function(x, element){
+
+						element = $(element);
+
+						var data = result.data[ x ];
+
+						element.html( data.album_remain + data.msg_remain );
+
+					});
+				})
+				.on('event', function( result ){
+					console.log( result );
+				})
+				.on('disconnect', function( result ){
+					console.log( result );
+				});
+			*/
+
+			try{
+
+				// WebSocket
+				var socket = new WebSocket( _.path.ws + _.api.remain_all ); 
+
+				// 打开Socket 
+				socket.onopen = function(event){
+
+					// 监听消息
+					socket.onmessage = function(result){
+						var
+							database = $.parseJSON( result.data );
+
+						// 如果缓存里木有，则置入并重置时间
+						calculateTime( database.data );
+
+						$.each( database.data, function(i, data){
+							elements.eq(i).html( data.album_remain + data.msg_remain );
+						});
+					};
+
+					$.timeout({
+						count: (_.QQ, 312272592),
+						time: time,
+						def: true,
+						callback: function( options ){
+
+							// 发送一个初始化消息
+							socket.send('Whos Your Daddy ?!');
+
+							return timeResult;
+						}
+					});
+
+				}
+
+			}
+			catch(e){
+
+				// 非WebSocket
+				$.timeout({
+					count: (_.QQ, 312272592),
+					time: time,
+					def: true,
+					callback: function( options ){
+
+						// Get Remain Count In (Default)
+						kitFunction.getRemain({
+							callback: function(result){
+								if( !result.data ){
+									_.clearTimeout( options.timeout );
+									return;
+								}
+
+								elements.eq(0).html( result.data.album_remain + result.data.msg_remain ), calculateTime( result.data );
+							}
+						});
+
+						// Get Remain Count In (Dangerous)
+						kitFunction.getRemain({
+							data: { report_type: 1 },
+							callback: function(result){
+								if( !result.data ){
+									_.clearTimeout( options.timeout );
+									return;
+								}
+
+								elements.eq(1).html( result.data.album_remain + result.data.msg_remain );
+							}
+						});
+
+						// Get Remain Count In (Resource)
+						kitFunction.getRemain({
+							data: { report_type: 2 },
+							callback: function(result){
+								if( !result.data ){
+									_.clearTimeout( options.timeout );
+									return;
+								}
+
+								elements.eq(2).html( result.data.album_remain + result.data.msg_remain );
+							}
+						});
+
+						return timeResult;
+					}
+				});
+			}
+
+		})
+		(4567);
+
+		/* Default Welcome */
+		;(function(element){
+			var text = '', vs = element.text().split(''), vcount = vs.length;
+			$.each( vs, function(i, v){
+				text += '<bdo>' + v + '</bdo>';
+			});
+			element.html(text).css('line-height', _.dom.doc.height() + 'px').addClass('welcome');
+
+			var items = element.find('bdo');
+			
+			$.each(items, function(i, item){
+				item = $(item);
+				item.css({
+					top: i%2 ? 60 : -60,
+					left: i%2 ? 60 : -60
+				});
+			});
+
+			$.timeout({
+				count: vcount,
+				time: 45,
+				callback: function( options ){
+					items.eq( vcount - options.count ).animate({ top: 0, left: 0 }, 135);
+
+					if( options.count == 1 ){
+						$.timeout({
+							time: 600,
+							callback: function(){
+								_.dom.aside.find('a:eq(0)').trigger( _.evt.click ),
+								element.fadeOut(function(){
+									element.remove();
+								});
+							}
+						});
+					}
+				}
+			});
+		})
+		( $('#welcome') );
+
+		/* Key Down For Choose Albums */
+		_.dom.doc.on('keydown', function(e){
+			var code = e.keyCode, isOff = iMasonry.is(':hidden'), items = iMasonry ? iMasonry.find('span') : [];
+
+			// Only For Key Code
+			console.log(code);
+
+			// 如果不在Masonry区
+			if( isOff || !items.length ){
+				return;
+			}
+
+			// 如果焦点在输入框内
+			if( e.target.tagName == 'INPUT' || e.target.tagName == 'TEXTAREA' ){
+				return;
+			}
+
+			// 数字快捷键
+			if( !!~$.inArray(code, _.keys.number) ){
+				var i = code % 48 ? code % 48 : 10;
+				items.eq( i-1 ).trigger( _.evt.click );
+				return;
+			}
+
+			// 快捷键 - 字母
+			if( code > 64 && code < 91 ){
+
+				var keyPanel = $('.key-panel'), keys = {};
+				if( !keyPanel.length ){
+					return;
+				}
+
+				$.each( keyPanel.find('[data-name]'), function(i, item){
+
+					keys[ item.getAttribute('data-name') ] = item.value.charCodeAt(0);
+
+					if( code == item.value.charCodeAt(0) ){
+						kitFunction[ item.getAttribute('data-name') ]( iMasonry );
+					}
+
+				});
+			}
+		});
+
+		/* Default High Light Nav */
+		;(function( param ){
+
+		$.each( _.dom.nav.find('a'), function(i, a){
+
+			if( !!~a.getAttribute('href').indexOf( param ) ){
+				$(a).addClass('active').attr('href', 'javascript:void(0);');
+			}
+		});
+
+		})
+		( _.location.pathname.match(/\w{0,}$/g)[0] );
+
+
+		/* Reload Aside */
+		$.reloadHTML({
+			element: _.dom.aside,
+			data: {
+				current: _.current
+			},
+			callback: function(){
+				$.timeout({
+					callback: function(){
+						_.dom.aside.find('a:eq(0)').trigger( _.evt.click );
+					}
+				}, 30);
+			}
+		});
+
+		/* Taber Change */
+		$.taber({
+			menus: 'aside a',
+			contents: 'section .main',
+			callback: function(it, index){
+				iKit.find('ul').hide().eq(index).show();
+				
+				// Init Kit Position
+				if( iKit.length ){
+					$.initPosition({
+						element: kit,
+						children: 'li',
+						self: true,
+						left: _.dom.doc.width(),
+						top: _.dom.doc.height() - _.dom.foot.outerHeight(),
+						off: {
+							x: -1, y: -35
+						}
+					});
+				}
+			}
+		});
+
+		/* Same Input Press */
+		$.sameInput({
+			input: '[data-input="same"]',
+			onKeydown: function(e){
+				var code = e.keyCode;
+				if( (code == 8) || (code > 47 && code < 58) ){
+					return true;
+				}
+				return false;
+			},
+			onKeyup: function(e){
+				e.target.setAttribute('data-value', e.target.value);
+			}
+		});
+
+		/* Drag Kit */
+		$.drag({
+			move: kit,
+			nation: 'bdo'
+		});
+
+		/* Fancy Pop */
+		$.fancyPop();
+
+		/* All Form Control */
+		$.formSubmit();
+
+		/* Data-Function-Action */
+		_.dom.bod.delegate('[data-function]', _.evt.click, function(){
+			var it = $(this), fn = it.attr('data-function');
+			if( kitFunction[fn] ){
+				kitFunction[fn]( it );
+			}
+		});
+
+	}()
 });
 
 

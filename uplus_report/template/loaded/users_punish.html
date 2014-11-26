@@ -1,17 +1,19 @@
 <table class="table-theme">
 	{{!? it.data.total }}
-
 	<thead>
 		<tr>
 			<td colspan="6">
-				<ul class="pagination">
-					{{!
-						var page = $.pagination( it.data.current, it.data.total );
-					}}
-					{{! for( var i=page.start; i<=page.end; i++ ){ }}
-						<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.u_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-					{{! } }}
-				</ul>
+				<div class="pagination">
+					<ul>
+						{{!
+							var page = $.pagination( it.data.current, it.data.total );
+						}}
+						{{! for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.u_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
+						{{! } }}
+					</ul>
+					<!--<input type="text" maxlength="4" />-->
+				</div>
 			</td>
 		</tr>
 	</tdead>
@@ -19,15 +21,15 @@
 	<thead>
 		<tr>
 			<th width="8%">用户</th>
-            <th width="30%">内容</th>
-            <th width="7%">类型</th>
-            <th width="7%">持续时间</th>
-			<th width="15%">生效时间</th>
+            <th width="20%">内容</th>
+            <th width="8%">类型</th>
+            <th width="8%">持续时间</th>
+			<th width="16%">生效时间</th>
 			<th width="8%">原因</th>
-            <th width="5%">客服</th>
+            <th width="8%">客服</th>
 			<th width="8%">举报id</th>
-			<th width="10%">内容来源</th>
-			<th width="7%">操作</th>
+			<th width="8%">内容来源</th>
+			<th width="8%">操作</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -37,8 +39,8 @@
 			<td>{{!= item.url }}{{!= item.content }}</td>
 			<td>{{!= $.escape(item.punish_type, 'punish_types') }}</td>
 			<td>{{!= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>
-			<td>{{!=  $.formatDate(item.punish_time) }}</td>
-			<td>{{!=  $.escape(item.reason, 'type') }}</td>
+			<td>{{!= $.formatDate(item.punish_time) }}</td>
+			<td>{{!= $.escape(item.reason, 'type') }}</td>
 			<td>{{!= item.cs_username }}({{!= item.csid }})</td>
 			<td>{{!= item.rid }}</td>
 			<td>{{!= $.escape(item.mod, 'mod') }} ({{!= item.mid }})</td>
