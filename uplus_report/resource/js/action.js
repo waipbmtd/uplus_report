@@ -1359,9 +1359,9 @@ $.extend({
 
 					// Input Press
 					$.sameInput({
-						input: '.audit-operat form input[data-name]',
+						input: '.audit-user form input[data-name]',
 						onKeydown: function(e){
-							return false;
+							// return false;
 						},
 						onKeyup: function(e){
 							e.target.setAttribute('data-value', e.target.value);
