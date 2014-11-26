@@ -1206,6 +1206,22 @@ $.extend({
 	},
 	init: +function(){
 
+		/* Show Elements By Admin */
+		;(function(selector){
+
+			$.each( $('['+selector+']'), function(i, item){
+
+				item = $(item);
+				var key = item.attr( selector );
+
+				if( _[key] != 'admin' ){
+					item.remove();
+				}
+
+			});
+
+		})('data-show');
+
 		/* Socket Run */
 		;(function( time ){
 
