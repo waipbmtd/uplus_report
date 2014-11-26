@@ -1,1 +1,43 @@
-report_operat.html
+<section>
+	
+	<div class="main">
+		
+		<div class="report_sheet">
+			<div class="report_search_panel">
+				<form data-submit="ajax" data-callback="getSheet" data-type="system" method="get" action="/report/sheet">
+					<ul>
+						<li>
+							<label>客服：</label>
+							<div>
+								<input type="text" data-input="same" data-name="u_id" data-value="0" />
+							</div>
+						</li>
+						<li>
+							<label>起始时间：</label>
+							<div>
+								<input type="datetime" data-input="same" data-datepicker="true" data-diff="0" data-name="start_date" data-value="0" />
+							</div>
+						</li>
+						<li>
+							<label>结束时间：</label>
+							<div>
+								<input type="datetime" data-input="same" data-datepicker="true" data-diff="+1" data-name="end_date" data-value="0" />
+							</div>
+						</li>
+						<li>
+							<div>
+								<button>查询</button>
+							</div>
+						</li>
+					</ul>
+				</form>
+				<hr class="line-gray" />
+			</div>
+			<div class="report_search_result">
+				<!-- Get Page From <users.html> -->
+			</div>
+		</div>
+
+	</div>
+
+</section>

@@ -27,6 +27,44 @@ $.ajaxSetup({
 });
 
 /* !!
+ * 设值全局Datepicker中文
+ * ** *** **** ***** **** *** ** *
+ */
+if( $.datepicker ){
+	$.datepicker.setDefaults({
+		clearText: '清除',
+		clearStatus: '清除已选日期',
+		closeText: '关闭',
+		closeStatus: '不改变当前选择',
+		prevText: '<上月',
+		prevStatus: '显示上月',
+		prevBigText: '<<',
+		prevBigStatus: '显示上一年',
+		nextText: '下月>',
+		nextStatus: '显示下月',
+		nextBigText: '>>',
+		nextBigStatus: '显示下一年',
+		currentText: '今天',
+		currentStatus: '显示本月',   
+		monthNames: ['一月','二月','三月','四月','五月','六月', '七月','八月','九月','十月','十一月','十二月'],
+		monthNamesShort: ['一','二','三','四','五','六', '七','八','九','十','十一','十二'],
+		monthStatus: '选择月份',
+		yearStatus: '选择年份',
+		weekHeader: '周',
+		weekStatus: '年内周次',
+		dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		dayStatus: '设置 DD 为一周起始',
+		dateStatus: '选择 m月 d日, DD',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		initStatus: '请选择日期',
+		isRTL: false
+	});
+}
+
+/* !!
  * All Function Is In Plus
  * ** *** **** ***** **** *** ** *
  */
@@ -716,6 +754,9 @@ $.extend({
 				},
 				onKeyup: function(e){
 					e.target.setAttribute('data-value', e.target.value);
+				},
+				onChange: function(e){
+					e.target.setAttribute('data-value', e.target.value);
 				}
 			});
 
@@ -723,6 +764,9 @@ $.extend({
 			$.sameInput({
 				input: '.audit-operat form [data-name=memo]',
 				onKeyup: function(e){
+					e.target.setAttribute('data-value', e.target.value);
+				},
+				onChange: function(e){
 					e.target.setAttribute('data-value', e.target.value);
 				}
 			});
@@ -1004,6 +1048,9 @@ $.extend({
 						},
 						onKeyup: function(e){
 							e.target.setAttribute('data-value', e.target.value);
+						},
+						onChange: function(e){
+							e.target.setAttribute('data-value', e.target.value);
 						}
 					});
 
@@ -1037,6 +1084,9 @@ $.extend({
 						},
 						onKeyup: function(e){
 							e.target.setAttribute('data-value', e.target.value);
+						},
+						onChange: function(e){
+							e.target.setAttribute('data-value', e.target.value);
 						}
 					});
 
@@ -1051,6 +1101,9 @@ $.extend({
 							// return false;
 						},
 						onKeyup: function(e){
+							e.target.setAttribute('data-value', e.target.value);
+						},
+						onChange: function(e){
 							e.target.setAttribute('data-value', e.target.value);
 						}
 					});
@@ -1114,10 +1167,24 @@ $.extend({
 		getUsersPunish: function(result, form){
 			$.checkResult(result, function( result ){
 
-				_.cache.users.risk = result.data;
-
 				$.renderHTML({
 					element: form.closest('.report_user').find('.report_search_result'),
+					data: $.mergeJSON(result, { type: form.attr('data-type') }),
+					html: _.tpl.users_punish,
+					type: 'get',
+					dataType: 'json',
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).html( options.render );
+					}
+				});
+			});
+		},
+		getSheet: function(result, form){
+			$.checkResult(result, function( result ){
+
+				$.renderHTML({
+					element: form.closest('.report_sheet').find('.report_search_result'),
 					data: $.mergeJSON(result, { type: form.attr('data-type') }),
 					html: _.tpl.users_punish,
 					type: 'get',
@@ -1430,7 +1497,15 @@ $.extend({
 			},
 			onKeyup: function(e){
 				e.target.setAttribute('data-value', e.target.value);
+			},
+			onChange: function(e){
+				e.target.setAttribute('data-value', e.target.value);
 			}
+		});
+
+		/* Datepicker */
+		$.timePicker({
+			items: '[data-datepicker]'
 		});
 
 		/* Drag Kit */
