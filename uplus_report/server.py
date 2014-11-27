@@ -3,7 +3,6 @@
 
 import os
 import logging
-# from tornado.httpclient import AsyncHTTPClient
 
 import tornado.ioloop
 import tornado.web
@@ -64,7 +63,6 @@ def main():
 
     init_db()
 
-    # AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
     define("dev", default=True, help="Is development env?", type=bool)
     define("port", default=8205, help="run on the given port", type=int)

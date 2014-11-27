@@ -273,5 +273,11 @@ class ReportProfileHandler(BaseHandler):
                                            parameters=dict(
                                                rid=rid,
                                            ))
+        j_data = json.loads(data)
+        j_i_data = j_data.get("data")
+        j_i_data.update(dict(desc=j_i_data.get("desc", ""),
+                             name=j_i_data.get("name", ""),
+                             mid=j_i_data.get("mid", ""),
+                             oid=j_i_data.get("oid", "")))
         self.record_log(u"获取举报(%s)的profile" % rid)
         return self.send_success_json(json.loads(data))

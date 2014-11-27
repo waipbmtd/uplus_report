@@ -42,7 +42,7 @@ routers = [
     #处理一条消息举报结束
     url(r"/report/batch_deal", report.ReportBatchDealHandler),
     #获取举报profile
-    url(r"/report/(?P<rid>\d+)/profile", render.RenderHandler),
+    url(r"/report/(?P<rid>\d+)/profile", report.ReportProfileHandler),
 
     #报表
     url(r"/report/sheet", report.ReportSheetHandler),

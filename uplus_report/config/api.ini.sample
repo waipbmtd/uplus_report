@@ -19,6 +19,8 @@ report_batch_deal = uplus-report/api/batch_deal_album
 
 report_sheet = uplus-report/api/get_customer_stat
 
+report_profile = uplus-report/api/get_profile
+
 user_punish_log = uplus-report/api/get_deal_result
 
 hall_openmouth = openmouth/hall
