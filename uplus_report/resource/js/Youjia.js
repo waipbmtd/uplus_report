@@ -134,7 +134,12 @@ _.api = {
 	// 获取用户(客服)列表
 	user_list: '/user/list',
 	// 获取用户详细
-	user_detail: '/user/log/list'
+	user_detail: '/user/log/list',
+
+	// 获取Profile
+	report_profile: function(rid){
+		return '/report/' + rid + '/profile';
+	}
 },
 
 /* !!
@@ -474,7 +479,8 @@ $.extend({
 	},
 	timePicker: function(options){
 		options = options || {}
-		, options.items = (options.items instanceof jQuery) ? options.items : $(options.items || 'data-datepicker');
+		, options.items = (options.items instanceof jQuery) ? options.items : $(options.items || 'data-datepicker')
+		, options.input = $.isType(options.input, 'boolean') ? options.input : false;
 
 		$.each( options.items, function(i, item){
 			item = $(item);
@@ -485,6 +491,10 @@ $.extend({
 				var date = new Date( new Date().getTime() + eval('(' + itemData.diff + ')') * 86400 * 1000 );
 				item.val( $.patternDate(date, 'yyyy-MM-dd') );
 			}
+
+			item.on('keydown', function(){
+				return options.input;
+			});
 		});
 	},
 	formatDate: function(time){

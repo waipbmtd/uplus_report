@@ -617,52 +617,78 @@ var
 		*/
 
 		deleteUser: function(it){
-			$.confirm('确定删除该用户吗？', function(){
-				
-				var itData = $.getData(it),
-					database = {},
-					url = '';
 
-				$.each( _.cache.users.risk, function(i, data){
-					if( data.user_id == itData.user_id ){
-						database = data;
+			var
+				// Item Data
+				itData = $.getData(it),
+				// Confirm Text
+				text = '确定删除该用户吗？',
+				// Do Function
+				doDelete = function(it){
+					var database = {},
+						url = '';
+
+					$.each( _.cache.users.risk, function(i, data){
+						if( data.user_id == itData.user_id ){
+							database = data;
+						}
+					});
+
+					switch( itData.type ){
+						case 'risk':
+							url = _.api.user_risk;
+							break;
+						case 'special':
+							url = _.api.user_special;
+							break;
+						case 'system':
+							url = _.api.user_system;
+							break;
+						default:
+							break;
 					}
-				});
 
-				switch( itData.type ){
-					case 'risk':
-						url = _.api.user_risk;
-						break;
-					case 'special':
-						url = _.api.user_special;
-						break;
-					case 'system':
-						url = _.api.user_system;
-						break;
-					default:
-						break;
+					$.ajax({
+						type: 'delete',
+						url: url,
+						data: database,
+						success: function(result){
+							$.checkResult(result, function( result ){
+
+								(function(tr){
+									if( tr.length ){
+										tr.slideUp(function(){
+											tr.remove();
+										});
+									}
+								})( it.closest('tr') );
+
+							});
+						}
+					});
+
+					return true;
 				}
 
-				$.ajax({
-					type: 'delete',
-					url: url,
-					data: database,
-					success: function(result){
-						$.checkResult(result, function( result ){
+			if( itData.rid ){
 
-							(function(tr){
-								if( tr.length ){
-									tr.slideUp(function(){
-										tr.remove();
-									});
-								}
-							})( it.closest('tr') );
+				$.get( _.api.report_profile( itData.rid ), function(result){
 
-						});
-					}
+					$.each(result.data, function(k, v){
+						text += '<br/>' + k + ':' + v;
+					});
+
+					$.confirm(text, function(){
+						doDelete( it );
+					});
+
 				});
 
-				return true;
+				return;
+			}
+
+			$.confirm(text, function(){
+				doDelete( it );
 			});
 		},
 
@@ -956,6 +982,12 @@ $.extend({
 										tr.remove();
 									});
 								}
+								// 如果无tr, 则认为是profile按钮, 做移除处理
+								else{
+									it.fadeOut(function(){
+										it.remove();
+									});
+								}
 							})( it.closest('tr') );
 						});
 
@@ -1212,9 +1244,8 @@ $.extend({
 			$.each( $('['+selector+']'), function(i, item){
 
 				item = $(item);
-				var key = item.attr( selector );
 
-				if( _[key] != 'admin' ){
+				if( _[ item.attr( selector ) ] != 'admin' ){
 					item.remove();
 				}
 
@@ -1521,7 +1552,8 @@ $.extend({
 
 		/* Datepicker */
 		$.timePicker({
-			items: '[data-datepicker]'
+			items: '[data-datepicker]',
+			input: false
 		});
 
 		/* Drag Kit */
