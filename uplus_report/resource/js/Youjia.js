@@ -1000,7 +1000,7 @@ $.extend({
 		if( !$.isType(options, 'object') ){
 			return;
 		}
-
+		
 		callback = callback || $.noop;
 
 		$.each(options, function(i, option){

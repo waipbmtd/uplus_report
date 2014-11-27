@@ -55,7 +55,7 @@ switch( it.data.mod ){
 			<p>{{!= it.data.profile.desc }}</p>
 			<menu>
 				{{!? it.data.profile }}
-				<button class="yellow" type="button" data-uid="{{!= it.data.profile.oid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+				<button class="yellow" type="button" data-uid="{{!= it.data.profile.oid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-deal_type="profile" data-callback="operatSelect_{{!= operatModel }}">操作</button>
 				{{!?}}
 			</menu>
 		</div>
@@ -128,7 +128,7 @@ switch( it.data.mod ){
 						<td>{{!= $.escape(item.msg_type, 'msg_types') || '' }}</td>
 						<td>
 							<menu>
-								<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+								<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-deal_type="msgs" data-callback="operatSelect_{{!= operatModel }}">操作</button>
 							</menu>
 						</td>
 					</tr>

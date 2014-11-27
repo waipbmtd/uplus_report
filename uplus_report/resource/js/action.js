@@ -692,6 +692,36 @@ var
 			});
 		},
 
+		showProfile: function( it ){
+
+			var
+				// Item Data
+				itData = $.getData(it),
+				// Confirm Text
+				text = '';
+
+			$.get( _.api.report_profile( itData.rid ), function(result){
+
+				$.each(result.data, function(k, v){
+					text += k + ':' + v + '<br/>';
+				});
+
+				$.fancybox.open({
+					title: '用户查询',
+					content: text,
+					minWidth: 360,
+					helpers: {
+						title: {
+							type: 'inside',
+							position: 'top'
+						}
+					}
+				});
+
+			});
+
+		},
+
 		// Search User Detail
 		searchUserDetail: function( it ){
 			var itData = $.getData(it);
@@ -948,6 +978,9 @@ $.extend({
 					mergeData = kitFunction.dataTolerance( mergeData );
 
 					delete mergeData.msgs;
+
+					// 给后台区分
+					option.data.deal_type = itData.deal_type || 'msgs';
 
 					// Punish - 一次
 					/*
