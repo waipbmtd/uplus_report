@@ -21,7 +21,7 @@
 	<thead>
 		<tr>
 			<th width="8%">用户</th>
-            <th width="20%">内容</th>
+            <th width="10%">内容</th>
             <th width="8%">类型</th>
             <th width="8%">持续时间</th>
 			<th width="16%">生效时间</th>
@@ -29,6 +29,7 @@
             <th width="8%">客服</th>
 			<th width="8%">举报id</th>
 			<th width="8%">内容来源</th>
+			<th width="10%">备注</th>
 			<th width="8%">操作</th>
 		</tr>
 	</thead>
@@ -41,9 +42,10 @@
 			<td>{{!= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>
 			<td>{{!= $.formatDate(item.punish_time) }}</td>
 			<td>{{!= $.escape(item.reason, 'type') }}</td>
-			<td>{{!= item.cs_username }}({{!= item.csid }})</td>
+			<td>{{!= item.csid }}</td>
 			<td>{{!= item.rid }}</td>
 			<td>{{!= $.escape(item.mod, 'mod') }} ({{!= item.mid }})</td>
+			<td>{{!= item.memo }}</td>
 			<td>
 				<menu>
 					<button class="yellow" type="button" data-function="showProfile" data-type="risk" data-rid="{{!= item.rid }}">Profile</button>

@@ -698,7 +698,7 @@ var
 				// Item Data
 				itData = $.getData(it),
 				// Confirm Text
-				text = '';
+				text = '<div style="padding:10px;">';
 
 			$.get( _.api.report_profile( itData.rid ), function(result){
 
@@ -708,8 +708,8 @@ var
 				});
 				*/
 
-				text += '场景名称：' + (result.data.name || '')
-					 +  '场景介绍：' + (result.data.desc || '');
+				text += '场景名称：' + (result.data.name || '') + '<br/>'
+					 +  '场景介绍：' + (result.data.desc || '') + '</div>';
 
 				$.fancybox.open({
 					title: '用户查询',
