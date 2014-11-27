@@ -1036,14 +1036,14 @@ $.extend({
 			console.log(e);
 			punish_type = 103;
 		}
-
+		
 		// 临时方法 - 献给Deal
 		often.deal = {
 			reason: 2, // 色情
 			module_type: 4, // 用户
 			punish_type: punish_type, // 删除资源
 			timedelta: often.timedelta || -1, // 限制登录时间
-			memo: 'auto', // 备注
+			memo: often.memo || 'auto', // 备注
 			pass: 0
 		};
 		if( often.pass ){
