@@ -702,9 +702,14 @@ var
 
 			$.get( _.api.report_profile( itData.rid ), function(result){
 
+				/*
 				$.each(result.data, function(k, v){
 					text += k + ':' + v + '<br/>';
 				});
+				*/
+
+				text += '场景名称：' + (result.data.name || '')
+					 +  '场景介绍：' + (result.data.desc || '');
 
 				$.fancybox.open({
 					title: '用户查询',
