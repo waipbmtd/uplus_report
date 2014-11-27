@@ -54,7 +54,7 @@ switch( it.data.mod ){
 			<h2>{{!= it.data.profile.name }}</h2>
 			<p>{{!= it.data.profile.desc }}</p>
 			<menu>
-				{{!? !it.data.profile }}
+				{{!? it.data.profile }}
 				<button class="yellow" type="button" data-uid="{{!= it.data.profile.oid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-callback="operatSelect_{{!= operatModel }}">操作</button>
 				{{!?}}
 			</menu>

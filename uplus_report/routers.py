@@ -41,6 +41,11 @@ routers = [
     url(r"/report/end", report.ReportEndHandler),
     #处理一条消息举报结束
     url(r"/report/batch_deal", report.ReportBatchDealHandler),
+    #获取举报profile
+    url(r"/report/(?P<rid>\d+)/profile", render.RenderHandler),
+
+    #报表
+    url(r"/report/sheet", report.ReportSheetHandler),
 
     #审核通过
     url(r"/pass", passed.PassedHandler),

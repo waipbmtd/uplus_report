@@ -20,8 +20,7 @@ class AdminUser(Base):
     state = Column('state', Boolean(True), default=True)
     create_time = Column('create_time', DateTime,
                          default=datetime.datetime.now())
-    update_time = Column('update_time', DateTime,
-                         default=datetime.datetime.now())
+    update_time = Column('update_time', DateTime)
     logs = relationship("AdminOperationLog", backref="admin_user")
 
     def __repr__(self):

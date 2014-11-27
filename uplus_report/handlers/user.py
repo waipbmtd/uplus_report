@@ -72,6 +72,7 @@ class UserHandler(BaseHandler):
         self.json(user.__json__())
 
     @util.exception_handler
+    @util.admin_only
     @session_manage
     @tornado.web.authenticated
     def post(self):
@@ -85,8 +86,7 @@ class UserHandler(BaseHandler):
         password = util.hash_password(password)
         user = AdminUser(username=username, password=password, role=role,
                          real_name=real_name, state=state,
-                         create_time=datetime.datetime.now(),
-                         update_time=datetime.datetime.now())
+                         create_time=datetime.datetime.now())
         self.record_log(u"创建用户 " + username.encode("utf8"))
         self.session.add(user)
         return self.send_success_json()

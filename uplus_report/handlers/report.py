@@ -2,6 +2,7 @@
 # coding=utf-8
 import json
 import logging
+import datetime
 import tornado
 import tornado.web
 import config
@@ -232,3 +233,45 @@ class ReportBatchDealHandler(BaseHandler):
         return "<br/>".join(
             [x.get("url") + x.get("content", " ") + u"(用户ID:" + x.get(
                 "u_id") + ")" for x in d_items])
+
+
+class ReportSheetHandler(BaseHandler):
+    REPORT_SHEET_API = config.api.report_sheet
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self):
+        csid = self.get_argument("csid", "")
+        if not self.is_admin():
+            csid = self.current_user.id
+
+        n_time = datetime.datetime.now()
+        start_date = self.get_argument("start_date",
+                                       n_time.strftime('%Y-%m-%d'))
+        end_date = self.get_argument("end_date", (
+            n_time + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           self.REPORT_SHEET_API,
+                                           parameters=dict(
+                                               csid=csid,
+                                               start_date=start_date,
+                                               end_date=end_date,
+                                           ))
+        self.record_log(u"获取客服(%s)的报表(从%s至%s)" % (csid, start_date, end_date))
+        return self.send_success_json(json.loads(data))
+
+
+class ReportProfileHandler(BaseHandler):
+    REPORT_PROFILE_API = config.api.report_profile
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    def get(self, rid):
+        rid = int(rid)
+        data = WebRequrestUtil.getRequest2(API_HOST,
+                                           self.REPORT_PROFILE_API,
+                                           parameters=dict(
+                                               rid=rid,
+                                           ))
+        self.record_log(u"获取举报(%s)的profile" % rid)
+        return self.send_success_json(json.loads(data))

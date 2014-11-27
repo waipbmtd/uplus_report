@@ -53,11 +53,11 @@ def admin_only(method):
 
     def wrapper(self, *args, **kwargs):
         user = self.current_user
-        user_cat = user.charactor
+        user_cat = user.role
         if user_cat != 'admin':
-            if user_cat == 'CS':
-                self.redirect('/')
-            return self.redirect('/')
+            import tornado
+            import tornado.web
+            raise tornado.web.HTTPError(403, "只有管理员才能执行该操作")
         return method(self, *args, **kwargs)
 
     return wrapper

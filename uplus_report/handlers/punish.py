@@ -78,7 +78,8 @@ class PunishBaseHandler(BaseHandler):
             msgId=self.v("msg_id"),
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
-            uucid=self.v("uucid")
+            uucid=self.v("uucid"),
+            memo=self.v("memo")
         )
 
     @property
@@ -95,7 +96,8 @@ class PunishBaseHandler(BaseHandler):
             uid=self.v("uid"),
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
-            uucid=self.v("uucid")
+            uucid=self.v("uucid"),
+            memo=self.v("memo")
         )
 
     @property
@@ -112,7 +114,8 @@ class PunishBaseHandler(BaseHandler):
             csid=self.v("csid"),
             rid=self.v("rid"),
             reporter=self.v("reporter_id"),
-            uucid=self.v("uucid")
+            uucid=self.v("uucid"),
+            memo=self.v("memo")
         )
 
     def log_record_close(self):
@@ -300,7 +303,9 @@ class UplusUserPunishList(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
-        u_id = self.get_argument("u_id")
+        u_id = self.get_argument("u_id","")
+        if not u_id:
+            return self.send_error_json(info="查询用户ID不能为空！")
         current = self.get_argument("current", 1)
         per = self.get_argument("per", self.per_page_num)
         server_api = self.PUNISH_LOG_API
