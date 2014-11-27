@@ -1218,7 +1218,7 @@ $.extend({
 				$.renderHTML({
 					element: form.closest('.report_sheet').find('.report_search_result'),
 					data: $.mergeJSON(result, { type: form.attr('data-type') }),
-					html: _.tpl.users_punish,
+					html: _.tpl.users_sheet,
 					type: 'get',
 					dataType: 'json',
 					callback: function(options){
