@@ -41,7 +41,7 @@ class PunishBaseHandler(BaseHandler):
             # 惩罚时长
             timedelta=self.get_argument("timedelta", -1),
 
-            #举报入口
+            # 举报入口
             mod=self.get_argument("mod"),
             # 备注
             memo=self.get_argument("memo", ""),
@@ -58,6 +58,8 @@ class PunishBaseHandler(BaseHandler):
             #uucid
             uucid=self.get_argument("uucid",
                                     "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
+            #是profile还是普通mesg
+            deal_type=self.get_argument("deal_type", "megs"),
             #客服id
             csid=self.current_user.id
         )
@@ -79,7 +81,8 @@ class PunishBaseHandler(BaseHandler):
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
             uucid=self.v("uucid"),
-            memo=self.v("memo")
+            memo=self.v("memo"),
+            deal_type=self.v("deal_type")
         )
 
     @property
@@ -97,7 +100,8 @@ class PunishBaseHandler(BaseHandler):
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
             uucid=self.v("uucid"),
-            memo=self.v("memo")
+            memo=self.v("memo"),
+            deal_type=self.v("deal_type")
         )
 
     @property
@@ -115,7 +119,8 @@ class PunishBaseHandler(BaseHandler):
             rid=self.v("rid"),
             reporter=self.v("reporter_id"),
             uucid=self.v("uucid"),
-            memo=self.v("memo")
+            memo=self.v("memo"),
+            deal_type=self.v("deal_type")
         )
 
     def log_record_close(self):
@@ -303,7 +308,7 @@ class UplusUserPunishList(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     def get(self):
-        u_id = self.get_argument("u_id","")
+        u_id = self.get_argument("u_id", "")
         if not u_id:
             return self.send_error_json(info="查询用户ID不能为空！")
         current = self.get_argument("current", 1)

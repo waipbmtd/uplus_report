@@ -49,8 +49,10 @@ def printHttpRequest(req):
     s.write("method : %s\n" % req.get_method())
     if req.has_data():
         s.write("data: \n")
-        for k, v in json.loads(req.get_data()).items():
-            s.write("\t%s : %s\n" % (k, v))
+        paras = req.get_data().split("&")
+        for x in paras:
+            x_l = x.split("=")
+            s.write("\t%s : %s\n" % (x_l[0], x_l[1]))
 
     s.write("headers: \n")
     for k, v in req.headers.items():

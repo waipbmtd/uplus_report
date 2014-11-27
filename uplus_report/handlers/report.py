@@ -175,8 +175,8 @@ class ReportBatchDealHandler(BaseHandler):
         WebRequrestUtil.getRequest2(API_HOST,
                                     self.BATH_REPORT,
                                     parameters=dict(
-                                        items=items,
-                                        deal=deal,
+                                        items=items.encode('utf8'),
+                                        deal=deal.encode('utf8'),
                                         report_type=report_type,
                                         timedelta=timedelta,
                                         csid=self.current_user.id,
@@ -218,7 +218,7 @@ class ReportBatchDealHandler(BaseHandler):
                 s_timedelta = u"永久".encode('utf8')
             elif s_timedelta != "":
                 s_timedelta += u"小时".encode('utf8')
-            s_memo = str(j_deal.get("memo"))
+            s_memo = j_deal.get("memo").encode('utf8')
 
             l_content.append(s_reason)
             l_content.append(s_m_type)

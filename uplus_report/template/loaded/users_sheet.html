@@ -20,18 +20,17 @@
 	{{!? }}
 	<thead>
 		<tr>
-			<th width="20%">csid</th>
-            <th width="20%">cs_username</th>
-            <th width="20%">check_num</th>
-            <th width="20%">pass_num</th>
-			<th width="20%">skip_num</th>
+            <th width="20%">客服</th>
+            <th width="20%">总审核数</th>
+            <th width="20%">通过审核数</th>
+			<th width="20%">未通过审核数</th>
 		</tr>
 	</thead>
 	<tbody>
 		{{!~ it.data:item }}
 		<tr>
-			<td>{{!= item.csid }}</td>
-			<td>{{!= item.cs_username }}</td>
+			<td></td>
+			<td>{{!= item.cs_username }}({{!= item.csid }})</td>
 			<td>{{!= item.check_num }}</td>
 			<td>{{!= item.pass_num }}</td>
 			<td>{{!= item.skip_num }}</td>
