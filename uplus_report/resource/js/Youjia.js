@@ -556,6 +556,9 @@ $.extend({
 					return false;
 				}
 
+				// 老是报错，毛了，干脆直接阻止吧！
+				return false;
+
 			});
 		});
 	},
@@ -1000,7 +1003,7 @@ $.extend({
 		if( !$.isType(options, 'object') ){
 			return;
 		}
-		
+
 		callback = callback || $.noop;
 
 		$.each(options, function(i, option){
