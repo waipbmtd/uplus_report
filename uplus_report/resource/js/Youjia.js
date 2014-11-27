@@ -489,7 +489,8 @@ $.extend({
 
 			if( itemData.diff ){
 				var date = new Date( new Date().getTime() + eval('(' + itemData.diff + ')') * 86400 * 1000 );
-				item.val( $.patternDate(date, 'yyyy-MM-dd') );
+				data = $.patternDate(date, 'yyyy-MM-dd');
+				item.val( data ).attr('data-value', data);
 			}
 
 			item.on('keydown', function(){
@@ -1036,7 +1037,7 @@ $.extend({
 			console.log(e);
 			punish_type = 103;
 		}
-		
+
 		// 临时方法 - 献给Deal
 		often.deal = {
 			reason: 2, // 色情
