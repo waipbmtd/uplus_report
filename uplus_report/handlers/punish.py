@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # coding=utf-8
 import json
+import logging
 
 import tornado
 # from tornado.httpclient import AsyncHTTPClient
@@ -47,7 +48,7 @@ class PunishBaseHandler(BaseHandler):
             memo=self.get_argument("memo", ""),
             # 资源url
             url=self.get_argument("url", ""),
-            #资源缩略图
+            # 资源缩略图
             thumb_url=self.get_argument("thumb_url", ""),
             #消息ID
             msg_id=self.get_argument("msg_id", ""),
@@ -81,7 +82,7 @@ class PunishBaseHandler(BaseHandler):
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
             uucid=self.v("uucid"),
-            memo=self.v("memo"),
+            memo=self.v("memo").encode('utf8'),
             deal_type=self.v("deal_type")
         )
 
@@ -100,7 +101,7 @@ class PunishBaseHandler(BaseHandler):
             url=self.v("url"),
             thumb_url=self.v("thumb_url"),
             uucid=self.v("uucid"),
-            memo=self.v("memo"),
+            memo=self.v("memo").encode('utf8'),
             deal_type=self.v("deal_type")
         )
 
@@ -119,7 +120,7 @@ class PunishBaseHandler(BaseHandler):
             rid=self.v("rid"),
             reporter=self.v("reporter_id"),
             uucid=self.v("uucid"),
-            memo=self.v("memo"),
+            memo=self.v("memo").encode('utf8'),
             deal_type=self.v("deal_type")
         )
 
@@ -202,7 +203,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._punish_group()
         elif module_type == reportConstant.REPORT_MODULE_TYPE_USER:
             data = self._punish_user()
-        return self.send_success_json(json.loads(data))
+        logging.info("punish response is %s" % data)
 
 
     def _punish_hall(self):
@@ -256,9 +257,9 @@ class PunishAdapterHandler(PunishBaseHandler):
         server_api = self.CLOSE_API % dict(mod_type=module_type,
                                            u_id=self.v("uid"))
 
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=self.feature_parameter)
+        data = WebRequrestUtil.postRequest2(API_HOST,
+                                            server_api,
+                                            parameters=self.feature_parameter)
         self.log_record_close()
         return data
 
@@ -268,36 +269,36 @@ class PunishAdapterHandler(PunishBaseHandler):
         server_api = self.SILENCE_API % dict(mod_type=self.v("module_type"),
                                              u_id=self.v("uid"))
 
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=self.feature_parameter)
+        data = WebRequrestUtil.postRequest2(API_HOST,
+                                            server_api,
+                                            parameters=self.feature_parameter)
         self.log_record_silence()
         return data
 
     def _dismiss_group(self):
         # 解散群
         server_api = self.DISMISS_GROUP
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=self.group_parameter)
+        data = WebRequrestUtil.postRequest2(API_HOST,
+                                            server_api,
+                                            parameters=self.group_parameter)
         self.log_record_group()
         return data
 
     def _kick_out_group(self):
         # 踢出群
         server_api = self.KICK_OUT
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=self.group_parameter)
+        data = WebRequrestUtil.postRequest2(API_HOST,
+                                            server_api,
+                                            parameters=self.group_parameter)
         self.log_record_group()
         return data
 
     def _delete_resource(self):
         # 删除资源
         server_api = self.DELETE_RESOURCE
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=self.resource_parameter)
+        data = WebRequrestUtil.postRequest2(API_HOST,
+                                            server_api,
+                                            parameters=self.resource_parameter)
         self.log_record_delete()
         return data
 

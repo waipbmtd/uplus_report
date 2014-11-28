@@ -3,6 +3,7 @@
 import json
 import logging
 import datetime
+import urllib
 import tornado
 import tornado.web
 import config
@@ -172,7 +173,7 @@ class ReportBatchDealHandler(BaseHandler):
         items = self.get_argument("items")
         deal = self.get_argument("deal")
         timedelta = self.get_argument("timedelta", -1),
-        WebRequrestUtil.getRequest2(API_HOST,
+        WebRequrestUtil.postRequest2(API_HOST,
                                     self.BATH_REPORT,
                                     parameters=dict(
                                         items=items.encode('utf8'),

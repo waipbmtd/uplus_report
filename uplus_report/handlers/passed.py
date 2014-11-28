@@ -69,7 +69,7 @@ class PassedHandler(BaseHandler):
 
     # @gen.coroutine
     # def post(self):
-    #     self.parse_argument()
+    # self.parse_argument()
     #     server_api = self.PASS_API
     #     http_client = AsyncHTTPClient()
     #     response = yield http_client.fetch(
@@ -89,6 +89,8 @@ class PassedHandler(BaseHandler):
                                                msgId=self.v("msg_id"),
                                                mod=self.v("mod"),
                                                u_id=self.v("uid"),
-                                               reporter=self.v("reporter_id")
+                                               reporter=self.v("reporter_id"),
+                                               deal_type=self.v("deal_type",
+                                                                "msgs")
                                            ))
         self.log_record_pass()

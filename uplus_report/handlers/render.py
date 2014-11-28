@@ -20,3 +20,6 @@ class RenderHandler(BaseHandler):
         if path == "report_resource":
             kwargs.update(dict(report_type=reportConstant.REPORT_TYPE_RESOURCE))
         self.render("index.html", **kwargs)
+
+    def post(self, path):
+        pass

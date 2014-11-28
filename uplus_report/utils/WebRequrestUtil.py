@@ -21,7 +21,7 @@ def postRequest(url, data=""):
 
 
 def getRequest(url, parameters={}):
-    req = urllib2.Request(url + "?" + urllib.urlencode(parameters))
+    req = urllib2.Request(url + "?" + urllib.urlencode(parameters, doseq=True))
     logging.debug(printHttpRequest(req))
     try:
         resp = urllib2.urlopen(req)
@@ -39,7 +39,7 @@ def getRequest2(host, path, parameters={}):
 
 def postRequest2(host, path, parameters={}):
     url = "http://%s/%s" % (host, path)
-    return postRequest(url, urllib.urlencode(parameters))
+    return postRequest(url, urllib.urlencode(parameters, doseq=True))
 
 
 
@@ -52,7 +52,7 @@ def printHttpRequest(req):
         paras = req.get_data().split("&")
         for x in paras:
             x_l = x.split("=")
-            s.write("\t%s : %s\n" % (x_l[0], x_l[1]))
+            s.write("\t%s : %s\n" % (x_l[0], urllib.unquote_plus(x_l[1])))
 
     s.write("headers: \n")
     for k, v in req.headers.items():

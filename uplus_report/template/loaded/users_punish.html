@@ -21,13 +21,14 @@
 	<thead>
 		<tr>
 			<th width="8%">用户</th>
+            <th width="10%">链接</th>
             <th width="10%">内容</th>
             <th width="8%">类型</th>
             <th width="8%">持续时间</th>
 			<th width="16%">生效时间</th>
 			<th width="8%">原因</th>
-            <th width="8%">客服</th>
-			<th width="8%">举报id</th>
+            <th width="5%">客服</th>
+			<th width="5%">举报id</th>
 			<th width="8%">内容来源</th>
 			<th width="10%">备注</th>
 			<th width="8%">操作</th>
@@ -37,7 +38,8 @@
 		{{!~ it.data.data:item }}
 		<tr>
 			<td>{{!= item.user_id }}</td>
-			<td>{{!= item.url }}{{!= item.content }}</td>
+			<td>{{!= item.url }}</td>
+			<td>{{!= item.content }}</td>
 			<td>{{!= $.escape(item.punish_type, 'punish_types') }}</td>
 			<td>{{!= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>
 			<td>{{!= $.formatDate(item.punish_time) }}</td>
