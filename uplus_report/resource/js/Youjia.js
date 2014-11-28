@@ -516,25 +516,32 @@ $.extend({
 
 			form.on('submit', function(){
 
-				var formData = $.getData( form ),
-					option = {
-						name: options.name || 'data-name',
-						value: options.value || 'data-value',
-						method: options.method || formData.method || form.attr('method'),
-						type: formData.submit,
-						instead: options.instead,
-						database: options.database,
-						url: options.url || formData.action || form.attr('action'),
-						callback: formData.callback ? $.formCall[ formData.callback ] : $.noop,
-						data: {}
-					};
+				try{
 
-				$.each( form.find('[' + option.name + ']'), function(i, item){
-					item = $(item);
-					if( !item.is(':hidden') ){
-						option.data[ item.attr( option.name ) ] = item.attr( option.value );
-					}
-				});
+					var formData = $.getData( form ),
+						option = {
+							name: options.name || 'data-name',
+							value: options.value || 'data-value',
+							method: options.method || formData.method || form.attr('method'),
+							type: formData.submit,
+							instead: options.instead,
+							database: options.database,
+							url: options.url || formData.action || form.attr('action'),
+							callback: formData.callback ? $.formCall[ formData.callback ] : $.noop,
+							data: {}
+						};
+
+					$.each( form.find('[' + option.name + ']'), function(i, item){
+						item = $(item);
+						if( !item.is(':hidden') ){
+							option.data[ item.attr( option.name ) ] = item.attr( option.value );
+						}
+					});
+
+				}
+				catch(e){
+					console.log(e);
+				}
 
 				if( option.instead ){
 					option.instead( option );
