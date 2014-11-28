@@ -973,7 +973,7 @@ $.extend({
 					mergeData.u_id = itData.uid;
 					mergeData.module_id = mergeData.profile.mid;
 
-					$.each(mergeData.msgs, function(i, item){
+					$.each(mergeData.msgs || {}, function(i, item){
 						if( item.msgid == itData.msgid ){
 							mergeData = $.mergeJSON( mergeData, item );
 						}
@@ -982,7 +982,7 @@ $.extend({
 					// 数据适配
 					mergeData = kitFunction.dataTolerance( mergeData );
 
-					delete mergeData.msgs;
+					// delete mergeData.msgs; // Bugs???
 
 					// 给后台区分
 					option.data.deal_type = itData.deal_type || 'msgs';
