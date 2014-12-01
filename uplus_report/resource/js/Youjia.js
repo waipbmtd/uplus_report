@@ -493,7 +493,10 @@ $.extend({
 				item.val( data ).attr('data-value', data);
 			}
 
-			item.on('keydown', function(){
+			item.on('keydown', function(e){
+				if( e.keyCode == 13 ){
+					return true;
+				}
 				return options.input;
 			});
 		});
