@@ -1,0 +1,34 @@
+<table class="table-theme">
+	{{!? it.data.total }}
+	<thead>
+		<tr>
+			<td colspan="6">
+				<div class="pagination">
+					<ul>
+						{{!
+							var page = $.pagination( it.data.current, it.data.total );
+						}}
+						{{! for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
+						{{! } }}
+					</ul>
+				</div>
+			</td>
+		</tr>
+	</thead>
+	{{!? }}
+	<thead>
+		<tr>
+			<th width="30%">用户</th>
+			<th width="70%">创建时间</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{!~ it.data:item }}
+		<tr>
+			<td>{{!= item.user_id }}</td>
+			<td>{{!= item.create_time }}</td>
+		</tr>
+		{{!~ }}
+	</tbody>
+</table>

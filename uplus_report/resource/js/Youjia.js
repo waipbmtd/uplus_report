@@ -152,6 +152,7 @@ _.tpl = {
 	operat: _.path.template('loaded/operat'),
 	users: _.path.template('loaded/users'),
 	users_punish: _.path.template('loaded/users_punish'),
+	users_special: _.path.template('loaded/users_special'),
 	users_sheet: _.path.template('loaded/users_sheet'),
 	select_panel: _.path.template('loaded/select_panel'),
 	user_detail: _.path.template('loaded/user_detail')

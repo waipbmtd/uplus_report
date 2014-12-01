@@ -1234,6 +1234,24 @@ $.extend({
 				});
 			});
 		},
+		getUsersSpecial: function(result, form){
+			$.checkResult(result, function( result ){
+
+				_.cache.users.risk = result.data;
+
+				$.renderHTML({
+					element: form.closest('.report_user').find('.report_search_result'),
+					data: $.mergeJSON(result, { type: form.attr('data-type') }),
+					html: _.tpl.users_special,
+					type: 'get',
+					dataType: 'json',
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).html( options.render );
+					}
+				});
+			});
+		},
 		getUsersPunish: function(result, form){
 			$.checkResult(result, function( result ){
 
