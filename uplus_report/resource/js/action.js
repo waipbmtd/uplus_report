@@ -1111,7 +1111,7 @@ $.extend({
 						input: '.audit-user form [data-name=user_id]',
 						onKeydown: function(e){
 							var code = e.keyCode;
-							if( (code == 8) || (code > 47 && code < 58) ){
+							if( (code == 8) || (code > 47 && code < 58) || e.ctrlKey || e.metaKey  ){
 								return true;
 							}
 							return false;
@@ -1147,7 +1147,7 @@ $.extend({
 						input: '.audit-user form [data-name=user_id]',
 						onKeydown: function(e){
 							var code = e.keyCode;
-							if( (code == 8) || (code > 47 && code < 58) ){
+							if( (code == 8) || (code > 47 && code < 58) || e.ctrlKey || e.metaKey  ){
 								return true;
 							}
 							return false;
@@ -1575,7 +1575,8 @@ $.extend({
 			input: '[data-input="same"]',
 			onKeydown: function(e){
 				var code = e.keyCode;
-				if( (code == 8) || (code > 47 && code < 58) ){
+				console.log(e);
+				if( (code == 8) || (code > 47 && code < 58) || e.ctrlKey || e.metaKey ){
 					return true;
 				}
 				return false;
