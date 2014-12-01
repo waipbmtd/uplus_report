@@ -174,7 +174,7 @@ var
 					_.cache.albums = options.database.data || {};
 
 					// Append Html To Element
-					$(options.element).html( options.render );
+					$(options.element).empty().html( options.render );
 
 					// Masonry Water Fall
 					iMasonry.imagesLoaded(function(){
@@ -451,7 +451,7 @@ var
 					_.cache.message = options.database;
 
 					// Append Html To Element
-					$(options.element).html( options.render );
+					$(options.element).empty().html( options.render );
 				}
 			});
 		},
@@ -743,7 +743,7 @@ var
 					it.addClass('active').siblings().removeClass('active');
 
 					// Append Html To Element
-					$(options.element).html( options.render );
+					$(options.element).empty().html( options.render );
 				}
 			});
 		},
@@ -1229,7 +1229,7 @@ $.extend({
 					dataType: 'json',
 					callback: function(options){
 						// Append Html To Element
-						$(options.element).html( options.render );
+						$(options.element).empty().html( options.render );
 					}
 				});
 			});
@@ -1247,7 +1247,7 @@ $.extend({
 					dataType: 'json',
 					callback: function(options){
 						// Append Html To Element
-						$(options.element).html( options.render );
+						$(options.element).empty().html( options.render );
 					}
 				});
 			});
@@ -1263,7 +1263,7 @@ $.extend({
 					dataType: 'json',
 					callback: function(options){
 						// Append Html To Element
-						$(options.element).html( options.render );
+						$(options.element).empty().html( options.render );
 					}
 				});
 			});
@@ -1279,7 +1279,7 @@ $.extend({
 					dataType: 'json',
 					callback: function(options){
 						// Append Html To Element
-						$(options.element).html( options.render );
+						$(options.element).empty().html( options.render );
 					}
 				});
 			});
