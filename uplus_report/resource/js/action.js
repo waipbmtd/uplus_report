@@ -1575,7 +1575,7 @@ $.extend({
 			input: '[data-input="same"]',
 			onKeydown: function(e){
 				var code = e.keyCode;
-				console.log(e);
+				
 				if( (code == 8) || (code > 47 && code < 58) || e.ctrlKey || e.metaKey ){
 					return true;
 				}
