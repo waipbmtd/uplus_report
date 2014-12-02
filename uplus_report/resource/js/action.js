@@ -786,13 +786,9 @@ $.extend({
 				form = $('.audit-operat form'),
 				associates = 'data-associate',
 				assos = 'data-assos',
+				timer = '.input-time-hour',
 				cancel = form.find('.form-submit button:eq(0)'),
 				itData = $.getData( it );
-
-			// 如果是profile点击进入, 则不允许删除资源
-			if( itData.deal_type == 'profile' ){
-				form.find('[' + assos + ']:eq(3)').attr(assos, '');
-			}
 
 			// 关联点击事件
 			form.find('[' + associates + ']').on( _.evt.click, function(e){
@@ -806,7 +802,10 @@ $.extend({
 						item.show();
 					}
 				});
-				form.find('[' + assos + ']:not(:hidden):eq(0)').trigger( _.evt.click );
+
+				var assosItems = form.find('[' + assos + ']:not(:hidden)');
+
+				assosItems.length ? assosItems.eq(0).trigger( _.evt.click ) : form.find( timer ).hide();
 			});
 
 			// Input Press
@@ -1058,7 +1057,7 @@ $.extend({
 		operatSelect_dating: function( it ){
 
 			// 隐藏不可用项
-			$('.audit-operat form li:eq(1)').find('button:eq(1), button:eq(2), button:eq(3)').hide();
+			$('.audit-operat form li:eq(1)').find('button:eq(1), button:eq(2)').hide();
 
 			// Items Operat
 			$.fancyCall.operatSelect_items( it );
