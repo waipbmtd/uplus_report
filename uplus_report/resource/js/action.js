@@ -786,7 +786,13 @@ $.extend({
 				form = $('.audit-operat form'),
 				associates = 'data-associate',
 				assos = 'data-assos',
-				cancel = form.find('.form-submit button:eq(0)');
+				cancel = form.find('.form-submit button:eq(0)'),
+				itData = $.getData( it );
+
+			// 如果是profile点击进入, 则不允许删除资源
+			if( itData.deal_type == 'profile' ){
+				form.find('[' + assos + ']:eq(3)').attr(assos, '');
+			}
 
 			// 关联点击事件
 			form.find('[' + associates + ']').on( _.evt.click, function(e){
@@ -865,7 +871,7 @@ $.extend({
 			$('.audit-operat form li:eq(1)').find('button:eq(0), button:eq(1), button:eq(2)').hide();
 
 			// Default UI
-			$.fancyCall.operatBase();
+			$.fancyCall.operatBase( it );
 
 			// Get Selected Item's Infomation From Cache
 			var database = kitFunction.getImageActive({
@@ -949,7 +955,7 @@ $.extend({
 		operatSelect_items: function( it ){
 
 			// Default UI
-			$.fancyCall.operatBase();
+			$.fancyCall.operatBase( it );
 			
 			var
 				// Get It(em) Data
