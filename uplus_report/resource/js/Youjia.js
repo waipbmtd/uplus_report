@@ -961,6 +961,10 @@ $.extend({
 			options.msgs = JSON.stringify( options.msgs );
 		}
 
+		// Profile Oid
+		options.profile = options.profile || {},
+		options.owner = options.profile.oid || '';
+
 		$.ajax({
 			type: 'post',
 			data: options,
