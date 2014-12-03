@@ -661,6 +661,7 @@ $.extend({
 			if( options.html ){
 				$.ajax({
 					type: 'get',
+					cache: true,
 					url: options.html,
 					success: function(html){
 						options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
