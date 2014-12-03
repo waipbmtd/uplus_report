@@ -27,7 +27,7 @@
 		{{!~ it.data:item }}
 		<tr>
 			<td>{{!= item.user_id }}</td>
-			<td>{{!= item.create_time }}</td>
+			<td>{{!= $.formatDate(item.create_time) }}</td>
 		</tr>
 		{{!~ }}
 	</tbody>

@@ -263,7 +263,6 @@ class PunishAdapterHandler(PunishBaseHandler):
         self.log_record_close()
         return data
 
-    # @gen.coroutine
     def _silence(self):
         # 禁言
         server_api = self.SILENCE_API % dict(mod_type=self.v("module_type"),
