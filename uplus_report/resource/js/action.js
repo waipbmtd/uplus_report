@@ -164,6 +164,12 @@ var
 
 		/* Get Data */
 		getImageData: function(it){
+
+			// 全局锁
+			if( _.globalLock ){
+				return;
+			}
+			
 			$.renderHTML({
 				element: masonry,
 				data: _.api.albums,
@@ -278,6 +284,11 @@ var
 				return;
 			}
 
+			// 全局锁
+			if( _.globalLock ){
+				return;
+			}
+
 			// $.confirm('确定通过这些图片吗？', function(){
 				
 				var database = kitFunction.getImageActive({
@@ -367,6 +378,11 @@ var
 				return;
 			}
 
+			// 全局锁
+			if( _.globalLock ){
+				return;
+			}
+
 			$.fancybox.open({
 				href: _.tpl.operat,
 				type: 'ajax',
@@ -394,6 +410,11 @@ var
 
 			if( !iMasonry.find('span.active').length ){
 				$.trace('至少选择一张图片');
+				return;
+			}
+
+			// 全局锁
+			if( _.globalLock ){
 				return;
 			}
 
@@ -458,6 +479,11 @@ var
 
 		/* Get Data */
 		getInfoData: function(it){
+
+			// 全局锁
+			if( _.globalLock ){
+				return;
+			}
 
 			// 如果空(首次拉取数据)
 			if( iReport.find('.unPage').length ){
@@ -1521,6 +1547,11 @@ $.extend({
 
 			// Only For Key Code
 			console.log(code);
+
+			// 如果全局锁
+			if( _.globalLock ){
+				return;
+			}
 
 			// 如果不在Masonry区
 			if( isOff || !items.length ){
