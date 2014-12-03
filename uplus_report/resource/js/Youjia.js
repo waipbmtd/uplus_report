@@ -52,6 +52,8 @@ _.console = _.console || { log: $.noop },
 
 _.report_type = $.trim(_.report_type).length ? Number(_.report_type) : 0,
 
+_.globalLock = false,
+
 /* !!
  * 路径
  * ** *** **** ***** **** *** ** *
@@ -984,9 +986,12 @@ $.extend({
 			type: 'post',
 			data: options,
 			url: api,
+			beforeSend: function(){
+				_.globalLock = true;
+			},
 			success: function(result){
 				$.checkResult(result, function( result ){
-					options.callback( result ), callback();
+					_.globalLock = false, options.callback( result ), callback();
 				});
 			}
 		});
