@@ -679,7 +679,7 @@ var
 					});
 
 					$.confirm(text, function(){
-						doDelete( it );
+						return doDelete( it );
 					});
 
 				});
@@ -688,7 +688,7 @@ var
 			}
 
 			$.confirm(text, function(){
-				doDelete( it );
+				return doDelete( it );
 			});
 		},
 
@@ -1248,6 +1248,24 @@ $.extend({
 					element: form.closest('.report_user').find('.report_search_result'),
 					data: $.mergeJSON(result, { type: form.attr('data-type') }),
 					html: _.tpl.users_special,
+					type: 'get',
+					dataType: 'json',
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).empty().html( options.render );
+					}
+				});
+			});
+		},
+		getUsersRisk: function(result, form){
+			$.checkResult(result, function( result ){
+
+				_.cache.users.risk = result.data;
+
+				$.renderHTML({
+					element: form.closest('.report_user').find('.report_search_result'),
+					data: $.mergeJSON(result, { type: form.attr('data-type') }),
+					html: _.tpl.users_risk,
 					type: 'get',
 					dataType: 'json',
 					callback: function(options){
