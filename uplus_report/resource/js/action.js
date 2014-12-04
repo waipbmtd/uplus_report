@@ -122,14 +122,14 @@ var
 		/* Flower Egg */
 		flowerEgg: function(){
 			
-			var sents =('两岸猿声啼不住，一支红杏出墙来 '
-					  + '床前明月光，地上鞋两双；举头望明月，衣服脱光光 '
-					  + '轻舟已过万重山，一支红杏出墙来 '
-					  + '鹅鹅鹅，去想向天歌，白毛浮绿水，红杏出墙来 '
-					  + '春眠不觉晓，处处闻啼鸟，夜来风雨声，红杏出墙来 '
-					  + '好雨知时节，当春乃发生，随风潜入夜，红杏出墙来 '
-					  + '千里莺啼绿映红，一支红杏出墙来 '
-					  + '爆竹声中一岁除，一支红杏出墙来').split(' '),
+			var sents =('两岸猿声啼不住，一支红杏出墙来。 '
+					  + '床前明月光，地上鞋两双；举头望明月，衣服脱光光。 '
+					  + '轻舟已过万重山，一支红杏出墙来。 '
+					  + '鹅鹅鹅，曲项向天歌，白毛浮绿水，红杏出墙来。 '
+					  + '春眠不觉晓，处处闻啼鸟，夜来风雨声，红杏出墙来。 '
+					  + '好雨知时节，当春乃发生，随风潜入夜，红杏出墙来。 '
+					  + '千里莺啼绿映红，一支红杏出墙来。 '
+					  + '爆竹声中一岁除，一支红杏出墙来。').split(' '),
 				
 				// One Sent
 				sent = sents[ Math.floor( Math.random() * sents.length ) ].split(''),
@@ -139,7 +139,7 @@ var
 					if( !arr.length ){
 
 						$.timeout({
-							time: 1680,
+							time: 2400,
 							callback: function( options ){
 								flower.remove();
 							}
@@ -151,7 +151,7 @@ var
 
 					if( arr.length ){
 
-						$('<bdo>' + arr.shift() + '</bdo>').appendTo( flower ).animate({ top: '50%' }, 'fast', function(){
+						$('<bdo>' + arr.shift() + '</bdo>').css('opacity', 0).appendTo( flower ).animate({ opacity: 1 }, 'fast', function(){
 
 							effect( arr );
 
