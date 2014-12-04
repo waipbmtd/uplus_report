@@ -812,6 +812,9 @@ $.extend({
 			speedOut: 100,
 			afterShow: function(){
 
+				// 全局锁
+				_.globalLock = true;
+
 				$.each( $('.confirm'), function(i, dialog){
 					dialog = $(dialog),
 					dialog.find('button:eq(0)').on(_.evt.click, function(){
@@ -820,6 +823,8 @@ $.extend({
 					dialog.find('button:eq(1)').on(_.evt.click, function(){
 						if( callback() ){
 							$.fancybox.close();
+							// 全局锁
+							_.globalLock = false;
 						}
 					})
 				});
