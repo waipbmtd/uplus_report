@@ -14,7 +14,9 @@ _.cache = {
 		risk: [],
 		special: [],
 		system: []
-	}
+	},
+	// 本地数据
+	egg: Number( _.localStorage.getItem('egg') ) || (_.localStorage.setItem('egg', 100), 100)
 }
 
 /* !!
@@ -91,6 +93,90 @@ var
 
 	/* Data-Function In Kit */
 	kitFunction = {
+
+		/* Object Egg */
+		objectEgg: $('.egg bdo'),
+
+		/* Random Egg */
+		randomEgg: function(){
+			return Math.ceil( Math.random() * Math.PI * 100 );
+		},
+
+		/* Same Egg */
+		sameEgg: function( num ){
+			num = num || kitFunction.randomEgg();
+			_.cache.egg = num, _.localStorage.setItem('egg', num);
+
+			return num;
+		},
+
+		/* Dim Egonceg */
+		dimEgg: function( num ){
+
+			num = (num == 1) ? ( kitFunction.flowerEgg(), kitFunction.sameEgg() ) : kitFunction.sameEgg( --num );
+			kitFunction.objectEgg.text( num );
+
+			return num;
+		},
+
+		/* Flower Egg */
+		flowerEgg: function(){
+			
+			var sents =('两岸猿声啼不住，一支红杏出墙来 '
+					  + '床前明月光，地上鞋两双；举头望明月，衣服脱光光 '
+					  + '轻舟已过万重山，一支红杏出墙来 '
+					  + '鹅鹅鹅，去想向天歌，白毛浮绿水，红杏出墙来 '
+					  + '春眠不觉晓，处处闻啼鸟，夜来风雨声，红杏出墙来 '
+					  + '好雨知时节，当春乃发生，随风潜入夜，红杏出墙来 '
+					  + '千里莺啼绿映红，一支红杏出墙来 '
+					  + '爆竹声中一岁除，一支红杏出墙来').split(' '),
+				
+				// One Sent
+				sent = sents[ Math.floor( Math.random() * sents.length ) ].split(''),
+				flower = $('<div class="flower"></div>').appendTo( _.dom.bod ),
+				effect = function( arr ){
+
+					if( !arr.length ){
+
+						$.timeout({
+							time: 1680,
+							callback: function( options ){
+								flower.remove();
+							}
+						});
+
+						return false;
+
+					}
+
+					if( arr.length ){
+
+						$('<bdo>' + arr.shift() + '</bdo>').appendTo( flower ).animate({ top: '50%' }, 'fast', function(){
+
+							effect( arr );
+
+						})
+
+					}
+
+				};
+
+				effect( sent );
+
+		},
+
+		/* Init Egg */
+		initEgg: function( obj ){
+
+			var
+				eggObject = $( obj + ' bdo' ),
+				
+				eggNum = _.cache.egg || kitFunction.randomEgg();
+
+			eggObject.text( eggNum );
+
+		},
+
 
 		/* 是否存在Mask */
 		hasMask: function(){
@@ -308,6 +394,9 @@ var
 					// Loading UI
 					mask.close();
 
+					// Egg
+					kitFunction.dimEgg( _.cache.egg );
+
 					$.trace('处理完成', function(){
 						iMasonry.find('span.active').fadeOut(function(){
 							$(this).remove();
@@ -438,6 +527,9 @@ var
 
 					// Loading UI
 					mask.close();
+
+					// Egg
+					kitFunction.dimEgg( _.cache.egg );
 
 					$.trace('处理完成', function(){
 						iMasonry.find('span.active').fadeOut(function(){
@@ -921,6 +1013,9 @@ $.extend({
 						// Loading UI
 						mask.close();
 
+						// Egg
+						kitFunction.dimEgg( _.cache.egg );
+
 						$.trace('处理完成', function(){
 							iMasonry.find('span.active').fadeOut(function(){
 								$(this).remove();
@@ -1043,6 +1138,9 @@ $.extend({
 
 						// Loading UI
 						mask.close();
+
+						// Egg
+						kitFunction.dimEgg( _.cache.egg );
 
 						$.trace('处理完成', function(){
 							(function(tr){
@@ -1426,7 +1524,8 @@ $.extend({
 						calculateTime( database.data );
 
 						$.each( database.data, function(i, data){
-							elements.eq(i).html( data.album_remain + data.msg_remain );
+							var num = data.album_remain + data.msg_remain;
+							elements.eq(i).html( num > 999 ? '999+' : num );
 						});
 					};
 
@@ -1686,6 +1785,9 @@ $.extend({
 				kitFunction[fn]( it );
 			}
 		});
+
+		/* Color Egg */
+		kitFunction.initEgg('.egg');
 
 	}()
 });
