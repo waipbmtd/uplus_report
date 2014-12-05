@@ -1,23 +1,23 @@
 <table class="table-theme">
-	{{!? it.data.total }}
+	{{? it.data.total }}
 	<thead>
 		<tr>
 			<td colspan="6">
 				<div class="pagination">
 					<ul>
-						{{!
+						{{
 							var page = $.pagination( it.data.current, it.data.total );
 						}}
-						{{! for( var i=page.start; i<=page.end; i++ ){ }}
-							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.u_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-						{{! } }}
+						{{ for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{? i == it.data.current }} class="active" {{? }} data-function="searchUserDetail" data-id="{{= it.data.u_id }}" data-current="{{= i }}"><a>{{= i }}</a></li>
+						{{ } }}
 					</ul>
 					<!--<input type="text" maxlength="4" />-->
 				</div>
 			</td>
 		</tr>
 	</tdead>
-	{{!? }}
+	{{? }}
 	<thead>
 		<tr>
             <th width="20%">客服</th>
@@ -27,13 +27,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data:item }}
+		{{~ it.data:item }}
 		<tr>
-			<td>{{!= item.cs_username }}({{!= item.csid }})</td>
-			<td>{{!= item.check_num }}</td>
-			<td>{{!= item.pass_num }}</td>
-			<td>{{!= item.skip_num }}</td>
+			<td>{{= item.cs_username }}({{= item.csid }})</td>
+			<td>{{= item.check_num }}</td>
+			<td>{{= item.pass_num }}</td>
+			<td>{{= item.skip_num }}</td>
 		</tr>
-		{{!~ }}
+		{{~ }}
 	</tbody>
 </table>

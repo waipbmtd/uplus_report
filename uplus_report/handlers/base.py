@@ -183,11 +183,9 @@ class DefaultHandler(BaseHandler):
 
 
 class GetTemplateHandler(BaseHandler):
-    @tornado.web.authenticated
     def get(self):
         page = self.get_argument("page")
-        page_str = self.render_string(page)
-        self.finish(page_str)
+        self.render_raw_html(page)
 
 
 class GetRawTemplateHandler(BaseHandler):

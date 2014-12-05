@@ -1,12 +1,12 @@
 <ul class="album">
-	{{!~ it.data:item }}
+	{{~ it.data:item }}
 		<li>
-			<span data-id="{{!=item.id }}">
+			<span data-id="{{=item.id }}">
 				<p>
-					<a target="_blank" href="http://122.144.133.40:8200/user/{{!=item.u_id }}/detail">查看详细</a>
+					<a target="_blank" href="http://122.144.133.40:8200/user/{{=item.u_id }}/detail">查看详细</a>
 				</p>
-				<img src="{{!=item.url }}">
+				<img src="{{=item.url }}">
 			</span>
 		</li>
-	{{!~ }}
+	{{~ }}
 </ul>

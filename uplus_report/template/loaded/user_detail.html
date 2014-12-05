@@ -1,22 +1,22 @@
 <table class="table-theme">
-	{{!? it.data.total }}
+	{{? it.data.total }}
 	<thead>
 		<tr>
 			<td colspan="6">
 				<div class="pagination">
 					<ul>
-						{{!
+						{{
 							var page = $.pagination( it.data.current, it.data.total );
 						}}
-						{{! for( var i=page.start; i<=page.end; i++ ){ }}
-							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-						{{! } }}
+						{{ for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{? i == it.data.current }} class="active" {{? }} data-function="searchUserDetail" data-id="{{= it.data.csid }}" data-current="{{= i }}"><a>{{= i }}</a></li>
+						{{ } }}
 					</ul>
 				</div>
 			</td>
 		</tr>
 	</thead>
-	{{!? }}
+	{{? }}
 	<thead>
 		<tr>
 			<th width="8%">索引</th>
@@ -28,15 +28,15 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data.data:item }}
+		{{~ it.data.data:item }}
 		<tr>
-			<td>{{!= item.id }}</td>
-			<td>{{!= item.username}}</td>
-			<td>{{!= item.content }}</td>
-			<td>{{!= item.memo }}</td>
-			<td>{{!= item.create_time }}</td>
-			<td>{{!= item.ip }}</td>
+			<td>{{= item.id }}</td>
+			<td>{{= item.username}}</td>
+			<td>{{= item.content }}</td>
+			<td>{{= item.memo }}</td>
+			<td>{{= item.create_time }}</td>
+			<td>{{= item.ip }}</td>
 		</tr>
-		{{!~ }}
+		{{~ }}
 	</tbody>
 </table>

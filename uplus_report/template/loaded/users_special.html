@@ -1,22 +1,22 @@
 <table class="table-theme">
-	{{!? it.data.total }}
+	{{? it.data.total }}
 	<thead>
 		<tr>
 			<td colspan="6">
 				<div class="pagination">
 					<ul>
-						{{!
+						{{
 							var page = $.pagination( it.data.current, it.data.total );
 						}}
-						{{! for( var i=page.start; i<=page.end; i++ ){ }}
-							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-						{{! } }}
+						{{ for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{? i == it.data.current }} class="active" {{? }} data-function="searchUserDetail" data-id="{{= it.data.csid }}" data-current="{{= i }}"><a>{{= i }}</a></li>
+						{{ } }}
 					</ul>
 				</div>
 			</td>
 		</tr>
 	</thead>
-	{{!? }}
+	{{? }}
 	<thead>
 		<tr>
 			<th width="30%">用户</th>
@@ -25,16 +25,16 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data:item }}
+		{{~ it.data:item }}
 		<tr>
-			<td>{{!= item.user_id }}</td>
-			<td>{{!= $.formatDate(item.create_time) }}</td>
+			<td>{{= item.user_id }}</td>
+			<td>{{= $.formatDate(item.create_time) }}</td>
 			<td>
 				<menu>
-					<button class="yellow" type="button" data-function="deleteUser" data-type="special" data-user_id="{{!= item.user_id }}">删除</button>
+					<button class="yellow" type="button" data-function="deleteUser" data-type="special" data-user_id="{{= item.user_id }}">删除</button>
 				</menu>
 			</td>
 		</tr>
-		{{!~ }}
+		{{~ }}
 	</tbody>
 </table>

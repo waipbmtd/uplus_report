@@ -1,4 +1,4 @@
-{{!
+{{
 var operatModel = 0;
 switch( it.data.mod ){
 	case 11:
@@ -42,21 +42,21 @@ switch( it.data.mod ){
 
 <dl>
 	<dt>
-		<bdo>来源：{{!= $.escape(it.data.mod, 'mod') }}</bdo>
-		<label data-id="{{!= it.data.id }}"><span>ID：</span>{{!= it.data.id }}</label>
-		<label data-reporter="{{!= it.data.reporter }}"><span>举报人：</span>{{!= it.data.reporter }}</label>
-		<label data-type="reason"><span>原因：</span>{{!= $.escape(it.data.type, 'type') }}</label>
-		<label><i>剩余：{{!= it.remain.msg_remain }}</i></label>
+		<bdo>来源：{{= $.escape(it.data.mod, 'mod') }}</bdo>
+		<label data-id="{{= it.data.id }}"><span>ID：</span>{{= it.data.id }}</label>
+		<label data-reporter="{{= it.data.reporter }}"><span>举报人：</span>{{= it.data.reporter }}</label>
+		<label data-type="reason"><span>原因：</span>{{= $.escape(it.data.type, 'type') }}</label>
+		<label><i>剩余：{{= it.remain.msg_remain }}</i></label>
 	</dt>
 	<dd>
-		<div class="profile" data-mid="{{!= it.data.profile.mid }}" data-oid="{{!= it.data.profile.oid }}">
+		<div class="profile" data-mid="{{= it.data.profile.mid }}" data-oid="{{= it.data.profile.oid }}">
 			<h1>Profile</h1>
-			<h2>{{!= it.data.profile.name }}</h2>
-			<p>{{!= it.data.profile.desc }}</p>
+			<h2>{{= it.data.profile.name }}</h2>
+			<p>{{= it.data.profile.desc }}</p>
 			<menu>
-				{{!? it.data.profile }}
-				<button class="yellow" type="button" data-uid="{{!= it.data.profile.oid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-deal_type="profile" data-callback="operatSelect_{{!= operatModel }}">操作</button>
-				{{!?}}
+				{{? it.data.profile }}
+				<button class="yellow" type="button" data-uid="{{= it.data.profile.oid }}" data-fancy="/get_template?page=loaded/operat.html" data-title="举报处理" data-deal_type="profile" data-callback="operatSelect_{{= operatModel }}">操作</button>
+				{{?}}
 			</menu>
 		</div>
 		<div class="divider"></div>
@@ -72,67 +72,67 @@ switch( it.data.mod ){
 					</tr>
 				</thead>
 				<tbody>
-					{{!~ it.data.msgs:item }}
+					{{~ it.data.msgs:item }}
 					<tr>
-						<td>{{!= item.msgid }}</td>
+						<td>{{= item.msgid }}</td>
 
-						{{! switch( item.msg_type ){ }}
+						{{ switch( item.msg_type ){ }}
 
-							{{! case 1: }}
+							{{ case 1: }}
 
 								<!-- 消息.文本 -->
 								<td>
 									<i class="glyphicon glyphicon-list-alt"></i>
-									{{!= item.content }}
+									{{= item.content }}
 								</td>
 
-							{{! break; }}
+							{{ break; }}
 
-							{{! case 2: }}
+							{{ case 2: }}
 
 								<!-- 消息.图片 -->
 								<td>
-									<a target="_blank" href="{{!= item.url }}"><img src="{{!= item.url}}"></a>
+									<a target="_blank" href="{{= item.url }}"><img src="{{= item.url}}"></a>
 								</td>
 
-							{{! break; }}
+							{{ break; }}
 
-							{{! case 3: }}
+							{{ case 3: }}
 
 								<!-- 消息.音频 -->
 								<td>
-									<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
+									<a target="_blank" href="{{= item.url }}"><i class="glyphicon glyphicon-music"></i>点击访问音频</a>
 								</td>
 
-							{{! break; }}
+							{{ break; }}
 
-							{{! case 8: }}
+							{{ case 8: }}
 
 								<!-- 消息.视频 -->
 								<td>
-									<a target="_blank" href="{{!= item.url }}"><i class="glyphicon glyphicon-hd-video"></i>点击访问视频</a>
+									<a target="_blank" href="{{= item.url }}"><i class="glyphicon glyphicon-hd-video"></i>点击访问视频</a>
 								</td>
 
-							{{! break; }}
+							{{ break; }}
 
-							{{! default: }}
+							{{ default: }}
 
 								<!-- 消息.无消息 -->
 								<td></td>
 
-							{{! break; }}
+							{{ break; }}
 
-						{{! } }}
+						{{ } }}
 
-						<td>{{!= item.senderid }}</td>
-						<td>{{!= $.escape(item.msg_type, 'msg_types') || '' }}</td>
+						<td>{{= item.senderid }}</td>
+						<td>{{= $.escape(item.msg_type, 'msg_types') || '' }}</td>
 						<td>
 							<menu>
-								<button class="yellow" type="button" data-uid="{{!= item.senderid }}" data-msgid="{{!= item.msgid }}" data-fancy="/get_template?page=loaded/operat_items.html" data-title="举报处理" data-deal_type="msgs" data-callback="operatSelect_{{!= operatModel }}">操作</button>
+								<button class="yellow" type="button" data-uid="{{= item.senderid }}" data-msgid="{{= item.msgid }}" data-fancy="/get_template?page=loaded/operat_items.html" data-title="举报处理" data-deal_type="msgs" data-callback="operatSelect_{{= operatModel }}">操作</button>
 							</menu>
 						</td>
 					</tr>
-					{{!~ }}
+					{{~ }}
 				</tbody>
 			</table>
 		</div>

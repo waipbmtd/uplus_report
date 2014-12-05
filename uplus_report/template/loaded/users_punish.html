@@ -1,23 +1,23 @@
 <table class="table-theme">
-	{{!? it.data.total }}
+	{{? it.data.total }}
 	<thead>
 		<tr>
 			<td colspan="6">
 				<div class="pagination">
 					<ul>
-						{{!
+						{{
 							var page = $.pagination( it.data.current, it.data.total );
 						}}
-						{{! for( var i=page.start; i<=page.end; i++ ){ }}
-							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.u_id }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-						{{! } }}
+						{{ for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{? i == it.data.current }} class="active" {{? }} data-function="searchUserDetail" data-id="{{= it.data.u_id }}" data-current="{{= i }}"><a>{{= i }}</a></li>
+						{{ } }}
 					</ul>
 					<!--<input type="text" maxlength="4" />-->
 				</div>
 			</td>
 		</tr>
 	</tdead>
-	{{!? }}
+	{{? }}
 	<thead>
 		<tr>
 			<th width="8%">用户</th>
@@ -35,25 +35,25 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data.data:item }}
+		{{~ it.data.data:item }}
 		<tr>
-			<td>{{!= item.user_id }}</td>
-			<td>{{!= item.url }}</td>
-			<td>{{!= item.content }}</td>
-			<td>{{!= $.escape(item.punish_type, 'punish_types') }}</td>
-			<td>{{!= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>
-			<td>{{!= $.formatDate(item.punish_time) }}</td>
-			<td>{{!= $.escape(item.reason, 'type') }}</td>
-			<td>{{!= item.csid }}</td>
-			<td>{{!= item.rid }}</td>
-			<td>{{!= $.escape(item.mod, 'mod') }} ({{!= item.mid }})</td>
-			<td>{{!= item.memo }}</td>
+			<td>{{= item.user_id }}</td>
+			<td>{{= item.url }}</td>
+			<td>{{= item.content }}</td>
+			<td>{{= $.escape(item.punish_type, 'punish_types') }}</td>
+			<td>{{= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>
+			<td>{{= $.formatDate(item.punish_time) }}</td>
+			<td>{{= $.escape(item.reason, 'type') }}</td>
+			<td>{{= item.csid }}</td>
+			<td>{{= item.rid }}</td>
+			<td>{{= $.escape(item.mod, 'mod') }} ({{= item.mid }})</td>
+			<td>{{= item.memo }}</td>
 			<td>
 				<menu>
-					<button class="yellow" type="button" data-function="showProfile" data-type="risk" data-rid="{{!= item.rid }}">Profile</button>
+					<button class="yellow" type="button" data-function="showProfile" data-type="risk" data-rid="{{= item.rid }}">Profile</button>
 				</menu>
 			</td>
 		</tr>
-		{{!~ }}
+		{{~ }}
 	</tbody>
 </table>

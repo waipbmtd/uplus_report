@@ -1,22 +1,22 @@
 <table class="table-theme">
-	{{!? it.data.total }}
+	{{? it.data.total }}
 	<thead>
 		<tr>
 			<td colspan="6">
 				<div class="pagination">
 					<ul>
-						{{!
+						{{
 							var page = $.pagination( it.data.current, it.data.total );
 						}}
-						{{! for( var i=page.start; i<=page.end; i++ ){ }}
-							<li {{!? i == it.data.current }} class="active" {{!? }} data-function="searchUserDetail" data-id="{{!= it.data.csid }}" data-current="{{!= i }}"><a>{{!= i }}</a></li>
-						{{! } }}
+						{{ for( var i=page.start; i<=page.end; i++ ){ }}
+							<li {{? i == it.data.current }} class="active" {{? }} data-function="searchUserDetail" data-id="{{= it.data.csid }}" data-current="{{= i }}"><a>{{= i }}</a></li>
+						{{ } }}
 					</ul>
 				</div>
 			</td>
 		</tr>
 	</thead>
-	{{!? }}
+	{{? }}
 	<thead>
 		<tr>
 			<th width="10%">用户名</th>
@@ -29,27 +29,27 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{!~ it.data:item }}
+		{{~ it.data:item }}
 		<tr>
-			<td>{{!= item.username }}({{!= item.id}})</td>
-			<td>{{!? item.role==='admin' }} 管理员 {{!?}}
-                {{!? item.role==='editor' }} 编辑 {{!?}}
+			<td>{{= item.username }}({{= item.id}})</td>
+			<td>{{? item.role==='admin' }} 管理员 {{?}}
+                {{? item.role==='editor' }} 编辑 {{?}}
             </td>
 			<td>
-                {{!? item.state }} 激活
-                {{!?? }} 未激活 {{!? }}
+                {{? item.state }} 激活
+                {{?? }} 未激活 {{? }}
             </td>
-			<td>{{!= item.real_name }}</td>
-			<td>{{!= item.update_time }}</td>
-			<td>{{!= item.create_time }}</td>
+			<td>{{= item.real_name }}</td>
+			<td>{{= item.update_time }}</td>
+			<td>{{= item.create_time }}</td>
 
 			<!--<td>-->
 				<!--<menu>-->
                     <!--操作-->
-					<!--&lt;!&ndash;<button class="yellow" type="button" data-function="deleteUser" data-type="risk" data-user_id="{{!= item.user_id }}">删除</button>&ndash;&gt;-->
+					<!--&lt;!&ndash;<button class="yellow" type="button" data-function="deleteUser" data-type="risk" data-user_id="{{= item.user_id }}">删除</button>&ndash;&gt;-->
 				<!--</menu>-->
 			<!--</td>-->
 		</tr>
-		{{!~ }}
+		{{~ }}
 	</tbody>
 </table>
