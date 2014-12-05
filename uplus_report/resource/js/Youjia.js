@@ -786,7 +786,15 @@ $.extend({
 			speedIn: 100,
 			speedOut: 100,
 			closeBtn: false,
-			scrolling: 'no'
+			scrolling: 'no',
+			beforeShow: function(){
+				// 全局锁
+				_.globalLock = true;
+			},
+			afterClose: function(){
+				// 全局锁
+				_.globalLock = false;
+			}
 		}),
 		$.timeout({
 			time: time,
@@ -812,9 +820,6 @@ $.extend({
 			speedOut: 100,
 			afterShow: function(){
 
-				// 全局锁
-				_.globalLock = true;
-
 				$.each( $('.confirm'), function(i, dialog){
 					dialog = $(dialog),
 					dialog.find('button:eq(0)').on(_.evt.click, function(){
@@ -834,6 +839,10 @@ $.extend({
 					}
 				});
 
+			},
+			beforeShow: function(){
+				// 全局锁
+				_.globalLock = true;
 			},
 			afterClose: function(){
 				// 全局锁
@@ -865,6 +874,14 @@ $.extend({
 				speedOut: option.speedOut,
 				afterShow: function(){
 					$.fancyCall[ option.callback ]( it );
+				},
+				beforeShow: function(){
+					// 全局锁
+					_.globalLock = true;
+				},
+				afterClose: function(){
+					// 全局锁
+					_.globalLock = false;
 				},
 				helpers: {
 					title: {
