@@ -49,5 +49,7 @@ class OpenMouthHallHandler(BaseHandler):
                                                msgId=self.v("msg_id"),
                                                csid=self.current_user.id,
                                            ))
-        self.log_record_open_mouth()
         return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        self.log_record_open_mouth()

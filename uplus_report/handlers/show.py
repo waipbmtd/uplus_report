@@ -58,8 +58,10 @@ class OpenMouthShowHandler(ShowBaseHandler):
                                                csid=self.current_user.id,
                                                msgId=self.v("msg_id")
                                            ))
-        self.log_record_open_mouth()
         return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        self.log_record_open_mouth()
 
 
 class UnlockShowHandler(ShowBaseHandler):
@@ -88,7 +90,9 @@ class UnlockShowHandler(ShowBaseHandler):
                                                csid=self.current_user.id,
                                                msgId=self.v("msg_id")
                                            ))
-        self.log_record_unlock()
         return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        self.log_record_unlock()
 
 

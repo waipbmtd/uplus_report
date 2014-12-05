@@ -41,13 +41,19 @@ class AlbumImageReportListHandler(BaseHandler):
                                            parameters=dict(
                                                report_type=report_type,
                                                csid=self.current_user.id,
-                                               size=6))
+                                               size=15))
+
+        return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
         self.record_log(content=u"获取下一批图片 " +
                                 reportConstant.REPORT_TYPE_ENUMS.get(
                                     int(report_type)).decode('utf8'))
-        return self.send_success_json(json.loads(data))
 
     post = get
+
 
 
 class MessageReportNextHandler(BaseHandler):
@@ -67,9 +73,6 @@ class MessageReportNextHandler(BaseHandler):
                                            parameters=dict(
                                                report_type=report_type,
                                                csid=self.current_user.id))
-        self.record_log(content=u"获取下一条消息 " +
-                                reportConstant.REPORT_TYPE_ENUMS.get(
-                                    int(report_type)).decode('utf8'))
 
         j_data = json.loads(data)
         ret = int(j_data.get("ret"))
@@ -85,6 +88,13 @@ class MessageReportNextHandler(BaseHandler):
             j_data.update({"data": data})
 
         return self.send_success_json(j_data)
+
+    def on_finish(self):
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
+        self.record_log(content=u"获取下一条消息 " +
+                                reportConstant.REPORT_TYPE_ENUMS.get(
+                                    int(report_type)).decode('utf8'))
 
 
 class RemainReportCountHandler(BaseHandler):
@@ -163,10 +173,11 @@ class ReportBatchDealHandler(BaseHandler):
     BATH_REPORT = config.api.report_batch_deal
 
     @util.exception_handler
-    @tornado.web.authenticated
     def post(self):
         return self.send_success_json()
 
+    @util.exception_handler
+    @tornado.web.authenticated
     def on_finish(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
@@ -258,8 +269,20 @@ class ReportSheetHandler(BaseHandler):
                                                start_date=start_date,
                                                end_date=end_date,
                                            ))
-        self.record_log(u"获取客服(%s)的报表(从%s至%s)" % (csid, start_date, end_date))
+
         return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        csid = self.get_argument("csid", "")
+        if not self.is_admin():
+            csid = self.current_user.id
+
+        n_time = datetime.datetime.now()
+        start_date = self.get_argument("start_date",
+                                       n_time.strftime('%Y-%m-%d'))
+        end_date = self.get_argument("end_date", (
+            n_time + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))
+        self.record_log(u"获取客服(%s)的报表(从%s至%s)" % (csid, start_date, end_date))
 
 
 class ReportProfileHandler(BaseHandler):
@@ -280,5 +303,9 @@ class ReportProfileHandler(BaseHandler):
                              name=j_i_data.get("name", ""),
                              mid=j_i_data.get("mid", ""),
                              oid=j_i_data.get("oid", "")))
-        self.record_log(u"获取举报(%s)的profile" % rid)
+        self.log_message = u"获取举报(%s)的profile" % rid
         return self.send_success_json(json.loads(data))
+
+    def on_finish(self):
+        if self.log_message:
+            self.record_log(self.log_message)

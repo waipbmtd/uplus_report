@@ -50,7 +50,7 @@ class PunishBaseHandler(BaseHandler):
             url=self.get_argument("url", ""),
             # 资源缩略图
             thumb_url=self.get_argument("thumb_url", ""),
-            #消息ID
+            # 消息ID
             msg_id=self.get_argument("msg_id", ""),
             #文字：
             content=self.get_argument("content", ""),
@@ -180,7 +180,6 @@ class PunishAdapterHandler(PunishBaseHandler):
     KICK_OUT = config.api.report_kick_out
 
     @util.exception_handler
-    @tornado.web.authenticated
     def post(self):
         """
         惩罚统一入口
@@ -188,6 +187,7 @@ class PunishAdapterHandler(PunishBaseHandler):
         """
         return self.send_success_json()
 
+    @tornado.web.authenticated
     def on_finish(self):
         self.parse_argument()
         module_type = int(self.v("module_type"))

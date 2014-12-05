@@ -64,9 +64,9 @@ def main():
     init_db()
 
 
-    define("dev", default=True, help="Is development env?", type=bool)
+    define("dev", default=False, help="Is development env?", type=bool)
     define("port", default=8205, help="run on the given port", type=int)
-    define("debug", default=True, help="is debug model?", type=bool)
+    define("debug", default=False, help="is debug model?", type=bool)
 
     tornado.options.parse_command_line()
 

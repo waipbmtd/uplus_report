@@ -87,13 +87,15 @@ class UserHandler(BaseHandler):
         user = AdminUser(username=username, password=password, role=role,
                          real_name=real_name, state=state,
                          create_time=datetime.datetime.now())
-        self.record_log(u"创建用户 " + username.encode("utf8"))
+        self.log_message = u"创建用户 " + username.encode("utf8")
         self.session.add(user)
         return self.send_success_json()
+
 
     @util.exception_handler
     @tornado.web.authenticated
     @session_manage
+    @util.add_body_arguments
     def delete(self):
         # 删除某个用户
         userid = int(self.get_argument("userid", -1))
@@ -102,10 +104,34 @@ class UserHandler(BaseHandler):
 
         user = self.session.query(AdminUser).get(userid)
         if user:
-            self.record_log(u"删除用户 " + user.username.encode("utf8"))
+            self.log_message = u"删除用户 " + user.username.encode("utf8")
             self.session.delete(user)
             return self.send_success_json(info="删除成功")
         self.send_error_json(info="删除失败")
+
+    # @util.exception_handler
+    # @tornado.web.authenticated
+    # @session_manage
+    # def put(self):
+    # #更新某个用户
+    #     userid = int(self.get_argument("userid", self.current_user.id))
+    #     org_user = self.session.query(AdminUser).get(userid)
+    #     org_username = org_user.username
+    #     org_password = org_user.password
+    #
+    #     username = self.get_argument("username")
+    #     password = self.get_argument("password")
+    #     password = self.get_argument("password")
+    #     real_name = self.get_argument("real_name", "")
+    #
+    #     password = util.hash_password(password)
+    #     self.session.query(AdminUser)
+    #     self.record_log(u"创建用户 " + username.encode("utf8"))
+    #     self.session.add(user)
+
+    def on_finish(self):
+        if self.log_message:
+            self.record_log(self.log_message)
 
 
 class UserNameExistCheckHandler(BaseHandler):
@@ -167,9 +193,10 @@ class UnlockUplusUserHandler(UplusUserBaseHandler):
                                                csid=self.current_user.id,
                                                msgId=self.v("msg_id"),
                                            ))
-        self.log_record_unlock()
         return self.send_success_json(json.loads(data))
 
+    def on_finish(self):
+        self.log_record_unlock()
 
 class UplusUserListBaseHandler(BaseHandler):
     _redis = ""
@@ -180,10 +207,12 @@ class UplusUserListBaseHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         users = self._redis.zrangebyscore(self.KEY, 0, "+inf", withscores=True)
-        self.record_log(content=self.TYPE.decode('utf8') + u" 获取列表")
         return self.send_success_json(
             dict(data=[dict(user_id=x[0], create_time=x[1]) for x in users])
         )
+
+    def on_finish(self):
+        self.record_log(content=self.TYPE.decode('utf8') + u" 获取列表")
 
 
 class UplusUserRedisBaseHandler(BaseHandler):
@@ -196,7 +225,8 @@ class UplusUserRedisBaseHandler(BaseHandler):
     def get(self):
         user_id = self.get_argument("user_id")
         score = self._redis.zscore(self.KEY, user_id)
-        self.record_log(content=self.TYPE.decode('utf8') + u" 获取用户 " + user_id)
+        self.log_message = " ".join(
+            [self.TYPE.decode('utf8'), u" 获取用户 ", str(user_id)])
         return self.send_success_json(
             dict(data=dict(user_id=user_id, create_time=score)))
 
@@ -206,17 +236,24 @@ class UplusUserRedisBaseHandler(BaseHandler):
         user_id = self.get_argument("user_id")
         score = int(time.time() * 1000)
         self._redis.zadd(self.KEY, user_id, score)
-        self.record_log(content=self.TYPE.decode('utf8') + u" 添加用户 " + user_id)
+        self.log_message = " ".join(
+            [self.TYPE.decode('utf8'), u" 添加用户 ", str(user_id)])
         return self.send_success_json(
             dict(data=dict(user_id=user_id, create_time=score)))
 
     @util.exception_handler
     @tornado.web.authenticated
+    @util.add_body_arguments
     def delete(self):
         user_id = self.get_argument("user_id")
         self._redis.zrem(self.KEY, user_id)
-        self.record_log(content=self.TYPE.decode('utf8') + u" 删除用户 " + user_id)
+        self.log_message = " ".join(
+            [self.TYPE.decode('utf8'), u" 删除用户 ", str(user_id)])
         return self.send_success_json(dict(data=dict(user_id=user_id)))
+
+    def on_finish(self):
+        if self.log_message:
+            self.record_log(self.log_message)
 
 
 class HighRiskUplusUserListHandler(UplusUserListBaseHandler):

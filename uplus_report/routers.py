@@ -16,6 +16,7 @@ routers = [
 
     # 获取页面
     url(r"/get_template", base.GetTemplateHandler),
+    url(r"/template/(?P<path>.+)", base.GetRawTemplateHandler),
 
     # 获取举报原因枚举
     url(r"/enum/type", constantenu.TypeEnumHandler),
