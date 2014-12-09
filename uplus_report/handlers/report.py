@@ -69,6 +69,7 @@ class MessageReportNextHandler(BaseHandler):
     @util.exception_handler
     @tornado.web.authenticated
     @session_manage
+    @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
@@ -106,6 +107,7 @@ class RemainReportCountHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
@@ -163,6 +165,7 @@ class ReportEndHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self):
         rid = self.get_argument("id")
         report_type = self.get_argument("report_type",

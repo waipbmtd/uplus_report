@@ -44,13 +44,15 @@ class OpenMouthHallHandler(BaseHandler):
     def post(self):
         self.parse_argument()
         server_api = self.OPEN_MOUTH_API
-        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               uid=self.v("uid"),
-                                               msgId=self.v("msg_id"),
-                                               csid=self.current_user.id,
-                                           ))
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            server_api,
+                            parameters=dict(
+                                uid=self.v("uid"),
+                                msgId=self.v(
+                                    "msg_id"),
+                                csid=self.current_user.id,
+                            ))
         self.asyn_response(reps)
 
     def on_finish(self):

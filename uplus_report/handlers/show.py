@@ -86,6 +86,7 @@ class UnlockShowHandler(ShowBaseHandler):
 
     @util.exception_handler
     @session_manage
+    @gen.coroutine
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(showId=self.v("show_id"))

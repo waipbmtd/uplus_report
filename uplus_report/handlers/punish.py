@@ -4,9 +4,9 @@ import json
 import logging
 
 import tornado
-# from tornado.httpclient import AsyncHTTPClient
 import tornado.web
-# from tornado import gen
+from tornado import gen
+from tornado.httpclient import HTTPError
 
 from handlers.base import BaseHandler
 import config
@@ -52,16 +52,16 @@ class PunishBaseHandler(BaseHandler):
             thumb_url=self.get_argument("thumb_url", ""),
             # 消息ID
             msg_id=self.get_argument("msg_id", ""),
-            #文字：
+            # 文字：
             content=self.get_argument("content", ""),
-            #拥有者ID
+            # 拥有者ID
             owner=self.get_argument("owner", ""),
-            #uucid
+            # uucid
             uucid=self.get_argument("uucid",
                                     "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
-            #是profile还是普通mesg
+            # 是profile还是普通mesg
             deal_type=self.get_argument("deal_type", "megs"),
-            #客服id
+            # 客服id
             csid=self.current_user.id
         )
 
@@ -250,6 +250,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             self._close(reportConstant.REPORT_MODULE_TYPE_SHOW)
         return data
 
+    @gen.coroutine
     def _close(self, module_type=""):
         # 封（封秀场或用户）
         if not module_type:
@@ -257,49 +258,58 @@ class PunishAdapterHandler(PunishBaseHandler):
         server_api = self.CLOSE_API % dict(mod_type=module_type,
                                            u_id=self.v("uid"))
 
-        data = WebRequrestUtil.postRequest2(API_HOST,
-                                            server_api,
-                                            parameters=self.feature_parameter)
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.feature_parameter)
         self.log_record_close()
-        return data
+        logging.info("punish response is %s" % reps.body)
 
+    @gen.coroutine
     def _silence(self):
         # 禁言
         server_api = self.SILENCE_API % dict(mod_type=self.v("module_type"),
                                              u_id=self.v("uid"))
 
-        data = WebRequrestUtil.postRequest2(API_HOST,
-                                            server_api,
-                                            parameters=self.feature_parameter)
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.feature_parameter)
         self.log_record_silence()
-        return data
+        logging.info("punish response is %s" % reps.body)
 
+    @gen.coroutine
     def _dismiss_group(self):
         # 解散群
         server_api = self.DISMISS_GROUP
-        data = WebRequrestUtil.postRequest2(API_HOST,
-                                            server_api,
-                                            parameters=self.group_parameter)
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.group_parameter)
         self.log_record_group()
-        return data
+        logging.info("punish response is %s" % reps.body)
 
+    @gen.coroutine
     def _kick_out_group(self):
         # 踢出群
         server_api = self.KICK_OUT
-        data = WebRequrestUtil.postRequest2(API_HOST,
-                                            server_api,
-                                            parameters=self.group_parameter)
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.group_parameter)
         self.log_record_group()
-        return data
+        logging.info("punish response is %s" % reps.body)
 
+    @gen.coroutine
     def _delete_resource(self):
         # 删除资源
         server_api = self.DELETE_RESOURCE
-        data = WebRequrestUtil.postRequest2(API_HOST,
-                                            server_api,
-                                            parameters=self.resource_parameter)
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.resource_parameter)
         self.log_record_delete()
-        return data
+        logging.info("punish response is %s" % reps.body)
 
 
 class UplusUserPunishList(BaseHandler):
@@ -307,23 +317,29 @@ class UplusUserPunishList(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self):
         u_id = self.get_argument("u_id", "")
         if not u_id:
-            return self.send_error_json(info="查询用户ID不能为空！")
+            self.send_error_json(info="查询用户ID不能为空！")
+            return
         current = self.get_argument("current", 1)
         per = self.get_argument("per", self.per_page_num)
         server_api = self.PUNISH_LOG_API
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               u_id=u_id,
-                                               current=current,
-                                               per=per,
-                                           ))
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            server_api,
+                            parameters=dict(
+                                u_id=u_id,
+                                current=current,
+                                per=per,
+                            ))
+        if isinstance(reps, HTTPError):
+            self.send_error_json(info=reps.message, code=reps.code)
+        else:
+            data = json.loads(reps.body)
+            j_data = data.get("data", {})
+            j_data.update(dict(u_id=u_id))
+            data.update(dict(data=j_data))
+            self.send_success_json(data)
         self.record_log(content=u"获取用户被惩罚日志 " + u_id)
-        data = json.loads(data)
-        j_data = data.get("data", {})
-        j_data.update(dict(u_id=u_id))
-        data.update(dict(data=j_data))
-        return self.send_success_json(data)
