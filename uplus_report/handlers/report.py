@@ -7,6 +7,7 @@ import datetime
 import tornado
 import tornado.web
 from tornado import gen
+from tornado.httpclient import HTTPError
 
 import config
 from handlers.base import BaseHandler, BaseWebSocketHandler
@@ -14,6 +15,7 @@ from models import reportConstant, redisConstant
 from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
 from storage.redis.redisClient import redis_remain_num
+
 
 
 API_HOST = config.api.host
@@ -308,14 +310,17 @@ class ReportProfileHandler(BaseHandler):
                                                      parameters=dict(
                                                          rid=rid,
                                                      ))
-        self.asyn_response(reps)
-
-        j_data = json.loads(reps.body)
-        j_i_data = j_data.get("data")
-        j_i_data.update(dict(desc=j_i_data.get("desc", ""),
-                             name=j_i_data.get("name", ""),
-                             mid=j_i_data.get("mid", ""),
-                             oid=j_i_data.get("oid", "")))
+        if isinstance(reps, HTTPError):
+            self.send_error_json(info=reps.message, code=reps.code)
+        else:
+            j_data = json.loads(reps.body)
+            j_i_data = j_data.get("data")
+            j_i_data.update(dict(desc=j_i_data.get("desc", ""),
+                                 name=j_i_data.get("name", ""),
+                                 mid=j_i_data.get("mid", ""),
+                                 oid=j_i_data.get("oid", "")))
+            j_data.update(dict(data=j_i_data))
+            self.send_success_json(j_data)
         self.log_message = u"获取举报(%s)的profile" % rid
 
     def on_finish(self):
