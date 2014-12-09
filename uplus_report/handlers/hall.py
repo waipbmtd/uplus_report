@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
+from tornado import gen
 from handlers.base import BaseHandler
 import config
 from models import reportConstant
@@ -39,17 +40,18 @@ class OpenMouthHallHandler(BaseHandler):
 
         self.record_log(content, memo=self.v("memo"))
 
+    @gen.coroutine
     def post(self):
         self.parse_argument()
         server_api = self.OPEN_MOUTH_API
-        data = WebRequrestUtil.getRequest2(API_HOST,
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
                                            server_api,
                                            parameters=dict(
                                                uid=self.v("uid"),
                                                msgId=self.v("msg_id"),
                                                csid=self.current_user.id,
                                            ))
-        return self.send_success_json(json.loads(data))
+        self.asyn_response(reps)
 
     def on_finish(self):
         self.log_record_open_mouth()

@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # coding=utf-8
+from tornado import gen
+
 from handlers.base import BaseHandler
 import config
 from models import reportConstant
 from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
-import json
+
 
 API_HOST = config.api.host
 
@@ -48,17 +50,20 @@ class OpenMouthShowHandler(ShowBaseHandler):
 
         self.record_log(content, memo=self.v("memo"))
 
+    @gen.coroutine
     def post(self):
         self.parse_argument()
         server_api = self.OPEN_MOUTH_API % dict(showId=self.v("show_id"))
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               uid=self.v("uid"),
-                                               csid=self.current_user.id,
-                                               msgId=self.v("msg_id")
-                                           ))
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     server_api,
+                                                     parameters=dict(
+                                                         uid=self.v("uid"),
+                                                         csid=self.current_user.id,
+                                                         msgId=self.v("msg_id")
+                                                     ))
+
+        self.asyn_response(reps)
+
 
     def on_finish(self):
         self.log_record_open_mouth()
@@ -84,13 +89,13 @@ class UnlockShowHandler(ShowBaseHandler):
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(showId=self.v("show_id"))
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               csid=self.current_user.id,
-                                               msgId=self.v("msg_id")
-                                           ))
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     server_api,
+                                                     parameters=dict(
+                                                         csid=self.current_user.id,
+                                                         msgId=self.v("msg_id")
+                                                     ))
+        self.asyn_response(reps)
 
     def on_finish(self):
         self.log_record_unlock()

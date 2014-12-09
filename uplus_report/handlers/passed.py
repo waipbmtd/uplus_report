@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # coding=utf-8
-import json
 
 import tornado
 import tornado.web
+from tornado import gen
 
 from handlers.base import BaseHandler
 import config
@@ -67,30 +67,22 @@ class PassedHandler(BaseHandler):
     def post(self):
         return self.send_success_json()
 
-    # @gen.coroutine
-    # def post(self):
-    # self.parse_argument()
-    #     server_api = self.PASS_API
-    #     http_client = AsyncHTTPClient()
-    #     response = yield http_client.fetch(
-    #         "http://%s/%s" % (API_HOST, server_api), )
-    #     pass
-
     @util.exception_handler
+    @gen.coroutine
     def on_finish(self):
         self.parse_argument()
         server_api = self.PASS_API
 
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               rid=self.v("rid"),
-                                               csid=self.current_user.id,
-                                               msgId=self.v("msg_id"),
-                                               mod=self.v("mod"),
-                                               u_id=self.v("uid"),
-                                               reporter=self.v("reporter_id"),
-                                               deal_type=self.v("deal_type",
-                                                                "msgs")
-                                           ))
-        self.log_record_pass()
+        yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                              server_api,
+                                              parameters=dict(
+                                                  rid=self.v("rid"),
+                                                  csid=self.current_user.id,
+                                                  msgId=self.v("msg_id"),
+                                                  mod=self.v("mod"),
+                                                  u_id=self.v("uid"),
+                                                  reporter=self.v(
+                                                      "reporter_id"),
+                                                  deal_type=self.v("deal_type",
+                                                                   "msgs")
+                                              ), callable=self.log_record_pass)

@@ -4,21 +4,21 @@ from datetime import datetime
 import json
 import logging
 import time
+import sys
+import os
+import os.path
 
 import jsonpickle
 import jsonpickle.backend
-import sys
 import tornado.web
 from tornado import websocket
+from tornado.httpclient import HTTPError
 
 import config
 from models import userConstant
 from storage.mysql.database import session_manage
 from storage.mysql.models import AdminUser, AdminOperationLog
 from utils import util
-
-import os
-import os.path
 
 
 class JsonBaseHandler(object):
@@ -156,6 +156,13 @@ class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
         path = os.path.join(template_path, name)
         with open(path, "rb") as f:
             self.write(f.read())
+
+    def asyn_response(self, reps):
+        if isinstance(reps, HTTPError):
+            self.send_error_json(info=reps.message, code=reps.code)
+        else:
+            self.send_success_json(json.loads(reps.body))
+        # self.finish()
 
 
 class BaseWebSocketHandler(websocket.WebSocketHandler, JsonBaseHandler):

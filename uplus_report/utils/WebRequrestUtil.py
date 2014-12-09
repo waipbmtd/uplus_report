@@ -5,11 +5,13 @@ import urllib
 import urllib2
 import logging
 from StringIO import StringIO
+from tornado import gen
+from tornado.httpclient import AsyncHTTPClient, HTTPRequest, HTTPError
 
 
 def postRequest(url, data=""):
     req = urllib2.Request(url, data=data)
-    logging.debug(printHttpRequest(req))
+    # logging.debug(printHttpRequest(req))
     try:
         resp = urllib2.urlopen(req)
         return resp.read()
@@ -21,7 +23,7 @@ def postRequest(url, data=""):
 
 def getRequest(url, parameters={}):
     req = urllib2.Request(url + "?" + urllib.urlencode(parameters))
-    logging.debug(printHttpRequest(req))
+    # logging.debug(printHttpRequest(req))
     try:
         resp = urllib2.urlopen(req)
         return resp.read()
@@ -40,6 +42,31 @@ def postRequest2(host, path, parameters={}):
     url = "http://%s/%s" % (host, path)
     return postRequest(url, urllib.urlencode(parameters))
 
+
+@gen.coroutine
+def asyncGetRequest(host, path, parameters={}, callback=None):
+    url = "http://%s/%s" % (host, path)
+    http_client = AsyncHTTPClient()
+    request = HTTPRequest(url + "?" + urllib.urlencode(parameters),
+                          method="GET")
+    try:
+        response = yield http_client.fetch(request, callback=callback)
+        raise gen.Return(response)
+    except HTTPError, e:
+        raise gen.Return(e)
+
+
+@gen.coroutine
+def asyncPostRequest(host, path, parameters={}, callback=None):
+    url = "http://%s/%s" % (host, path)
+    http_client = AsyncHTTPClient()
+    request = HTTPRequest(url, body=urllib.urlencode(parameters),
+                          method="POST")
+    try:
+        response = yield http_client.fetch(request, callback=callback)
+        raise gen.Return(response)
+    except HTTPError, e:
+        raise gen.Return(e)
 
 
 def printHttpRequest(req):

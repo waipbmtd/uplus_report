@@ -3,14 +3,18 @@
 import json
 import logging
 import datetime
-import urllib
+
 import tornado
 import tornado.web
+from tornado import gen
+
 import config
 from handlers.base import BaseHandler, BaseWebSocketHandler
-from models import reportConstant
+from models import reportConstant, redisConstant
 from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
+from storage.redis.redisClient import redis_remain_num
+
 
 API_HOST = config.api.host
 
@@ -33,17 +37,18 @@ class AlbumImageReportListHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.LIST_ALBUM_IMAGE,
-                                           parameters=dict(
-                                               report_type=report_type,
-                                               csid=self.current_user.id,
-                                               size=15))
 
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.LIST_ALBUM_IMAGE,
+                                                     parameters=dict(
+                                                         report_type=report_type,
+                                                         csid=self.current_user.id,
+                                                         size=15))
+        self.asyn_response(reps)
 
     def on_finish(self):
         report_type = self.get_argument("report_type",
@@ -53,7 +58,6 @@ class AlbumImageReportListHandler(BaseHandler):
                                     int(report_type)).decode('utf8'))
 
     post = get
-
 
 
 class MessageReportNextHandler(BaseHandler):
@@ -68,13 +72,14 @@ class MessageReportNextHandler(BaseHandler):
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.NEXT_MESSAGE,
-                                           parameters=dict(
-                                               report_type=report_type,
-                                               csid=self.current_user.id))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.NEXT_MESSAGE,
+                                                     parameters=dict(
+                                                         report_type=report_type,
+                                                         csid=self.current_user.id))
 
-        j_data = json.loads(data)
+        self.asyn_response(reps)
+        j_data = json.loads(reps.body)
         ret = int(j_data.get("ret"))
         if ret == 0:
             data = j_data.get("data", {})
@@ -87,7 +92,6 @@ class MessageReportNextHandler(BaseHandler):
                 })
             j_data.update({"data": data})
 
-        return self.send_success_json(j_data)
 
     def on_finish(self):
         report_type = self.get_argument("report_type",
@@ -105,16 +109,19 @@ class RemainReportCountHandler(BaseHandler):
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.REMAIN_REPORT,
-                                           parameters=dict(
-                                               report_type=report_type,
-                                               csid=self.current_user.id
-                                           ))
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.REMAIN_REPORT,
+                                                     parameters=dict(
+                                                         report_type=report_type,
+                                                         csid=self.current_user.id
+                                                     ))
+        self.asyn_response(reps)
 
 
 class WSRemainReportCountHandler(BaseWebSocketHandler):
+    _redis = redis_remain_num
+    KEY = redisConstant.REDIS_REMAIN_NUM
+
     clients = set()
     REMAIN_REPORT = config.api.report_remain_count
 
@@ -129,15 +136,16 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
         WSRemainReportCountHandler.clients.remove(self)
         logging.info("webSocket Close")
 
+    @gen.coroutine
     def _build_message(self):
         data = []
         for report_type in reportConstant.REPORT_TYPE_ENUMS:
-            i_data = WebRequrestUtil.getRequest2(API_HOST,
-                                                 self.REMAIN_REPORT,
-                                                 parameters=dict(
-                                                     report_type=report_type
-                                                 ))
-            i_j_data = json.loads(i_data)
+            response = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                             self.REMAIN_REPORT,
+                                                             parameters=dict(
+                                                                 report_type=report_type
+                                                             ))
+            i_j_data = json.loads(response.body)
             ret = i_j_data.get("ret", reportConstant.API_RET_NO)
             if ret == reportConstant.API_RET_NO:
                 self.write_message(self.build_error_json(
@@ -159,40 +167,39 @@ class ReportEndHandler(BaseHandler):
         rid = self.get_argument("id")
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.END_REPORT,
-                                           parameters=dict(
-                                               report_type=report_type,
-                                               rid=rid,
-                                               csid=self.current_user.id,
-                                           ))
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.END_REPORT,
+                                                     parameters=dict(
+                                                         report_type=report_type,
+                                                         rid=rid,
+                                                         csid=self.current_user.id,
+                                                     ))
+        self.asyn_response(reps)
 
 
 class ReportBatchDealHandler(BaseHandler):
     BATH_REPORT = config.api.report_batch_deal
 
-    @util.exception_handler
     def post(self):
         return self.send_success_json()
 
-    @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def on_finish(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
         items = self.get_argument("items")
         deal = self.get_argument("deal")
         timedelta = self.get_argument("timedelta", -1)
-        WebRequrestUtil.postRequest2(API_HOST,
-                                    self.BATH_REPORT,
-                                    parameters=dict(
-                                        items=items.encode('utf8'),
-                                        deal=deal.encode('utf8'),
-                                        report_type=report_type,
-                                        timedelta=timedelta,
-                                        csid=self.current_user.id,
-                                    ))
+        yield WebRequrestUtil.asyncPostRequest(API_HOST,
+                                               self.BATH_REPORT,
+                                               parameters=dict(
+                                                   items=items.encode('utf8'),
+                                                   deal=deal.encode('utf8'),
+                                                   report_type=report_type,
+                                                   timedelta=timedelta,
+                                                   csid=self.current_user.id,
+                                               ))
         s_content, s_memo = self._deal_detail()
         s_content2 = self._items_detail()
         self.record_log(content=s_content.decode("utf8") + "<br/>"
@@ -252,6 +259,7 @@ class ReportSheetHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self):
         csid = self.get_argument("csid", "")
         if not self.is_admin():
@@ -262,15 +270,14 @@ class ReportSheetHandler(BaseHandler):
                                        n_time.strftime('%Y-%m-%d'))
         end_date = self.get_argument("end_date", (
             n_time + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.REPORT_SHEET_API,
-                                           parameters=dict(
-                                               csid=csid,
-                                               start_date=start_date,
-                                               end_date=end_date,
-                                           ))
-
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.REPORT_SHEET_API,
+                                                     parameters=dict(
+                                                         csid=csid,
+                                                         start_date=start_date,
+                                                         end_date=end_date,
+                                                     ))
+        self.asyn_response(reps)
 
     def on_finish(self):
         csid = self.get_argument("csid", "")
@@ -290,21 +297,23 @@ class ReportProfileHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
+    @gen.coroutine
     def get(self, rid):
         rid = int(rid)
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           self.REPORT_PROFILE_API,
-                                           parameters=dict(
-                                               rid=rid,
-                                           ))
-        j_data = json.loads(data)
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     self.REPORT_PROFILE_API,
+                                                     parameters=dict(
+                                                         rid=rid,
+                                                     ))
+        self.asyn_response(reps)
+
+        j_data = json.loads(reps.body)
         j_i_data = j_data.get("data")
         j_i_data.update(dict(desc=j_i_data.get("desc", ""),
                              name=j_i_data.get("name", ""),
                              mid=j_i_data.get("mid", ""),
                              oid=j_i_data.get("oid", "")))
         self.log_message = u"获取举报(%s)的profile" % rid
-        return self.send_success_json(json.loads(data))
 
     def on_finish(self):
         if self.log_message:

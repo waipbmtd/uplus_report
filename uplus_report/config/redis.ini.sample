@@ -9,3 +9,9 @@ host = report.redis.youja.cn
 port = 6005
 db = 0
 max_connections = 3
+
+[redis_remain_num]
+host = report.redis.youja.cn
+port = 6005
+db = 0
+max_connections = 3

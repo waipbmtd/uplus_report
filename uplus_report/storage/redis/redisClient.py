@@ -18,3 +18,8 @@ host = config.redis.redis_special_user["host"]
 port = int(config.redis.redis_special_user["port"])
 db = int(config.redis.redis_special_user["db"])
 redis_special_user = Redis(host=host, port=port, db=db)
+
+host = config.redis.redis_remain_num["host"]
+port = int(config.redis.redis_remain_num["port"])
+db = int(config.redis.redis_remain_num["db"])
+redis_remain_num = Redis(host=host, port=port, db=db)
