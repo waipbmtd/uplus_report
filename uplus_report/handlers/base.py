@@ -123,7 +123,7 @@ class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
         return self.render('login.html')
 
     @session_manage
-    def record_log(self, content="", memo=""):
+    def record_log(self, content="", memo="", **kwargs):
         log = AdminOperationLog(content=content,
                                 memo=memo,
                                 create_time=datetime.now(),
@@ -162,7 +162,6 @@ class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
             self.send_error_json(info=reps.message, code=reps.code)
         else:
             self.send_success_json(json.loads(reps.body))
-        # self.finish()
 
 
 class BaseWebSocketHandler(websocket.WebSocketHandler, JsonBaseHandler):

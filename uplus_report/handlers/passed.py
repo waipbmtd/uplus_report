@@ -47,7 +47,7 @@ class PassedHandler(BaseHandler):
     def v(self, k):
         return self.args.get(k)
 
-    def log_record_pass(self):
+    def log_record_pass(self, callback=None):
         log_format = "%(passed)s (%(uid)s)"
         content = log_format % dict(
             uid=str(self.v("uid")),
@@ -85,4 +85,5 @@ class PassedHandler(BaseHandler):
                                                       "reporter_id"),
                                                   deal_type=self.v("deal_type",
                                                                    "msgs")
-                                              ), callable=self.log_record_pass)
+                                              ))
+        yield gen.Task(self.log_record_pass)

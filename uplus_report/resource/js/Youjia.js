@@ -661,14 +661,20 @@ $.extend({
 		, options.callback = options.callback || $.noop
 		, options.action = function( data ){
 			if( options.html ){
-				$.ajax({
-					type: 'get',
-					cache: true,
-					url: options.html,
-					success: function(html){
-						options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
-					}
-				});
+                var t_html = $("body").data(options.html);
+                if (t_html != undefined){
+                    options.callback( (options.render = doT.template( t_html )(data), (options.database = data, options)) );
+                }else{
+                    $.ajax({
+                        type: 'get',
+                        cache: true,
+                        url: options.html,
+                        success: function(html){
+                            $("body").data(options.html, html)
+                            options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
+                        }
+                    });
+                }
 				return;
 			}
 			options.callback( (options.render = doT.template( $(options.element).html() )(data), (options.database = data, options)) );

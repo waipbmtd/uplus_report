@@ -2,6 +2,7 @@
 # coding=utf-8
 import tornado
 import tornado.web
+from tornado import gen
 
 from handlers.base import BaseHandler
 from storage.mysql.database import session_manage, sqlalchemy_json
@@ -30,24 +31,29 @@ class UserLogListHandler(BaseHandler):
             logs = self.session.query(AdminOperationLog) \
                 .filter_by(admin_user_id=csid).order_by(
                 AdminOperationLog.create_time.desc()).limit(per).offset(
-                per * (current-1))
+                per * (current - 1))
             total = self.session.query(AdminOperationLog) \
                 .filter_by(admin_user_id=csid).count()
         else:
             logs = self.session.query(AdminOperationLog).order_by(
                 AdminOperationLog.create_time.desc()).limit(per).offset(
-                per * (current-1))
+                per * (current - 1))
             total = self.session.query(AdminOperationLog).count()
         js_logs = [
             dict(sqlalchemy_json(x), **dict(
                 username=x.admin_user and x.admin_user.username or None)) for x
             in logs]
-        self.record_log(u"获取指定客服日志列表详细信息 " + str(csid))
+        self.csid = csid
         return self.send_success_json(dict(
             data=dict(data=js_logs,
                       current=current,
                       csid=self.get_argument("csid", ""),
                       total=math.ceil(float(total) / per))))
+
+    @gen.coroutine
+    def on_finish(self):
+        yield gen.Task(self.record_log, u"获取指定客服日志列表详细信息 "
+                       + str(self.csid))
 
 
 class UserLogHandler(BaseHandler):
@@ -58,5 +64,9 @@ class UserLogHandler(BaseHandler):
         # 获取日志详细信息
         id = int(self.get_argument("id"))
         logs = self.session.query(AdminOperationLog).get(id)
-        self.record_log(u"获取日志详细信息 ")
+
         return self.send_success_json(dict(data=sqlalchemy_json(logs)))
+
+    @gen.coroutine
+    def on_finish(self):
+        yield gen.Task(self.record_log, u"获取日志详细信息 ")

@@ -5,6 +5,8 @@ import time
 import datetime
 import tornado
 import tornado.web
+from tornado import gen
+
 from handlers.base import BaseHandler
 from models import reportConstant, redisConstant, userConstant
 from storage.mysql.database import session_manage, sqlalchemy_json
@@ -114,8 +116,8 @@ class UserHandler(BaseHandler):
     # @session_manage
     # def put(self):
     # #更新某个用户
-    #     userid = int(self.get_argument("userid", self.current_user.id))
-    #     org_user = self.session.query(AdminUser).get(userid)
+    # userid = int(self.get_argument("userid", self.current_user.id))
+    # org_user = self.session.query(AdminUser).get(userid)
     #     org_username = org_user.username
     #     org_password = org_user.password
     #
@@ -129,9 +131,10 @@ class UserHandler(BaseHandler):
     #     self.record_log(u"创建用户 " + username.encode("utf8"))
     #     self.session.add(user)
 
+    @gen.coroutine
     def on_finish(self):
         if self.log_message:
-            self.record_log(self.log_message)
+            yield gen.Task(self.record_log, self.log_message)
 
 
 class UserNameExistCheckHandler(BaseHandler):
@@ -171,7 +174,7 @@ class UnlockUplusUserHandler(UplusUserBaseHandler):
     用户解封
     """
 
-    def log_record_unlock(self):
+    def log_record_unlock(self, **kwargs):
         log_format = "%(unlock)s (%(uid)s)"
         content = log_format % dict(
             uid=str(self.v("uid")),
@@ -183,20 +186,24 @@ class UnlockUplusUserHandler(UplusUserBaseHandler):
     @util.exception_handler
     @session_manage
     @tornado.web.authenticated
+    @gen.coroutine
     def post(self):
         self.parse_argument()
         server_api = self.UNLOCK_API % dict(uid=self.v("uid"))
-        data = WebRequrestUtil.getRequest2(API_HOST,
-                                           server_api,
-                                           parameters=dict(
-                                               uid=self.v("uid"),
-                                               csid=self.current_user.id,
-                                               msgId=self.v("msg_id"),
-                                           ))
-        return self.send_success_json(json.loads(data))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     server_api,
+                                                     parameters=dict(
+                                                         uid=self.v("uid"),
+                                                         csid=self.current_user.id,
+                                                         msgId=self.v(
+                                                             "msg_id"),
+                                                     ))
+        self.asyn_response(reps)
 
+    @gen.coroutine
     def on_finish(self):
-        self.log_record_unlock()
+        yield gen.Task(self.log_record_unlock)
+
 
 class UplusUserListBaseHandler(BaseHandler):
     _redis = ""
@@ -211,8 +218,10 @@ class UplusUserListBaseHandler(BaseHandler):
             dict(data=[dict(user_id=x[0], create_time=x[1]) for x in users])
         )
 
+    @gen.coroutine
     def on_finish(self):
-        self.record_log(content=self.TYPE.decode('utf8') + u" 获取列表")
+        yield gen.Task(self.record_log,
+                       content=self.TYPE.decode('utf8') + u" 获取列表")
 
 
 class UplusUserRedisBaseHandler(BaseHandler):
@@ -251,9 +260,10 @@ class UplusUserRedisBaseHandler(BaseHandler):
             [self.TYPE.decode('utf8'), u" 删除用户 ", str(user_id)])
         return self.send_success_json(dict(data=dict(user_id=user_id)))
 
+    @gen.coroutine
     def on_finish(self):
         if self.log_message:
-            self.record_log(self.log_message)
+            yield gen.Task(self.record_log, self.log_message)
 
 
 class HighRiskUplusUserListHandler(UplusUserListBaseHandler):

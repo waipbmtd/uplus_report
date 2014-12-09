@@ -124,7 +124,7 @@ class PunishBaseHandler(BaseHandler):
             deal_type=self.v("deal_type")
         )
 
-    def log_record_close(self):
+    def log_record_close(self, **kwargs):
         log_format = "%(mod)s %(punish)s (%(uid)s)"
         content = log_format % dict(
             mod=reportConstant.REPORT_MODULE_TYPES.get(
@@ -140,7 +140,7 @@ class PunishBaseHandler(BaseHandler):
 
     log_record_silence = log_record_close
 
-    def log_record_delete(self):
+    def log_record_delete(self, **kwargs):
         log_format = "%(mod)s %(punish)s (%(uid)s)"
         content = log_format % dict(
             mod=reportConstant.REPORT_MODULE_TYPES.get(
@@ -157,7 +157,7 @@ class PunishBaseHandler(BaseHandler):
             content += str(" %s" % str(self.v("thumb_url")))
         self.record_log(content, memo=self.v("memo"))
 
-    def log_record_group(self):
+    def log_record_group(self, **kwargs):
         log_format = "%(mod)s %(punish)s (%(uid)s)"
         content = log_format % dict(
             mod=reportConstant.REPORT_MODULE_TYPES.get(
@@ -236,8 +236,6 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._dismiss_group()
         elif self.punish_type == reportConstant.REPORT_PUNISH_KICK_OUT_GROUP:
             data = self._kick_out_group()
-            # http_client = AsyncHTTPClient()
-            # http_client.fetch(self.reverse_url("punish"), method="post")
         return data
 
     def _punish_user(self):
@@ -262,7 +260,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.feature_parameter)
-        self.log_record_close()
+        yield gen.Task(self.log_record_close)
         logging.info("punish response is %s" % reps.body)
 
     @gen.coroutine
@@ -275,7 +273,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.feature_parameter)
-        self.log_record_silence()
+        yield gen.Task(self.log_record_silence)
         logging.info("punish response is %s" % reps.body)
 
     @gen.coroutine
@@ -286,7 +284,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.group_parameter)
-        self.log_record_group()
+        yield gen.Task(self.log_record_group)
         logging.info("punish response is %s" % reps.body)
 
     @gen.coroutine
@@ -297,7 +295,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.group_parameter)
-        self.log_record_group()
+        yield gen.Task(self.log_record_group)
         logging.info("punish response is %s" % reps.body)
 
     @gen.coroutine
@@ -308,7 +306,7 @@ class PunishAdapterHandler(PunishBaseHandler):
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.resource_parameter)
-        self.log_record_delete()
+        yield gen.Task(self.log_record_delete)
         logging.info("punish response is %s" % reps.body)
 
 
@@ -323,6 +321,7 @@ class UplusUserPunishList(BaseHandler):
         if not u_id:
             self.send_error_json(info="查询用户ID不能为空！")
             return
+        self.u_id = u_id
         current = self.get_argument("current", 1)
         per = self.get_argument("per", self.per_page_num)
         server_api = self.PUNISH_LOG_API
@@ -342,4 +341,7 @@ class UplusUserPunishList(BaseHandler):
             j_data.update(dict(u_id=u_id))
             data.update(dict(data=j_data))
             self.send_success_json(data)
-        self.record_log(content=u"获取用户被惩罚日志 " + u_id)
+
+    @gen.coroutine
+    def on_finish(self):
+        yield gen.Task(self.record_log, content=u"获取用户被惩罚日志 " + self.u_id)

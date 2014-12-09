@@ -41,7 +41,7 @@ class OpenMouthShowHandler(ShowBaseHandler):
     秀场解除禁言
     """
 
-    def log_record_open_mouth(self):
+    def log_record_open_mouth(self, **kwargs):
         log_format = "%(open)s (%(uid)s)"
         content = log_format % dict(
             uid=str(self.v("uid")),
@@ -64,9 +64,9 @@ class OpenMouthShowHandler(ShowBaseHandler):
 
         self.asyn_response(reps)
 
-
+    @gen.coroutine
     def on_finish(self):
-        self.log_record_open_mouth()
+        yield gen.Task(self.log_record_open_mouth)
 
 
 class UnlockShowHandler(ShowBaseHandler):
@@ -75,7 +75,7 @@ class UnlockShowHandler(ShowBaseHandler):
     秀场解封
     """
 
-    def log_record_unlock(self):
+    def log_record_unlock(self, **kwargs):
         log_format = "%(unlock)s (%(uid)s)"
         content = log_format % dict(
             uid=str(self.v("uid")),
@@ -98,7 +98,8 @@ class UnlockShowHandler(ShowBaseHandler):
                                                      ))
         self.asyn_response(reps)
 
+    @gen.coroutine
     def on_finish(self):
-        self.log_record_unlock()
+        yield gen.Task(self.log_record_unlock)
 
 

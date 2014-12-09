@@ -17,7 +17,6 @@ from utils import WebRequrestUtil, util
 from storage.redis.redisClient import redis_remain_num
 
 
-
 API_HOST = config.api.host
 
 
@@ -52,12 +51,14 @@ class AlbumImageReportListHandler(BaseHandler):
                                                          size=15))
         self.asyn_response(reps)
 
+    @gen.coroutine
     def on_finish(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        self.record_log(content=u"获取下一批图片 " +
-                                reportConstant.REPORT_TYPE_ENUMS.get(
-                                    int(report_type)).decode('utf8'))
+        yield gen.Task(self.record_log, content=u"获取下一批图片 " +
+                                                reportConstant.REPORT_TYPE_ENUMS.get(
+                                                    int(report_type)).decode(
+                                                    'utf8'))
 
     post = get
 
@@ -95,13 +96,14 @@ class MessageReportNextHandler(BaseHandler):
                 })
             j_data.update({"data": data})
 
-
+    @gen.coroutine
     def on_finish(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        self.record_log(content=u"获取下一条消息 " +
-                                reportConstant.REPORT_TYPE_ENUMS.get(
-                                    int(report_type)).decode('utf8'))
+        yield gen.Task(self.record_log, content=u"获取下一条消息 " +
+                                                reportConstant.REPORT_TYPE_ENUMS.get(
+                                                    int(report_type)).decode(
+                                                    'utf8'))
 
 
 class RemainReportCountHandler(BaseHandler):
@@ -142,22 +144,20 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
 
     @gen.coroutine
     def _build_message(self):
-        data = []
-        for report_type in reportConstant.REPORT_TYPE_ENUMS:
-            response = yield WebRequrestUtil.asyncGetRequest(API_HOST,
-                                                             self.REMAIN_REPORT,
-                                                             parameters=dict(
-                                                                 report_type=report_type
-                                                             ))
-            i_j_data = json.loads(response.body)
-            ret = i_j_data.get("ret", reportConstant.API_RET_NO)
-            if ret == reportConstant.API_RET_NO:
-                self.write_message(self.build_error_json(
-                    info=i_j_data.get("info", ""),
-                    code=i_j_data.get("code", "")))
-                return
-            else:
-                data.append(i_j_data.get("data"))
+        resps = yield [WebRequrestUtil.
+                           asyncGetRequest(API_HOST,
+                                           self.REMAIN_REPORT,
+                                           parameters=dict(
+                                               report_type=report_type
+                                           )) for
+                       report_type in
+                       reportConstant.REPORT_TYPE_ENUMS]
+        data = [json.loads(reps.body).get("data") for reps in resps]
+        # data=[]
+        # data.append(dict(msg_remain=0, album_remain=0))
+        # data.append(dict(msg_remain=0, album_remain=0))
+        # data.append(dict(msg_remain=0,
+        #                  album_remain=int(redis_remain_num.get(self.KEY))))
         r_j_data = dict(data=data)
         self.write_message(self.build_success_json(r_j_data))
 
@@ -207,9 +207,9 @@ class ReportBatchDealHandler(BaseHandler):
                                                ))
         s_content, s_memo = self._deal_detail()
         s_content2 = self._items_detail()
-        self.record_log(content=s_content.decode("utf8") + "<br/>"
-                                + s_content2,
-                        memo=s_memo)
+        yield gen.Task(self.record_log,
+                       content=s_content.decode("utf8") + "<br/>"
+                               + s_content2, memo=s_memo)
 
     def _deal_detail(self):
         l_content = []
@@ -284,6 +284,7 @@ class ReportSheetHandler(BaseHandler):
                                                      ))
         self.asyn_response(reps)
 
+    @gen.coroutine
     def on_finish(self):
         csid = self.get_argument("csid", "")
         if not self.is_admin():
@@ -294,7 +295,8 @@ class ReportSheetHandler(BaseHandler):
                                        n_time.strftime('%Y-%m-%d'))
         end_date = self.get_argument("end_date", (
             n_time + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))
-        self.record_log(u"获取客服(%s)的报表(从%s至%s)" % (csid, start_date, end_date))
+        yield gen.Task(self.record_log,
+                       u"获取客服(%s)的报表(从%s至%s)" % (csid, start_date, end_date))
 
 
 class ReportProfileHandler(BaseHandler):
@@ -305,6 +307,7 @@ class ReportProfileHandler(BaseHandler):
     @gen.coroutine
     def get(self, rid):
         rid = int(rid)
+        self.rid = rid
         reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
                                                      self.REPORT_PROFILE_API,
                                                      parameters=dict(
@@ -321,8 +324,7 @@ class ReportProfileHandler(BaseHandler):
                                  oid=j_i_data.get("oid", "")))
             j_data.update(dict(data=j_i_data))
             self.send_success_json(j_data)
-        self.log_message = u"获取举报(%s)的profile" % rid
 
+    @gen.coroutine
     def on_finish(self):
-        if self.log_message:
-            self.record_log(self.log_message)
+        yield gen.Task(self.record_log, u"获取举报(%s)的profile" % self.rid)
