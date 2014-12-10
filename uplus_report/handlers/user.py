@@ -153,28 +153,28 @@ class UplusUserProfileHandler(BaseHandler):
     USER_PROFILE_API = config.api.user_profile
 
     @tornado.web.authenticated
-    # @gen.coroutine
+    @gen.coroutine
     def get(self):
         uid = self.get_argument("u_id")
         server_api = self.USER_PROFILE_API
-        return self.write(json.dumps(dict(ret=1,
-                                                info="",
-                                                data=dict(user_id=uid,
-                                                          user_name="友加大绵羊",
-                                                          user_desc="友加大绵羊",
-                                                          user_avatar_url="http://122.144.133.40:8200/user/10000/avatar/22055214/middle",
-                                                          punish_image=1234,
-                                                          punish_video=34,
-                                                          punish_audio=213,
-                                                          punish_text=1235)
-                                                )))
-        # reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
-        #                                              server_api,
-        #                                              parameters=dict(
-        #                                                  user_id=uid,
-        #                                                  csid=self.current_user.id,
-        #                                              ))
-        # self.asyn_response(reps)
+        # return self.write(json.dumps(dict(ret=1,
+        #                                         info="",
+        #                                         data=dict(user_id=uid,
+        #                                                   user_name="友加大绵羊",
+        #                                                   user_desc="友加大绵羊",
+        #                                                   user_avatar_url="http://122.144.133.40:8200/user/10000/avatar/22055214/middle",
+        #                                                   punish_image=1234,
+        #                                                   punish_video=34,
+        #                                                   punish_audio=213,
+        #                                                   punish_text=1235)
+        #                                         )))
+        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+                                                     server_api,
+                                                     parameters=dict(
+                                                         u_id=uid,
+                                                         csid=self.current_user.id,
+                                                     ))
+        self.asyn_response(reps)
 
 
 class UplusUserBaseHandler(BaseHandler):

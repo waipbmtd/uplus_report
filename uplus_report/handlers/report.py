@@ -117,18 +117,27 @@ class VideoReportNextHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @gen.coroutine
+    # @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_RISK)
-        reps = yield WebRequrestUtil. \
-            asyncGetRequest(API_HOST,
-                            self.NEXT_MESSAGE,
-                            parameters=dict(
-                                report_type=report_type,
-                                csid=self.current_user.id))
-
-        self.asyn_response(reps)
+        # reps = yield WebRequrestUtil. \
+        #     asyncGetRequest(API_HOST,
+        #                     self.NEXT_MESSAGE,
+        #                     parameters=dict(
+        #                         report_type=report_type,
+        #                         csid=self.current_user.id))
+        j_data = dict(ret=1,
+                      info="",
+                      data=[dict(id=123,
+                                 url="http://test.resource.youja.cn/resource_type/305/resource_id/170/A.mp4 ",
+                                 thumb_url="http://122.144.133.40:8200/user/39540784/avatar/38109669/middle",
+                                 report=16710605,
+                                 u_id=39540784,
+                                 mod=25,
+                                 mid=24)])
+        return self.write(json.dumps(j_data))
+        # self.asyn_response(reps)
 
     @gen.coroutine
     def on_finish(self):
