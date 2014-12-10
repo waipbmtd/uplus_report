@@ -127,7 +127,7 @@ class VideoReportNextHandler(BaseHandler):
         #                     parameters=dict(
         #                         report_type=report_type,
         #                         csid=self.current_user.id))
-        j_data = dict(ret=1,
+        j_data = dict(ret=0,
                       info="",
                       data=[dict(id=123,
                                  url="http://test.resource.youja.cn/resource_type/305/resource_id/170/A.mp4 ",
