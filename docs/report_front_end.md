@@ -744,7 +744,7 @@ GET uplus-report/api/get_next_report
         }
 
 ##### 获取被举报用户详情：  
-GET uplus-report/api/get_next_report    
+GET uplus-report/api/get_user_detail    
 
 参数：   
    * 必选：       
@@ -987,4 +987,3 @@ GET   /uplus-report/api/get_profile
 | |用户 : 限制登录|用户 : 限制登录，删除资源|
 |私聊|用户 : 限制登录|用户 : 限制登录，删除资源|
 |个人|用户 : 限制登录|用户 : 限制登录，删除资源|
-
