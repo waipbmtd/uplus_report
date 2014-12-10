@@ -405,15 +405,15 @@ section{
 					background: @color-dim;
 				}
 
-				i{
-					padding: @distance / 4 @distance / 2;
-					color: @color-white;
-					border-radius: @radius;
-					background: @color-red;
-				}
-
 				label{
 					margin-left: 2em;
+
+					&>i{
+						padding: @distance / 4 @distance / 2;
+						color: @color-white;
+						border-radius: @radius;
+						background: @color-red;
+					}
 				}
 			}
 			dd{
@@ -491,6 +491,10 @@ section{
 				padding-top: 1px;
 				border-top: 1px solid @color-frivo;
 				background: @color-white;
+			}
+			strong{
+				.normal;
+				.hand;
 			}
 		}
 	}

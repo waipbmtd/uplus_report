@@ -138,8 +138,12 @@ _.api = {
 	// 获取用户详细
 	user_detail: '/user/log/list',
 
+	// 获取 User Profile
+	user_profile: function( uid ){
+		return '/user/profile?u_id=' + uid;
+	},
 	// 获取Profile
-	report_profile: function(rid){
+	report_profile: function( rid ){
 		return '/report/' + rid + '/profile';
 	}
 },

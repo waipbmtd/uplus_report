@@ -1289,6 +1289,12 @@ textarea{
 .scroll-y{
 	overflow-y: auto;
 }
+.bold{
+	font-weight: bold;
+}
+.normal{
+	font-weight: normal;
+}
 
 
 /* Component */
@@ -1563,6 +1569,56 @@ textarea{
 					margin-top: -24px;
 				}
 			}
+		}
+	}
+}
+.poper{
+	width: 320px; height: 180px;
+	position:fixed;
+	z-index: 1;
+	background: @color-white;
+	border-radius: @radius;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+
+	dt, dd{
+		border: none;
+		background: transparent;
+	}
+	dt{
+		height: 0;
+		.text-center;
+	}
+	dd{
+		color: @color-hazy;
+		.relative;
+
+		&>img{
+			max-width: 120px; max-height: 120px;
+			.absolute;
+			top: 5px; right: 5px;
+			border: 1px solid @color-ghost;
+			border-radius: @radius;
+		}
+	}
+
+	.caret{
+		.caret;
+
+		top: -16px; z-index: 1;
+		.relative;
+
+		border-top: none;
+		border-bottom: 8px solid @color-frivo;
+		border-left-width: 8px;
+		border-right-width: 8px;
+	}
+
+	ul{
+		width: 360px;
+		padding: @distance / 2 0;
+
+		li{
+			padding: 0 @distance;
 		}
 	}
 }

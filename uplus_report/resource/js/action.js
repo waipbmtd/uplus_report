@@ -15,6 +15,8 @@ _.cache = {
 		special: [],
 		system: []
 	},
+	// Profile 信息
+	profile: {},
 	// 本地数据
 	egg: Number( _.localStorage.getItem('egg') ) || (_.localStorage.setItem('egg', 100), 100)
 }
@@ -881,7 +883,75 @@ var
 					});
 				});
 			}
-		}('.report_select_panel')
+		}('.report_select_panel'),
+
+		popInfo: function( it ){
+
+			var
+				pop = $('.poper'),
+
+				id = $.trim( it.text() ),
+
+				doInsert = function( data ){
+
+					return	( ( data.user_avatar_url ? '<img src="' + data.user_avatar_url + '">' : '' )
+							+ '<ul>'
+							+ '<li><label>用户ID:</label><span>' + data.user_id + '</span></li>'
+							+ '<li><label>用户昵称:</label><span>' + data.user_name + '</span></li>'
+							+ '<li><label>用户简介:</label><span>' + data.user_desc + '</span></li>'
+							+ '<li><label>被惩罚图片:</label><span>' + data.punish_image + '</span></li>'
+							+ '<li><label>被惩罚视频:</label><span>' + data.punish_video + '</span></li>'
+							+ '<li><label>被惩罚音频:</label><span>' + data.punish_audio + '</span></li>'
+							+ '<li><label>被惩罚文本:</label><span>' + data.punish_text + '</span></li>'
+							+ '</ul>');
+
+				};
+
+			if( !pop.length ){
+
+				pop = '<dl class="poper">'
+					+ '<dt><i class="caret"></i><dt>'
+					+ '<dd>'
+					+ 'Loading Now ...'
+					+ '</dd>'
+					+ '</dl>';
+
+				dom.bod.append(
+					pop = $(pop)
+				);
+			}
+
+			pop.css({
+				left: it.offset().left + it.outerWidth() / 2 - 180,
+				top: it.offset().top + it.outerHeight() + 8
+			});
+			it
+				.off( _.evt.out )
+				.on( _.evt.out, function(e){
+					pop.remove(), it.off( _.evt.out );
+				});
+
+			if( _.cache.profile[id] ){
+
+				pop.find('dd').html( doInsert( _.cache.profile[id] ) );
+
+			}
+			else{
+
+				$.ajax({
+					type: 'get',
+					dataType: 'json',
+					url: _.api.user_profile( it.text() ),
+					success: function(data){
+
+						pop.find('dd').html( doInsert( _.cache.profile[id] = data.data ) );
+
+					}
+				});
+
+			}
+
+		}
 
 	};
 
@@ -1782,6 +1852,14 @@ $.extend({
 		/* Data-Function-Action */
 		_.dom.bod.delegate('[data-function]', _.evt.click, function(){
 			var it = $(this), fn = it.attr('data-function');
+			if( kitFunction[fn] ){
+				kitFunction[fn]( it );
+			}
+		});
+
+		/* Data-Hover-Action */
+		_.dom.bod.delegate('[data-hover]', _.evt.over, function(){
+			var it = $(this), fn = it.attr('data-hover');
 			if( kitFunction[fn] ){
 				kitFunction[fn]( it );
 			}

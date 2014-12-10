@@ -157,7 +157,7 @@ class UplusUserProfileHandler(BaseHandler):
     def get(self):
         uid = self.get_argument("u_id")
         server_api = self.USER_PROFILE_API
-        return self.send_success_json(data=dict(ret=1,
+        return self.write(json.dumps(dict(ret=1,
                                                 info="",
                                                 data=dict(user_id=uid,
                                                           user_name="友加大绵羊",
@@ -167,7 +167,7 @@ class UplusUserProfileHandler(BaseHandler):
                                                           punish_video=34,
                                                           punish_audio=213,
                                                           punish_text=1235)
-                                                ))
+                                                )))
         # reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
         #                                              server_api,
         #                                              parameters=dict(

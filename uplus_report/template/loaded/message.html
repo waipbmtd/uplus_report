@@ -44,7 +44,7 @@ switch( it.data.mod ){
 	<dt>
 		<bdo>来源：{{= $.escape(it.data.mod, 'mod') }}</bdo>
 		<label data-id="{{= it.data.id }}"><span>ID：</span>{{= it.data.id }}</label>
-		<label data-reporter="{{= it.data.reporter }}"><span>举报人：</span>{{= it.data.reporter }}</label>
+		<label data-reporter="{{= it.data.reporter }}"><span>举报人：</span><strong data-hover="popInfo">{{= it.data.reporter }}</strong></label>
 		<label data-type="reason"><span>原因：</span>{{= $.escape(it.data.type, 'type') }}</label>
 		<label><i>剩余：{{= it.remain.msg_remain }}</i></label>
 	</dt>
@@ -124,7 +124,7 @@ switch( it.data.mod ){
 
 						{{ } }}
 
-						<td>{{= item.senderid }}</td>
+						<td><strong data-hover="popInfo">{{= item.senderid }}</strong></td>
 						<td>{{= $.escape(item.msg_type, 'msg_types') || '' }}</td>
 						<td>
 							<menu>
