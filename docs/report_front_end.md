@@ -178,8 +178,30 @@ GET /report/album_image/list
               },{...},...]     
         }
         }
+
+##### 获取下一个视频
+GET /report/video/next    
+
+参数： 
+   * 必选：   
+      report_type : 是否高危（ 1：高危, 2:资源）     
+  
+返回值:
+>
+    {ret:1,
+    info: ''
+    data:{
+          [{  id : 关联举报记录 的id(唯一标识符)，
+              url: 视频的url，
+              reporter: 举报者，
+              u_id: 被举报的人， 
+              mod: 举报入口
+              mid: 模块ID
+              }]     
+        }
+        }
         
-        
+
 #####获取下一个被举报message
 GET /report/message/next   
 
@@ -224,7 +246,7 @@ GET user/profile
 
 参数：   
    * 必选：       
-     user_id : u+用户id   
+     u_id : u+用户id   
 
 返回值:      
 >
@@ -743,12 +765,35 @@ GET uplus-report/api/get_next_report
         }
         }
 
+##### 获取下一个视频
+GET 
+
+参数： 
+   * 必选：   
+      csid : 客服ID    
+      report_type : 是否高危（ 1：高危, 2:资源）     
+  
+返回值:
+>
+    {ret:1,
+    info: ''
+    data:{
+          [{  id : 关联举报记录 的id(唯一标识符)，
+              url: 视频的url，
+              reporter: 举报者，
+              u_id: 被举报的人， 
+              mod: 举报入口
+              mid: 模块ID
+              }]     
+        }
+        }
+
 ##### 获取被举报用户详情：  
 GET uplus-report/api/get_user_detail    
 
 参数：   
    * 必选：       
-     user_id : u+用户id   
+     u_id : u+用户id   
 
 返回值:   
 >
