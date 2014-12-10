@@ -1,7 +1,9 @@
 [default]
-host = report.api.youja.cn
+host = 192.168.1.185:8180
+#host = 127.0.0.1:8081
 report_album_image_list = uplus-report/api/get_pic_list
 report_message_next = uplus-report/api/get_next_report
+report_video_next = uplus-report/api/report_video
 report_remain_count = uplus-report/api/get_remain_report
 
 report_close_api = uplus-report/api/close/mt/%(mod_type)s/uid/%(u_id)s
@@ -21,6 +23,8 @@ report_sheet = uplus-report/api/get_customer_stat
 
 report_profile = uplus-report/api/get_profile
 
+
+
 user_punish_log = uplus-report/api/get_deal_result
 
 hall_openmouth = openmouth/hall
@@ -29,3 +33,5 @@ show_openmouth = openmouth/show/%(showId)s
 show_unlock = unlock/show/%(showId)s
 
 user_unlock= unlock/user/%(uid)s
+user_profile= uplus-report/api/get_user_detail
+

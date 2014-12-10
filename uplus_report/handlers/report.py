@@ -71,7 +71,6 @@ class MessageReportNextHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @session_manage
     @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
@@ -82,28 +81,64 @@ class MessageReportNextHandler(BaseHandler):
                                                          report_type=report_type,
                                                          csid=self.current_user.id))
 
-        self.asyn_response(reps)
-        j_data = json.loads(reps.body)
-        ret = int(j_data.get("ret"))
-        if ret == 0:
-            data = j_data.get("data", {})
-            data.update(
-                {"profile": data.get("profile", dict(name="",
-                                                     desc="",
-                                                     oid="",
-                                                     mid="")
-                )
-                })
-            j_data.update({"data": data})
+        if isinstance(reps, HTTPError):
+            self.send_error_json(info=reps.message, code=reps.code)
+        else:
+            j_data = json.loads(reps.body)
+            ret = int(j_data.get("ret"))
+            if ret == 0:
+                data = j_data.get("data", {})
+                data.update(
+                    {"profile": data.get("profile", dict(name="",
+                                                         desc="",
+                                                         oid="",
+                                                         mid="")
+                    )
+                    })
+                j_data.update({"data": data})
+            self.send_success_json(j_data)
 
     @gen.coroutine
     def on_finish(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        yield gen.Task(self.record_log, content=u"获取下一条消息 " +
-                                                reportConstant.REPORT_TYPE_ENUMS.get(
-                                                    int(report_type)).decode(
-                                                    'utf8'))
+        yield gen.Task(self.record_log,
+                       content=u"获取下一条消息 " +
+                               reportConstant.REPORT_TYPE_ENUMS.get(
+                                   int(report_type)).decode(
+                                   'utf8'))
+
+
+class VideoReportNextHandler(BaseHandler):
+    """
+    获取下一个被举报的视频
+    """
+    NEXT_MESSAGE = config.api.report_video_next
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    @gen.coroutine
+    def get(self):
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_RISK)
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            self.NEXT_MESSAGE,
+                            parameters=dict(
+                                report_type=report_type,
+                                csid=self.current_user.id))
+
+        self.asyn_response(reps)
+
+    @gen.coroutine
+    def on_finish(self):
+        report_type = self.get_argument("report_type",
+                                        reportConstant.REPORT_TYPE_COMM)
+        yield gen.Task(self.record_log,
+                       content=u"获取下一条被举报视频 " +
+                               reportConstant.REPORT_TYPE_ENUMS.get(
+                                   int(report_type)).decode(
+                                   'utf8'))
 
 
 class RemainReportCountHandler(BaseHandler):
@@ -157,7 +192,7 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
         # data.append(dict(msg_remain=0, album_remain=0))
         # data.append(dict(msg_remain=0, album_remain=0))
         # data.append(dict(msg_remain=0,
-        #                  album_remain=int(redis_remain_num.get(self.KEY))))
+        # album_remain=int(redis_remain_num.get(self.KEY))))
         r_j_data = dict(data=data)
         self.write_message(self.build_success_json(r_j_data))
 

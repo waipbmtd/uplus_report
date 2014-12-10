@@ -118,7 +118,7 @@ class UserHandler(BaseHandler):
     # #更新某个用户
     # userid = int(self.get_argument("userid", self.current_user.id))
     # org_user = self.session.query(AdminUser).get(userid)
-    #     org_username = org_user.username
+    # org_username = org_user.username
     #     org_password = org_user.password
     #
     #     username = self.get_argument("username")
@@ -147,6 +147,37 @@ class UserNameExistCheckHandler(BaseHandler):
             username=username).count()
         return self.send_success_json(
             dict(data=dict(exist=num > 0 and 1 or 0)))
+
+
+class UplusUserProfileHandler(BaseHandler):
+    USER_PROFILE_API = config.api.user_profile
+
+    @tornado.web.authenticated
+    # @gen.coroutine
+    def get(self):
+        uid = self.get_argument("u_id")
+        server_api = self.USER_PROFILE_API
+        return self.send_success_json(data={"ret": 1,
+                                            "info": '',
+                                            "data": {
+                                                "user_id": uid,
+                                                "user_name": "友加大绵羊",  # string
+                                                "user_desc": "友加大绵羊",  #string
+                                                "user_avatar_url": "http://122.144.133.40:8200/user/10000/avatar/22055214/middle",
+                                                #url
+                                                "punish_image": 1298,
+                                                "punish_video": 34,
+                                                "punish_audio": 213,
+                                                "punish_text": 1235,
+                                            }
+        })
+        # reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
+        #                                              server_api,
+        #                                              parameters=dict(
+        #                                                  user_id=uid,
+        #                                                  csid=self.current_user.id,
+        #                                              ))
+        # self.asyn_response(reps)
 
 
 class UplusUserBaseHandler(BaseHandler):
@@ -184,7 +215,6 @@ class UnlockUplusUserHandler(UplusUserBaseHandler):
         self.record_log(content, memo=self.v("memo"))
 
     @util.exception_handler
-    @session_manage
     @tornado.web.authenticated
     @gen.coroutine
     def post(self):

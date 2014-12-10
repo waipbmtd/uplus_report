@@ -34,6 +34,8 @@ routers = [
         report.AlbumImageReportListHandler),
     #获取下一个被举报的消息
     url(r"/report/message/next", report.MessageReportNextHandler),
+    #获取下一个被举报的视频
+    url(r"/report/video/next", report.VideoReportNextHandler),
     #获取还剩余的未处理的举报数
     url(r"/report/remain", report.RemainReportCountHandler),
     #获取所有还剩余的未处理的举报数（长连）
@@ -86,6 +88,8 @@ routers = [
     url(r'/user/name_id_list', user.UserNameIdListHandler),
     #检查用户名是否存在：
     url(r'/user/check_name', user.UserNameExistCheckHandler),
+    #友加用户Profile:
+    url(r'/user/profile', user.UplusUserProfileHandler),
 
 
     #系统用户日志
