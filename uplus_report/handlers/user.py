@@ -157,20 +157,17 @@ class UplusUserProfileHandler(BaseHandler):
     def get(self):
         uid = self.get_argument("u_id")
         server_api = self.USER_PROFILE_API
-        return self.send_success_json(data={"ret": 1,
-                                            "info": '',
-                                            "data": {
-                                                "user_id": uid,
-                                                "user_name": "友加大绵羊",  # string
-                                                "user_desc": "友加大绵羊",  #string
-                                                "user_avatar_url": "http://122.144.133.40:8200/user/10000/avatar/22055214/middle",
-                                                #url
-                                                "punish_image": 1298,
-                                                "punish_video": 34,
-                                                "punish_audio": 213,
-                                                "punish_text": 1235,
-                                            }
-        })
+        return self.send_success_json(data=dict(ret=1,
+                                                info="",
+                                                data=dict(user_id=uid,
+                                                          user_name="友加大绵羊",
+                                                          user_desc="友加大绵羊",
+                                                          user_avatar_url="http://122.144.133.40:8200/user/10000/avatar/22055214/middle",
+                                                          punish_image=1234,
+                                                          punish_video=34,
+                                                          punish_audio=213,
+                                                          punish_text=1235)
+                                                ))
         # reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
         #                                              server_api,
         #                                              parameters=dict(
