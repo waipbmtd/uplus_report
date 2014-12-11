@@ -139,8 +139,8 @@ _.api = {
 	user_detail: '/user/log/list',
 
 	// 获取视频信息
-	video_next: function( type ){
-		return '/report/video/next?resource_type=' + type
+	video_next: function( resource, report ){
+		return '/report/video/next?resource_type=' + resource + '&report_type=' + report
 	},
 
 	// 获取 User Profile

@@ -582,7 +582,7 @@ var
 
 			$.renderHTML({
 				element: data.element || media,
-				data: _.api.video_next( data.type ),
+				data: _.api.video_next( data.resource, data.report ),
 				html: _.tpl.video_next,
 				than: data,
 				type: 'get',
@@ -1055,7 +1055,7 @@ var
 				// 获取剩余消息数, 并渲染页面
 				kitFunction.getRemain({
 					callback: function(result){
-						kitFunction.renderVideoPage({ remain: result.data, element: itData.element, type: itData.type });
+						kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 					}
 				});
 
