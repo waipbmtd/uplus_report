@@ -1067,6 +1067,9 @@ var
 				mask.open();
 			}
 
+			// 参数容错: report: reporter
+			_.cache.video.reporter = _.cache.video.report;
+
 			// 1.通过, 2.请求数据
 			$.ajax({
 				type: 'post',
