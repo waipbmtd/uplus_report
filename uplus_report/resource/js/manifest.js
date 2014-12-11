@@ -8,6 +8,7 @@ _.modules = 'plugin/jQuery/jQuery.min'
 + ' plugin/fancybox/jquery.fancybox.pack'
 + ' plugin/socketio/socket.io'
 + ' plugin/jquery-ui.custom/jquery-ui.min'
++ ' plugin/video-js/video'
 + ' Youjia action'
 
 })

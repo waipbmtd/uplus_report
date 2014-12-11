@@ -138,6 +138,11 @@ _.api = {
 	// 获取用户详细
 	user_detail: '/user/log/list',
 
+	// 获取视频信息
+	video_next: function( type ){
+		return '/report/video/next?resource_type=' + type
+	},
+
 	// 获取 User Profile
 	user_profile: function( uid ){
 		return '/user/profile?u_id=' + uid;
@@ -162,7 +167,9 @@ _.tpl = {
 	users_risk: _.path.template('loaded/users_risk'),
 	users_sheet: _.path.template('loaded/users_sheet'),
 	select_panel: _.path.template('loaded/select_panel'),
-	user_detail: _.path.template('loaded/user_detail')
+	user_detail: _.path.template('loaded/user_detail'),
+	user_profile: _.path.template('loaded/user_profile'),
+	video_next: _.path.template('loaded/video_next')
 },
 
 /* !!
@@ -665,21 +672,24 @@ $.extend({
 		, options.callback = options.callback || $.noop
 		, options.action = function( data ){
 			if( options.html ){
-                var t_html = $("body").data(options.html);
-                if (t_html != undefined){
-                    options.callback( (options.render = doT.template( t_html )(data), (options.database = data, options)) );
-                }else{
-                    $.ajax({
-                        type: 'get',
-                        cache: true,
-                        url: options.html,
-                        success: function(html){
-                            $("body").data(options.html, html)
-                            options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
-                        }
-                    });
-                }
-				return;
+
+				return function( tempCache ){
+
+					if( tempCache ){
+						options.callback( (options.render = doT.template( tempCache )(data), (options.database = data, options)) );
+						return;
+					}
+					$.ajax({
+						type: 'get',
+						cache: true,
+						url: options.html,
+						success: function(html){
+							_.dom.bod.data(options.html, html),
+							options.callback( (options.render = doT.template( html )(data), (options.database = data, options)) );
+						}
+					});
+
+				}( _.dom.bod.data( options.html ) );
 			}
 			options.callback( (options.render = doT.template( $(options.element).html() )(data), (options.database = data, options)) );
 		};

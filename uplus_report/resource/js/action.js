@@ -9,6 +9,8 @@ _.cache = {
 	albums: [],
 	// 消息存储
 	message: [],
+	// 视频存储
+	video: [],
 	// 用户存储
 	users: {
 		risk: [],
@@ -72,7 +74,7 @@ if( $.datepicker ){
  * All Function Is In Plus
  * ** *** **** ***** **** *** ** *
  */
-;+function( kit, masonry, report, reportUser, active ){
+;+function( kit, masonry, report, media, reportUser, active ){
 
 var
 	/* Full Mask */
@@ -89,6 +91,9 @@ var
 
 	/* Report Element */
 	iReport = $(report),
+
+	/* Media Element */
+	iMedia = $(media),
 
 	/* Report User */
 	iReportUser = $(reportUser),
@@ -571,6 +576,101 @@ var
 			});
 		},
 
+		/* 渲染视频页面 */
+		renderVideoPage: function(data){
+			data = data || {};
+
+			$.renderHTML({
+				element: data.element || media,
+				data: _.api.video_next( data.type ),
+				html: _.tpl.video_next,
+				than: data,
+				type: 'get',
+				dataType: 'json',
+				callback: function(options){
+					_.cache.video = options.database.data[0];
+
+					// Append Html To Element
+					$(options.element).empty().html( options.render ).ready(function(){
+
+						var container = '.v-control form ';
+
+						// Tab 切换事件
+						$.taber({
+							container: container + 'li menu',
+							menus: 'button',
+							callback: function(it, index){
+								it = $(it);
+
+								var
+									parent = it.closest('li'),
+									next = it.next();
+
+								parent.find('[data-name]:eq(0)').attr('data-value', it.attr('data-option')),
+								parent.find('span').hide();
+
+								if( next.is('span') ){
+									next.show();
+								}
+							}
+						});
+
+						// Input Press
+						$.sameInput({
+							input: container + '[data-name=timedelta]',
+							onKeydown: function(e){
+								var code = e.keyCode;
+								if( !!~$.inArray(code, $.mergeArray(_.keys.number, _.keys.negative, _.keys.point, _.keys.back)) ){
+									return true;
+								}
+								return false;
+							},
+							onKeyup: function(e){
+								e.target.setAttribute('data-value', e.target.value);
+							},
+							onChange: function(e){
+								e.target.setAttribute('data-value', e.target.value);
+							}
+						});
+
+						// Textarea Input
+						$.sameInput({
+							input: container + '[data-name=memo]',
+							onKeyup: function(e){
+								e.target.setAttribute('data-value', e.target.value);
+							},
+							onChange: function(e){
+								e.target.setAttribute('data-value', e.target.value);
+							}
+						});
+
+						// 绑定提交事件
+						$.formSubmit();
+
+						// 二次渲染, 获取Video Profile
+						return function( videoProfile ){
+
+							$.renderHTML({
+								element: videoProfile,
+								data: _.api.user_profile( $( videoProfile ).attr('data-uid') ),
+								html: _.tpl.user_profile,
+								than: data,
+								type: 'get',
+								dataType: 'json',
+								callback: function(options){
+
+									// Append Html To Element
+									$(options.element).empty().html( options.render );
+								}
+							});
+
+						}( '.v-profile' );
+
+					});
+				}
+			});
+		},
+
 		/* Get Data */
 		getInfoData: function(it){
 
@@ -890,22 +990,7 @@ var
 			var
 				pop = $('.poper'),
 
-				id = $.trim( it.text() ),
-
-				doInsert = function( data ){
-
-					return	( ( data.user_avatar_url ? '<img src="' + data.user_avatar_url + '">' : '' )
-							+ '<ul>'
-							+ '<li><label>用户ID:</label><span>' + data.user_id + '</span></li>'
-							+ '<li><label>用户昵称:</label><span>' + data.user_name + '</span></li>'
-							+ '<li><label>用户简介:</label><span>' + data.user_desc + '</span></li>'
-							+ '<li><label>被惩罚图片:</label><span>' + data.punish_image + '</span></li>'
-							+ '<li><label>被惩罚视频:</label><span>' + data.punish_video + '</span></li>'
-							+ '<li><label>被惩罚音频:</label><span>' + data.punish_audio + '</span></li>'
-							+ '<li><label>被惩罚文本:</label><span>' + data.punish_text + '</span></li>'
-							+ '</ul>');
-
-				};
+				id = $.trim( it.text() );
 
 			if( !pop.length ){
 
@@ -922,7 +1007,7 @@ var
 			}
 
 			pop.css({
-				left: it.offset().left + it.outerWidth() / 2 - 180,
+				left: it.offset().left + (it.outerWidth() / 2) - 160,
 				top: it.offset().top + it.outerHeight() + 8
 			});
 			it
@@ -938,19 +1023,109 @@ var
 			}
 			else{
 
-				$.ajax({
+				$.renderHTML({
+					element: pop.find('dd'),
+					data: _.api.user_profile( it.text() ),
+					html: _.tpl.user_profile,
 					type: 'get',
 					dataType: 'json',
-					url: _.api.user_profile( it.text() ),
-					success: function(data){
-
-						pop.find('dd').html( doInsert( _.cache.profile[id] = data.data ) );
-
+					callback: function(options){
+						// Append Html To Element
+						$(options.element).empty().html( options.render );
 					}
 				});
 
 			}
 
+		},
+
+		// 获取视频: 下一条
+		getVideoNext: function(it){
+			// 全局锁
+			if( _.globalLock ){
+				return;
+			}
+
+			var itData = $.getData(it),
+				iElement = $(itData.element);
+
+			// 如果空(首次拉取数据)
+			if( iElement.find('.unPage').length ){
+
+				// 获取剩余消息数, 并渲染页面
+				kitFunction.getRemain({
+					callback: function(result){
+						kitFunction.renderVideoPage({ remain: result.data, element: itData.element, type: itData.type });
+					}
+				});
+
+				return false;
+			}
+
+			// Loading UI
+			if( !kitFunction.hasMask() ){
+				mask.open();
+			}
+
+			// 1.通过, 2.请求数据
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: _.api.pass,
+				data: _.cache.video,
+				success: function(result){
+					$.checkResult(result, function( result ){
+
+						// Loading UI
+						mask.close();
+
+						// 请求数据
+						iElement.html('<div class="unPage">'),
+						kitFunction.getVideoNext( it );
+					});
+				}
+			});
+
+			return;
+		},
+
+		// 视频 - 删除资源
+		video_del: function( it ){
+
+			var form = it.closest('form');
+
+			form.find('[data-name=punish_type]').attr('data-value', 103);
+
+			$.each(_.cache.video, function(name, value){
+				form.append('<i data-name="' + name + '" data-value="' + value + '">');
+			});
+
+			// Loading UI
+			if( !kitFunction.hasMask() ){
+				mask.open();
+			}
+
+			form.submit();
+
+		},
+
+		// 视频 - 限制登录
+		video_lim: function( it ){
+
+			var form = it.closest('form');
+
+			form.find('[data-name=punish_type]').attr('data-value', 104);
+
+			$.each(_.cache.video, function(name, value){
+				form.append('<i data-name="' + name + '" data-value="' + value + '">');
+			});
+			
+			// Loading UI
+			if( !kitFunction.hasMask() ){
+				mask.open();
+			}
+
+			form.submit();
 		}
 
 	};
@@ -1415,6 +1590,19 @@ $.extend({
 			console.log( result );
 			alert('I am callback Image');
 		},
+		videoSubmit: function(result, form){
+			$.checkResult(result, function( result ){
+				// Loading UI
+				mask.close();
+
+				var mediaContainer = form.closest('.media');
+				mediaContainer.html('<div class="unPage"></div>');
+
+				// 当前可见的Kit按钮
+				iKit.find('li:visible').trigger( _.evt.click );
+
+			});
+		},
 		getUsers: function(result, form){
 			$.checkResult(result, function( result ){
 
@@ -1873,7 +2061,7 @@ $.extend({
 
 
 
-}( '.kit', '.masonry', '.report', '.report_user', 'active' );
+}( '.kit', '.masonry', '.report', '.media', '.report_user', 'active' );
 
 })
 (window, jQuery);

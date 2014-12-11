@@ -1,0 +1,14 @@
+{{ it = it.data; }}
+
+{{? it.user_avatar_url }}
+<img src="{{=it.user_avatar_url}}">
+{{? }}
+<ul>
+	<li><label>用户ID: </label><span>{{=it.user_id}}</span></li>
+	<li><label>用户昵称: </label><span>{{=it.user_name}}</span></li>
+	<li><label>用户简介: </label><span>{{=it.user_desc}}</span></li>
+	<li><label>被惩罚图片: </label><span>{{=it.punish_image}}</span></li>
+	<li><label>被惩罚视频: </label><span>{{=it.punish_video}}</span></li>
+	<li><label>被惩罚音频: </label><span>{{=it.punish_audio}}</span></li>
+	<li><label>被惩罚文本: </label><span>{{=it.punish_text}}</span></li>
+</ul>

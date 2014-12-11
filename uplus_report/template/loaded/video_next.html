@@ -1,0 +1,59 @@
+{{ it = it.data[0]; }}
+
+<div class="videos">
+
+	<div>
+
+		<div class="v-video">
+			<h4>修长的Video</h4>
+			<video controls preload="none" poster="{{= it.thumb_url }}" width="320" height="180">
+				<source type="video/mp4" src="{{= it.url }}"></source>
+			</video>
+		</div>
+		<div class="v-control">
+			<form action="/punish" method="post" data-callback="videoSubmit" data-submit="ajax">
+				<!-- Module Type: 4(用户) -->
+				<i data-name="module_type" data-value="4"></i>
+				<ul>
+					<li>
+						<label data-name="reason" data-value="2"><i class="sign">*</i>违规类型：</label>
+						<div>
+							<menu>
+								<button data-option="2" type="button" class="active">色情</button>
+								<button data-option="1" type="button">广告</button>
+								<button data-option="3" type="button">敏感话题</button>
+							</menu>
+						</div>
+					</li>
+					<li>
+						<label data-name="punish_type" data-value="104"><i class="sign">*</i>限时：</label>
+						<div>
+							<menu>
+								<span class="input-time-hour">
+									<input type="text" data-value="" data-name="timedelta">
+									<bdo>小时</bdo>
+								</span>
+							</menu>
+						</div>
+					</li>
+					<li>
+						<label>备注：</label>
+						<div>
+							<textarea data-name="memo" placeholder="处罚详细原因" rows="3" data-value=""></textarea>
+						</div>
+					</li>
+				</ul>
+				<hr />
+				<menu>
+					<button type="button" data-function="video_del" data-id="">删除资源</button>
+					<button type="button" data-function="video_lim" data-id="">限制登录</button>
+				</menu>
+			</form>
+		</div>
+		<div class="v-profile" data-uid="{{= it.u_id }}"></div>
+
+	</div>
+
+	<hr />
+
+</div>

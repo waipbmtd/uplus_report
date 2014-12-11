@@ -390,7 +390,7 @@ section{
 			}
 		}
 
-		.report{
+		.report, .media{
 			dt, .profile, .proinfo li{
 				padding: @distance / 2 @distance;
 			}
@@ -496,6 +496,91 @@ section{
 				.normal;
 				.hand;
 			}
+		}
+
+		.videos{
+			&>div{
+				padding: @distance @distance 0;
+				.over-hide;
+
+				&>div{
+					.left;
+
+					&.v-video, &.v-control{
+						padding-right: @distance;
+					}
+					&.v-video{
+						min-height: 210px;
+						h4{
+							line-height: @distance * 3;
+							font-size: 16px;
+						}
+					}
+					&.v-control{
+						.audit-operat;
+						min-width: 340px; min-height: 220px;
+						padding: 0 @distance;
+
+						li{
+							label{
+								width: 6em;
+							}
+							div{
+								margin-left: 6em;
+							}
+						}
+						form{
+							i{
+								width:0; height:0;
+								.over-hide;
+							}
+							textarea{
+								width: 250px;
+							}
+							&>menu{
+								.text-right;
+
+								button{
+									margin-left: @distance / 2;
+									color: @color-white;
+								}
+							}
+						}
+					}
+					&.v-profile{
+						.relative;
+
+						img{
+							.absolute;
+
+							top: 5px; right: 5px;
+						}
+						li{
+							padding: 0 @distance;
+						}
+					}
+					&.v-video, &.v-control, &.v-profile{
+						height: 236px;
+					}
+
+					border-right: 1px solid @color-frivo;
+					border-left: 1px solid @color-white;
+
+					&:first-child{
+						border-left: none;
+					}
+					&:last-child{
+						border-right: none;
+					}
+
+				}
+			}
+
+			hr{
+				width: 100%;
+				.line-gray;
+			}
+
 		}
 	}
 
