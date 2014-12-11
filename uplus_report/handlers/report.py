@@ -8,6 +8,7 @@ import tornado
 import tornado.web
 from tornado import gen
 from tornado.httpclient import HTTPError
+from tornado import ioloop
 
 import config
 from handlers.base import BaseHandler, BaseWebSocketHandler
@@ -36,7 +37,6 @@ class AlbumImageReportListHandler(BaseHandler):
     """
     LIST_ALBUM_IMAGE = config.api.report_album_image_list
 
-    @util.exception_handler
     @tornado.web.authenticated
     @gen.coroutine
     def get(self):
@@ -115,29 +115,21 @@ class VideoReportNextHandler(BaseHandler):
     """
     NEXT_MESSAGE = config.api.report_video_next
 
-    @util.exception_handler
     @tornado.web.authenticated
-    # @gen.coroutine
+    @gen.coroutine
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_RISK)
-        # reps = yield WebRequrestUtil. \
-        #     asyncGetRequest(API_HOST,
-        #                     self.NEXT_MESSAGE,
-        #                     parameters=dict(
-        #                         report_type=report_type,
-        #                         csid=self.current_user.id))
-        j_data = dict(ret=0,
-                      info="",
-                      data=[dict(id=123,
-                                 url="http://test.resource.youja.cn/resource_type/305/resource_id/170/A.mp4 ",
-                                 thumb_url="http://122.144.133.40:8200/user/39540784/avatar/38109669/middle",
-                                 report=16710605,
-                                 u_id=39540784,
-                                 mod=25,
-                                 mid=24)])
-        return self.write(json.dumps(j_data))
-        # self.asyn_response(reps)
+        resource_type = self.get_argument("resource_type",
+                                          reportConstant.VIDEO_FROM_SHOW)
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            self.NEXT_MESSAGE,
+                            parameters=dict(
+                                report_type=report_type,
+                                resource_type=resource_type,
+                                csid=self.current_user.id))
+        self.asyn_response(reps)
 
     @gen.coroutine
     def on_finish(self):
@@ -159,12 +151,13 @@ class RemainReportCountHandler(BaseHandler):
     def get(self):
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
-        reps = yield WebRequrestUtil.asyncGetRequest(API_HOST,
-                                                     self.REMAIN_REPORT,
-                                                     parameters=dict(
-                                                         report_type=report_type,
-                                                         csid=self.current_user.id
-                                                     ))
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            self.REMAIN_REPORT,
+                            parameters=dict(
+                                report_type=report_type,
+                                csid=self.current_user.id
+                            ))
         self.asyn_response(reps)
 
 
@@ -175,35 +168,66 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     clients = set()
     REMAIN_REPORT = config.api.report_remain_count
 
-    def open(self):
-        WSRemainReportCountHandler.clients.add(self)
+    _start = False
 
-    def on_message(self, message):
-        logging.info("receive message %s" % message)
-        self._build_message()
-
-    def on_close(self):
-        WSRemainReportCountHandler.clients.remove(self)
-        logging.info("webSocket Close")
-
+    @classmethod
     @gen.coroutine
-    def _build_message(self):
+    def subscript_message(cls):
+        s_j_data = cls._redis.get(cls.KEY)
+        if len(cls.clients) == 0:
+            return
+        if not s_j_data:
+            cls._redis.psetex(cls.KEY, int(config.app.websocket_timestamp),
+                              "{}")
+            s_j_data = yield cls.read_stat()
+        else:
+            ttl = cls._redis.pttl(cls.KEY)
+            if ttl < 2000:
+                cls._redis.pexpire(cls.KEY,
+                                   int(config.app.websocket_timestamp))
+                s_j_data = yield cls.read_stat()
+
+        [x.write_message(x.build_success_json(json.loads(s_j_data))) for x in
+         WSRemainReportCountHandler.clients]
+
+    @classmethod
+    @gen.coroutine
+    def read_stat(cls):
+        logging.info(
+            "websocket connections(%s), in read db" % len(cls.clients))
         resps = yield [WebRequrestUtil.
                            asyncGetRequest(API_HOST,
-                                           self.REMAIN_REPORT,
+                                           cls.REMAIN_REPORT,
                                            parameters=dict(
                                                report_type=report_type
                                            )) for
                        report_type in
                        reportConstant.REPORT_TYPE_ENUMS]
         data = [json.loads(reps.body).get("data") for reps in resps]
-        # data=[]
-        # data.append(dict(msg_remain=0, album_remain=0))
-        # data.append(dict(msg_remain=0, album_remain=0))
-        # data.append(dict(msg_remain=0,
-        # album_remain=int(redis_remain_num.get(self.KEY))))
         r_j_data = dict(data=data)
-        self.write_message(self.build_success_json(r_j_data))
+        s_j_data = json.dumps(r_j_data)
+        cls._redis.psetex(cls.KEY,
+                          cls._redis.pttl(cls.KEY) + 1000,
+                          s_j_data)
+        raise gen.Return(s_j_data)
+
+    def open(self):
+        if not len(self.clients) and not self._start:
+            ioloop.PeriodicCallback(
+                WSRemainReportCountHandler.subscript_message,
+                int(config.app.websocket_timestamp)).start()
+        WSRemainReportCountHandler.clients.add(self)
+        self._start = True
+
+
+    def on_message(self, message):
+        pass
+        # logging.info("receive message %s" % message)
+        # self._build_message()
+
+    def on_close(self):
+        WSRemainReportCountHandler.clients.remove(self)
+        logging.info("webSocket Close")
 
 
 class ReportEndHandler(BaseHandler):

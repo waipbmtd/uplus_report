@@ -3,7 +3,7 @@ host = 192.168.1.185:8180
 #host = 127.0.0.1:8081
 report_album_image_list = uplus-report/api/get_pic_list
 report_message_next = uplus-report/api/get_next_report
-report_video_next = uplus-report/api/report_video
+report_video_next = uplus-report/api/get_next_video
 report_remain_count = uplus-report/api/get_remain_report
 
 report_close_api = uplus-report/api/close/mt/%(mod_type)s/uid/%(u_id)s

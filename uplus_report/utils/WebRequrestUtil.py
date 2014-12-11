@@ -53,6 +53,9 @@ def asyncGetRequest(host, path, parameters={}, callback=None):
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
     except HTTPError, e:
+        logging.error("exception : %s : %s : %s" % (e.code,
+                                                    e.message,
+                                                    str(e.response)))
         raise gen.Return(e)
 
 
@@ -66,6 +69,9 @@ def asyncPostRequest(host, path, parameters={}, callback=None):
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
     except HTTPError, e:
+        logging.error("exception : %s : %s : %s" % (e.code,
+                                                    e.message,
+                                                    str(e.response)))
         raise gen.Return(e)
 
 
