@@ -41,7 +41,7 @@
 
 ####  [API 2.0](#API 2.0)   
 ---
-+ [限制上传](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md限制上传)
++ [限制上传](#限制上传)
 + [删除修改资源](#删除修改资源)   
 
 #### [server接口索引](#server%E6%8E%A5%E5%8F%A3)   
@@ -50,7 +50,7 @@
 + [获取下一条被举报消息记录](#%E8%8E%B7%E5%8F%96%E4%B8%8B%E4%B8%80%E6%9D%A1%E8%A2%AB%E4%B8%BE%E6%8A%A5%E6%B6%88%E6%81%AF%E8%AE%B0%E5%BD%95)
 + [获取被举报用户详情](#%E8%8E%B7%E5%8F%96%E8%A2%AB%E4%B8%BE%E6%8A%A5%E7%94%A8%E6%88%B7%E8%AF%A6%E6%83%85-1)
 + [剩余未处理的举报数](#%E5%89%A9%E4%BD%99%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%BE%E6%8A%A5%E6%95%B0-1)
-+ [获取下一个视频](#%获取下一个视频-1)
++ [获取下一个视频](#获取下一个视频-1)
 + [所有剩余未处理的举报数（长连推送）](#%E6%89%80%E6%9C%89%E5%89%A9%E4%BD%99%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%BE%E6%8A%A5%E6%95%B0%E9%95%BF%E8%BF%9E%E6%8E%A8%E9%80%81)
 + [获取友加用户惩罚日志](#%E8%8E%B7%E5%8F%96%E5%8F%8B%E5%8A%A0%E7%94%A8%E6%88%B7%E6%83%A9%E7%BD%9A%E6%97%A5%E5%BF%97-1)
 + [获取客服操作报表](#%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%9C%8D%E6%93%8D%E4%BD%9C%E6%8A%A5%E8%A1%A8)
@@ -58,7 +58,7 @@
 
 #### [其他](#%E5%85%B6%E5%AE%83)  
 ---  
-+ [**处罚接口**与**被举报message**参数对照](https://github.com/youjia/youjia-api/blob/master/docs/report-profile-punish.JPG "参数图解") 
++ [**处罚接口**与**被举报message**参数对照](report-profile-punish.JPG "参数图解") 
 + [消息惩罚二级关联](#%E6%B6%88%E6%81%AF%E6%83%A9%E7%BD%9A%E4%BA%8C%E7%BA%A7%E5%85%B3%E8%81%94)  
 
 # 前端接口
@@ -985,6 +985,11 @@ GET
      rid : 举报id    
      uid : 被限制友加用户id  
      type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+     timedelta: 处罚持续时间(单位：小时)
+     reason: (原因:色情/广告/敏感信息)
+     reporter:举报者Id   
+     csid:操作客服  
+
 返回：  
 
 >     
@@ -993,7 +998,7 @@ GET
     "code": "",
     "ret":0,
      data: 
-     }       
+     }      
 
 #####  删除修改资源      
 GET    
