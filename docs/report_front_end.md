@@ -724,11 +724,13 @@ GET   /api/2/punish/forbidden/upload
 参数：
    * 必选:     
      rid : 举报id    
-     uid : 被限制友加用户id  
+     u_id : 被限制友加用户id  
      type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)    
-     timedelta: 处罚持续时间(单位：小时)     
-     reason: (原因:色情/广告/敏感信息)     
+     reason: 处罚的原因（ 1: "广告",2: "色情", 3: "敏感话题",）        
      reporter:举报者Id     
+  * 可选：     
+    timedelta: 处罚持续时间(单位：小时, default=-1)     
+    memo: 处罚备注
 
 返回：    
 
@@ -981,17 +983,18 @@ GET   /uplus-report/api/get_profile
     }
             
 #####  限制上传     
-GET   
+GET   /uplus-report/api/forbidden_upload 
 
 参数：
    * 必选:     
      rid : 举报id    
-     uid : 被限制友加用户id  
+     u_id : 被限制友加用户id  
      type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)    
      timedelta: 处罚持续时间(单位：小时)   
-     reason: (原因:色情/广告/敏感信息)   
+     reason: 处罚的原因（ 1: "广告",2: "色情", 3: "敏感话题",）   
      reporter:举报者Id    
-     csid:操作客服  
+     csid:操作客服   
+     memo: 处罚备注    
 
 返回：  
 

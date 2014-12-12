@@ -65,7 +65,6 @@ class PunishBaseHandler(BaseHandler):
             csid=self.current_user.id
         )
 
-
     @property
     def group_parameter(self):
         return dict(
@@ -205,7 +204,6 @@ class PunishAdapterHandler(PunishBaseHandler):
             data = self._punish_user()
         logging.info("punish response is %s" % data)
 
-
     def _punish_hall(self):
         # 对大厅用户惩罚
         data = {}
@@ -214,7 +212,6 @@ class PunishAdapterHandler(PunishBaseHandler):
         elif self.punish_type == reportConstant.REPORT_PUNISH_SILENCE:
             data = self._silence()
         return data
-
 
     def _punish_show(self):
         # 对秀场本省或则秀场内容处罚
@@ -345,3 +342,63 @@ class UplusUserPunishList(BaseHandler):
     @gen.coroutine
     def on_finish(self):
         yield gen.Task(self.record_log, content=u"获取用户被惩罚日志 " + self.u_id)
+
+
+class ForbiddenUploadHandler(BaseHandler):
+    """
+    限制上传特定资源（文字:0 (暂定)， 图片:1, 语音：2, 视频：3）
+    """
+    PUNISH_FORBIDDEN_UPLOAD = config.api.punish_forbidden_upload
+
+    def __init__(self, *args, **kwargs):
+        super(BaseHandler, self).__init__(*args, **kwargs)
+        self.args = {}
+
+    def parse_args(self):
+        self.args = dict(
+            # 举报记录id
+            rid=int(self.get_argument("rid")),
+            # 被举报友加用户id
+            u_id=int(self.get_argument("u_id")),
+            # 资源类型(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+            type=int(self.get_argument("type")),
+            # 限制持续的时间(-1为永久)
+            timedelta=int(self.get_argument("timedelta", -1)),
+            # 违规类型
+            reason=int(self.get_argument("reason")),
+            # 举报者id
+            reporter=int(self.get_argument("reporter")),
+            # 备注
+            memo=self.get_argument("memo", "")
+        )
+
+    def v(self, key):
+        return self.args.get(key)
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    @gen.coroutine
+    def get(self):
+        server_api = self.PUNISH_FORBIDDEN_UPLOAD
+        reps = yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            server_api,
+                            parameters=dict(
+                                rid=self.v("rid"),
+                                u_id=self.v("u_id"),
+                                type=self.v("type"),
+                                timedelta=self.v("timedelta"),
+                                reason=self.v("reason"),
+                                reporter=self.v("reporter"),
+                                csid=self.current_user.id
+                            ))
+        self.asyn_response(reps)
+
+    @gen.coroutine
+    def on_finish(self):
+        log_message = u"{},限制用户({})上传{}". \
+            format(reportConstant.REPORT_REASONS.get(self.v("reason")),
+                   self.v("u_id"),
+                   reportConstant.FORBIDDEN_RESOURCE_TYPES_ENUMS.get(
+                       self.v("u_id")))
+        yield gen.Task(self.record_log, log_message, self.v("memo"))

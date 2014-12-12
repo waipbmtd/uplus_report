@@ -35,3 +35,5 @@ show_unlock = unlock/show/%(showId)s
 user_unlock= unlock/user/%(uid)s
 user_profile= uplus-report/api/get_user_detail
 
+#API 2.0
+punish_forbidden_upload = uplus-report/api/forbidden_upload
