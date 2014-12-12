@@ -1785,7 +1785,7 @@ $.extend({
 						calculateTime( database.data );
 
 						$.each( database.data, function(i, data){
-							var num = data.album_remain + data.msg_remain;
+							var num = data.album_remain + data.msg_remain ;
 							elements.eq(i).html( num );
 							// elements.eq(i).html( num > 999 ? '999+' : num );
 						});

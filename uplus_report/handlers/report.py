@@ -13,7 +13,6 @@ from tornado import ioloop
 import config
 from handlers.base import BaseHandler, BaseWebSocketHandler
 from models import reportConstant, redisConstant
-from storage.mysql.database import session_manage
 from utils import WebRequrestUtil, util
 from storage.redis.redisClient import redis_remain_num
 
@@ -182,7 +181,7 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
             s_j_data = yield cls.read_stat()
         else:
             ttl = cls._redis.pttl(cls.KEY)
-            if ttl < 2000:
+            if ttl < 1000:
                 cls._redis.pexpire(cls.KEY,
                                    int(config.app.websocket_timestamp))
                 s_j_data = yield cls.read_stat()
@@ -201,13 +200,12 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
                                            parameters=dict(
                                                report_type=report_type
                                            )) for
-                       report_type in
-                       reportConstant.REPORT_TYPE_ENUMS]
+                       report_type in reportConstant.REPORT_TYPE_ENUMS]
         data = [json.loads(reps.body).get("data") for reps in resps]
         r_j_data = dict(data=data)
         s_j_data = json.dumps(r_j_data)
         cls._redis.psetex(cls.KEY,
-                          cls._redis.pttl(cls.KEY) + 1000,
+                          cls._redis.pttl(cls.KEY) + 500,
                           s_j_data)
         raise gen.Return(s_j_data)
 
@@ -219,11 +217,8 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
         WSRemainReportCountHandler.clients.add(self)
         self._start = True
 
-
     def on_message(self, message):
         pass
-        # logging.info("receive message %s" % message)
-        # self._build_message()
 
     def on_close(self):
         WSRemainReportCountHandler.clients.remove(self)

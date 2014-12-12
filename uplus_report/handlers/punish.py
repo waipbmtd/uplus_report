@@ -359,7 +359,7 @@ class ForbiddenUploadHandler(BaseHandler):
             # 举报记录id
             rid=int(self.get_argument("rid")),
             # 被举报友加用户id
-            u_id=int(self.get_argument("u_id")),
+            uid=int(self.get_argument("uid")),
             # 资源类型(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
             type=int(self.get_argument("type")),
             # 限制持续的时间(-1为永久)
@@ -369,11 +369,65 @@ class ForbiddenUploadHandler(BaseHandler):
             # 举报者id
             reporter=int(self.get_argument("reporter")),
             # 备注
-            memo=self.get_argument("memo", "")
+            memo=self.get_argument("memo", ""),
+            # 信息ID
+            msgId=self.get_argument("msg_id"),
+            # 资源url
+            url=self.get_argument("url", ""),
+            # 资源缩略图
+            thumb_url=self.get_argument("thumb_url", ""),
+            # uucid
+            uucid=self.get_argument("uucid",
+                                    "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
+            # 是profile还是普通mesg
+            deal_type=self.get_argument("deal_type", "megs"),
+            # 举报入口
+            mod=self.get_argument("mod"),
+            # 秀场或者群id
+            mid=self.get_argument("module_id", ""),
+            csid=self.current_user.id,
         )
 
     def v(self, key):
         return self.args.get(key)
+
+    @property
+    def feature_parameter(self):
+        return dict(
+            mid=self.v("mid"),
+            mod=self.v("mod"),
+            reason=self.v("reason"),
+            timedelta=self.v("timedelta"),
+            rid=self.v("rid"),
+            csid=self.v("csid"),
+            reporter=self.v("reporter_id"),
+            msgId=self.v("msg_id"),
+            uid=self.v("uid"),
+            url=self.v("url"),
+            thumb_url=self.v("thumb_url"),
+            uucid=self.v("uucid"),
+            memo=self.v("memo").encode('utf8'),
+            type=self.v("type"),
+            deal_type=self.v("deal_type")
+        )
+
+    def log_record_close(self, **kwargs):
+        log_format = u"{reason},限制用户({uid})上传{type}"
+        content = log_format.format(
+            reason=reportConstant.REPORT_REASONS.get(self.v("reason")),
+            uid=self.v("u_id"),
+            type=reportConstant.FORBIDDEN_RESOURCE_TYPES_ENUMS.get(
+                self.v("type")))
+        if self.v("timedelta"):
+            content += str(" %sHOURS" % str(self.v("timedelta")))
+        if self.v("content"):
+            content += "<br/>" + self.v("content").encode('utf8')
+        if self.v("url"):
+            content += "<br/>" + str(" %s" % str(self.v("url")))
+        if self.v("thumb_url"):
+            content += str(" %s" % str(self.v("thumb_url")))
+
+        self.record_log(content, memo=self.v("memo"))
 
     @util.exception_handler
     @tornado.web.authenticated
@@ -383,22 +437,10 @@ class ForbiddenUploadHandler(BaseHandler):
         reps = yield WebRequrestUtil. \
             asyncGetRequest(API_HOST,
                             server_api,
-                            parameters=dict(
-                                rid=self.v("rid"),
-                                u_id=self.v("u_id"),
-                                type=self.v("type"),
-                                timedelta=self.v("timedelta"),
-                                reason=self.v("reason"),
-                                reporter=self.v("reporter"),
-                                csid=self.current_user.id
-                            ))
+                            parameters=self.feature_parameter
+                            )
         self.asyn_response(reps)
 
     @gen.coroutine
     def on_finish(self):
-        log_message = u"{},限制用户({})上传{}". \
-            format(reportConstant.REPORT_REASONS.get(self.v("reason")),
-                   self.v("u_id"),
-                   reportConstant.FORBIDDEN_RESOURCE_TYPES_ENUMS.get(
-                       self.v("u_id")))
-        yield gen.Task(self.record_log, log_message, self.v("memo"))
+        yield gen.Task(self.log_record_close)

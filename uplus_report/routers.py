@@ -98,7 +98,7 @@ routers_api1 = [
 
 routers_api2 = [
     #友加用户限制上传
-    url(r'/api/2/punish/forbidden/upload', punish.ForbiddenUploadHanlder)
+    url(r'/api/2/punish/forbidden/upload', punish.ForbiddenUploadHandler)
 ]
 
 append_routers = [

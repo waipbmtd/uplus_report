@@ -156,7 +156,7 @@ POST   /api/1/report/remain
 
 返回：  
 >
-        {"ret":0,"data":{"msg_remain":1789,"album_remain":2127}}  
+        {"ret":0,"data":{"msg_remain":1789,"album_remain":2127, "show_video_remain":2134,"shiliao_video_remain":234,"group_video_remain":654}}  
         
 #####  所有剩余未处理的举报数（长连推送）
 GET   /api/1/report/remain/all 
@@ -892,7 +892,8 @@ POST   uplus-report/api/get_remain_report
 
 返回：  
 >
-        {"ret":0,"data":{"msg_remain":1789,"album_remain":2127}}  
+        {"ret":0,"data":{"msg_remain":1789,"album_remain":2127, "show_video_remain":2134,"shiliao_video_remain":234,"group_video_remain":654}}  
+
         
 #####  获取友加用户惩罚日志   
 GET   /uplus-report/api/get_deal_result 
