@@ -74,7 +74,7 @@ _.path = {
 
 	// Base Template
 	template: function(page){
-		return _.path.root + '/get_template?page=' + page + '.html';
+		return _.path.root + '/api/1/get_template?page=' + page + '.html';
 	},
 
 	// Params
@@ -104,52 +104,52 @@ _.path = {
  */
 _.api = {
 	// Report End
-	end: '/report/end?report_type=' + _.report_type,
+	end: '/api/1/report/end?report_type=' + _.report_type,
 
 	// 获取剩余消息数
-	remain: '/report/remain',
+	remain: '/api/1/report/remain',
 	// 获取所有剩余消息数
-	remain_all: '/report/remain/all',
+	remain_all: '/api/1/report/remain/all',
 	// 获取Album
-	albums: '/report/album_image/list' + '?report_type=' + _.report_type,
+	albums: '/api/1/report/album_image/list' + '?report_type=' + _.report_type,
 	// 获取Message
-	message: '/report/message/next' + '?report_type=' + _.report_type,
+	message: '/api/1/report/message/next' + '?report_type=' + _.report_type,
 	// 审核未通过
-	punish: '/punish' + '?report_type=' + _.report_type,
+	punish: '/api/1/punish' + '?report_type=' + _.report_type,
 	// 审核通过接口
-	pass: '/pass' + '?report_type=' + _.report_type,
+	pass: '/api/1/pass' + '?report_type=' + _.report_type,
 	// 批量审核接口
-	report_batch: '/report/batch_deal' + '?report_type=' + _.report_type,
+	report_batch: '/api/1/report/batch_deal' + '?report_type=' + _.report_type,
 
 	// 获取高危用户列表
-	user_risk_list: '/user/risk/list',
+	user_risk_list: '/api/1/user/risk/list',
 	// 获取特殊用户列表
-	user_special_list: '/user/special/list',
+	user_special_list: '/api/1/user/special/list',
 	// 单个高危用户: Get->获取, Post->添加
-	user_risk: '/user/risk',
+	user_risk: '/api/1/user/risk',
 	// 单个特殊用户: Get->获取, Post->添加
-	user_special: '/user/special',
+	user_special: '/api/1/user/special',
 
 	// 获取用户日志
-	user_punish_log: '/user/punish/log',
+	user_punish_log: '/api/1/user/punish/log',
 
 	// 获取用户(客服)列表
-	user_list: '/user/list',
+	user_list: '/api/1/user/list',
 	// 获取用户详细
-	user_detail: '/user/log/list',
+	user_detail: '/api/1/user/log/list',
 
 	// 获取视频信息
 	video_next: function( resource, report ){
-		return '/report/video/next?resource_type=' + resource + '&report_type=' + report
+		return '/api/1/report/video/next?resource_type=' + resource + '&report_type=' + report
 	},
 
 	// 获取 User Profile
 	user_profile: function( uid ){
-		return '/user/profile?u_id=' + uid;
+		return '/api/1/user/profile?u_id=' + uid;
 	},
 	// 获取Profile
 	report_profile: function( rid ){
-		return '/report/' + rid + '/profile';
+		return '/api/1/report/' + rid + '/profile';
 	}
 },
 
@@ -207,7 +207,7 @@ _.dom = {
  * ** *** **** ***** **** *** ** *
  */
 _.enum = {},
-$.get('/enum/all', function(data){
+$.get('/api/1/enum/all', function(data){
 	_.enum = data;
 }),
 

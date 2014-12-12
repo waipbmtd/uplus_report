@@ -4,7 +4,7 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<form data-submit="ajax" data-callback="getUsersPunish" data-type="system" method="get" action="/user/punish/log">
+				<form data-submit="ajax" data-callback="getUsersPunish" data-type="system" method="get" action="/api/1/user/punish/log">
 					<ul>
 						<li>
 							<label>关键字：</label>
@@ -28,8 +28,8 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-fancy="/get_template?page=loaded/user_add.html" data-title="添加高危用户" data-type="risk" data-callback="addUser">添加用户</button>
-				<form data-submit="ajax" data-callback="getUsersRisk" data-type="risk" method="get" action="/user/risk/list">
+				<button type="button" data-fancy="/api/1/get_template?page=loaded/user_add.html" data-title="添加高危用户" data-type="risk" data-callback="addUser">添加用户</button>
+				<form data-submit="ajax" data-callback="getUsersRisk" data-type="risk" method="get" action="/api/1/user/risk/list">
 					<ul>
 						<li>
 							<label>关键字：</label>
@@ -53,8 +53,8 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-fancy="/get_template?page=loaded/user_add.html" data-title="添加特殊用户" data-type="special" data-callback="addUser">添加用户</button>
-				<form data-submit="ajax" data-callback="getUsersSpecial" data-type="special" method="get" action="/user/special/list">
+				<button type="button" data-fancy="/api/1/get_template?page=loaded/user_add.html" data-title="添加特殊用户" data-type="special" data-callback="addUser">添加用户</button>
+				<form data-submit="ajax" data-callback="getUsersSpecial" data-type="special" method="get" action="/api/1/user/special/list">
 					<ul>
 						<li>
 							<label>关键字：</label>
@@ -78,8 +78,8 @@
 		
 		<div class="report_user">
 			<div class="report_search_panel">
-				<button type="button" data-fancy="/get_template?page=loaded/user_add_sys.html" data-title="添加系统用户" data-type="special" data-callback="addUserSys" data-show="role">添加用户</button>
-				<form data-submit="ajax" data-callback="getUsers" data-type="system" method="get" action="/user/list">
+				<button type="button" data-fancy="/api/1/get_template?page=loaded/user_add_sys.html" data-title="添加系统用户" data-type="special" data-callback="addUserSys" data-show="role">添加用户</button>
+				<form data-submit="ajax" data-callback="getUsers" data-type="system" method="get" action="/api/1/user/list">
 					<ul>
 						<li>
 							<label>关键字：</label>

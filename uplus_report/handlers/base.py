@@ -195,6 +195,5 @@ class GetTemplateHandler(BaseHandler):
 
 
 class GetRawTemplateHandler(BaseHandler):
-    @tornado.web.authenticated
     def get(self, path):
         self.render_raw_html(path)

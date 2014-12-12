@@ -12,89 +12,93 @@ routers = [
     # 登录
     url(r"/login", auth.LoginHandler),
     # 登出
-    url(r"/logout", auth.LogoutHandler),
+    url(r"/api/1/logout", auth.LogoutHandler),
 
     # 获取页面
-    url(r"/get_template", base.GetTemplateHandler),
-    url(r"/template/(?P<path>.+)", base.GetRawTemplateHandler),
+    url(r"/api/1/get_template", base.GetTemplateHandler),
+    url(r"/api/1/template/(?P<path>.+)", base.GetRawTemplateHandler),
 
     # 获取举报原因枚举
-    url(r"/enum/type", constantenu.TypeEnumHandler),
+    url(r"/api/1/enum/type", constantenu.TypeEnumHandler),
     # 获取举报业务场所
-    url(r"/enum/mod", constantenu.ModEnumHandler),
+    url(r"/api/1/enum/mod", constantenu.ModEnumHandler),
     # 获取举报处理类型
-    url(r"/enum/punish", constantenu.PunishEnumHandler),
+    url(r"/api/1/enum/punish", constantenu.PunishEnumHandler),
     # 入口业务枚举
-    url(r"/enum/entrance_mod", constantenu.EntranceModEnumHandler),
+    url(r"/api/1/enum/entrance_mod", constantenu.EntranceModEnumHandler),
     # 所有枚举
-    url(r"/enum/all", constantenu.ALLEnumHandler),
+    url(r"/api/1/enum/all", constantenu.ALLEnumHandler),
 
     #获取像册图片列表
-    url(r"/report/album_image/list",
+    url(r"/api/1/report/album_image/list",
         report.AlbumImageReportListHandler),
     #获取下一个被举报的消息
-    url(r"/report/message/next", report.MessageReportNextHandler),
+    url(r"/api/1/report/message/next", report.MessageReportNextHandler),
     #获取下一个被举报的视频
-    url(r"/report/video/next", report.VideoReportNextHandler),
+    url(r"/api/1/report/video/next", report.VideoReportNextHandler),
     #获取还剩余的未处理的举报数
-    url(r"/report/remain", report.RemainReportCountHandler),
+    url(r"/api/1/report/remain", report.RemainReportCountHandler),
     #获取所有还剩余的未处理的举报数（长连）
-    url(r"/report/remain/all", report.WSRemainReportCountHandler),
+    url(r"/api/1/report/remain/all", report.WSRemainReportCountHandler),
     #处理一条消息举报结束
-    url(r"/report/end", report.ReportEndHandler),
+    url(r"/api/1/report/end", report.ReportEndHandler),
     #处理一条消息举报结束
-    url(r"/report/batch_deal", report.ReportBatchDealHandler),
+    url(r"/api/1/report/batch_deal", report.ReportBatchDealHandler),
     #获取举报profile
-    url(r"/report/(?P<rid>\d+)/profile", report.ReportProfileHandler),
+    url(r"/api/1/report/(?P<rid>\d+)/profile", report.ReportProfileHandler),
 
     #报表
-    url(r"/report/sheet", report.ReportSheetHandler),
+    url(r"/api/1/report/sheet", report.ReportSheetHandler),
 
     #审核通过
-    url(r"/pass", passed.PassedHandler),
+    url(r"/api/1/pass", passed.PassedHandler),
     #处罚
-    url(r"/punish", punish.PunishAdapterHandler, name="punish"),
+    url(r"/api/1/punish", punish.PunishAdapterHandler, name="punish"),
     #处罚关联
-    url(r'/punish_enum_relation',
+    url(r'/api/1/punish_enum_relation',
         constantenu.PunishRelationHandler),
 
     #大厅解禁
-    url(r'/hall/open_mouth', hall.OpenMouthHallHandler),
+    url(r'/api/1/hall/open_mouth', hall.OpenMouthHallHandler),
 
     #秀场解禁
-    url(r'/show/open_mouth', show.OpenMouthShowHandler),
+    url(r'/api/1/show/open_mouth', show.OpenMouthShowHandler),
     #秀场解封
-    url(r'/show/un_clock', show.UnlockShowHandler),
+    url(r'/api/1/show/un_clock', show.UnlockShowHandler),
 
     #用户解封
-    url(r'/user/un_clock', user.UnlockUplusUserHandler),
+    url(r'/api/1/user/un_clock', user.UnlockUplusUserHandler),
 
     #高危友加用户
-    url(r'/user/risk', user.HighRiskUplusUserHandler),
-    url(r'/user/risk/list', user.HighRiskUplusUserListHandler),
+    url(r'/api/1/user/risk', user.HighRiskUplusUserHandler),
+    url(r'/api/1/user/risk/list', user.HighRiskUplusUserListHandler),
 
     #特殊友加用户
-    url(r'/user/special', user.SpecialUplusUserHandler),
-    url(r'/user/special/list', user.SpecialUplusUserListHandler),
+    url(r'/api/1/user/special', user.SpecialUplusUserHandler),
+    url(r'/api/1/user/special/list', user.SpecialUplusUserListHandler),
 
     #友加用户被惩罚日志
-    url(r'/user/punish/log', punish.UplusUserPunishList),
+    url(r'/api/1/user/punish/log', punish.UplusUserPunishList),
+    #友加用户Profile:
+    url(r'/api/1/user/profile', user.UplusUserProfileHandler),
+
+    # #友加用户限制上传
+    # url(r'/user/profile', user.UplusUserProfileHandler),
+
+
 
     #系统用户维护
-    url(r'/user', user.UserHandler),
+    url(r'/api/1/user', user.UserHandler),
     #所有系统用户
-    url(r'/user/list', user.UserListHandler),
+    url(r'/api/1/user/list', user.UserListHandler),
     #所有用户名
-    url(r'/user/name_id_list', user.UserNameIdListHandler),
+    url(r'/api/1/user/name_id_list', user.UserNameIdListHandler),
     #检查用户名是否存在：
-    url(r'/user/check_name', user.UserNameExistCheckHandler),
-    #友加用户Profile:
-    url(r'/user/profile', user.UplusUserProfileHandler),
-
+    url(r'/api/1/user/check_name', user.UserNameExistCheckHandler),
 
     #系统用户日志
-    url(r'/user/log', userlog.UserLogHandler),
-    url(r'/user/log/list', userlog.UserLogListHandler),
+    url(r'/api/1/user/log', userlog.UserLogHandler),
+    url(r'/api/1/user/log/list', userlog.UserLogListHandler),
 ]
 
 append_routers = [

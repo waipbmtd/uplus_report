@@ -334,7 +334,7 @@ class ReportSheetHandler(BaseHandler):
     @tornado.web.authenticated
     @gen.coroutine
     def get(self):
-        csid = self.get_argument("csid", "")
+        csid = self.get_argument("u_id", "")
         if not self.is_admin():
             csid = self.current_user.id
 

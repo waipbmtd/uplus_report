@@ -78,11 +78,13 @@ class ALLEnumHandler(BaseHandler):
         report_type = reportConstant.REPORT_TYPE_ENUMS
         msg_types = reportConstant.MESSAGE_TYPES_ENUMS
         punish_types = reportConstant.REPORT_PUNISHES
+        video_from_enum = reportConstant.VIDEO_FROM_ENUMS
 
         return self.json(dict(mod=ent_enum_dic,
                               type=reasons,
                               ret=request,
                               report_type=report_type,
                               msg_types=msg_types,
-                              punish_types=punish_types)
+                              punish_types=punish_types,
+                              video_from=video_from_enum)
                         )

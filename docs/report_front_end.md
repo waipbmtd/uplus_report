@@ -9,6 +9,7 @@
 + [获取入口MOD枚举](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%85%A5%E5%8F%A3mod%E6%9E%9A%E4%B8%BE)
 + [剩余未处理的举报数](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%89%A9%E4%BD%99%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%BE%E6%8A%A5%E6%95%B0)
 + [获取下一批相册图片](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%8B%E4%B8%80%E6%89%B9%E7%9B%B8%E5%86%8C%E5%9B%BE%E7%89%87)
++ [获取下一个视频](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#获取下一个视频)
 + [获取下一个被举报message](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%8B%E4%B8%80%E4%B8%AA%E8%A2%AB%E4%B8%BE%E6%8A%A5message)
 + [获取被举报用户详情](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E8%A2%AB%E4%B8%BE%E6%8A%A5%E7%94%A8%E6%88%B7%E8%AF%A6%E6%83%85)
 + [处罚](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%A4%84%E7%BD%9A%E6%8E%A5%E5%8F%A3)
@@ -40,6 +41,7 @@
 + [获取下一条被举报消息记录](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%8B%E4%B8%80%E6%9D%A1%E8%A2%AB%E4%B8%BE%E6%8A%A5%E6%B6%88%E6%81%AF%E8%AE%B0%E5%BD%95)
 + [获取被举报用户详情](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E8%A2%AB%E4%B8%BE%E6%8A%A5%E7%94%A8%E6%88%B7%E8%AF%A6%E6%83%85-1)
 + [剩余未处理的举报数](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%89%A9%E4%BD%99%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%BE%E6%8A%A5%E6%95%B0-1)
++ [获取下一个视频](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%获取下一个视频-1)
 + [所有剩余未处理的举报数（长连推送）](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E6%89%80%E6%9C%89%E5%89%A9%E4%BD%99%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%BE%E6%8A%A5%E6%95%B0%E9%95%BF%E8%BF%9E%E6%8E%A8%E9%80%81)
 + [获取友加用户惩罚日志](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%8F%8B%E5%8A%A0%E7%94%A8%E6%88%B7%E6%83%A9%E7%BD%9A%E6%97%A5%E5%BF%97-1)
 + [获取客服操作报表](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%9C%8D%E6%93%8D%E4%BD%9C%E6%8A%A5%E8%A1%A8)
@@ -54,6 +56,8 @@
 ###  WEB接口
 ---
 
+
+###    API 1.0
 #####  登录  
 POST   /login   
 
@@ -70,7 +74,7 @@ POST   /login
         
         
 #####  登出  
-POST   /logout      
+POST   /api/1/logout      
 
 参数：
    * 必选：  
@@ -82,7 +86,7 @@ POST   /logout
 
 
 #####获取关联信息  
-GET   /punish_enum_relation   
+GET   /api/1/punish_enum_relation   
 
 参数：
 
@@ -115,7 +119,7 @@ GET   /punish_enum_relation
           
           
 #####获取入口MOD枚举  
-GET   /enum/entrance_mod   
+GET   /api/1/enum/entrance_mod   
 
 参数：
 
@@ -130,7 +134,7 @@ GET   /enum/entrance_mod
         }
 
 #####  剩余未处理的举报数
-POST   /report/remain 
+POST   /api/1/report/remain 
 
 参数：
    * 必选：        
@@ -142,7 +146,7 @@ POST   /report/remain
         {"ret":0,"data":{"msg_remain":1789,"album_remain":2127}}  
         
 #####  所有剩余未处理的举报数（长连推送）
-GET   /report/remain/all 
+GET   /api/1/report/remain/all 
 
 返回：  
 >
@@ -154,7 +158,7 @@ GET   /report/remain/all
         
 
 #####获取下一批相册图片
-GET /report/album_image/list   
+GET /api/1/report/album_image/list   
 
 参数：
    * 可选：    
@@ -180,7 +184,7 @@ GET /report/album_image/list
         }
 
 ##### 获取下一个视频
-GET /report/video/next    
+GET /api/1/report/video/next    
 
 参数： 
    * 必选：   
@@ -206,7 +210,7 @@ GET /report/video/next
         
 
 #####获取下一个被举报message
-GET /report/message/next   
+GET /api/1/report/message/next   
 
 参数：  
    * 可选：   
@@ -245,7 +249,7 @@ GET /report/message/next
         }
         
 ##### 获取被举报用户详情：  
-GET user/profile   
+GET /api/1/user/profile   
 
 参数：   
    * 必选：       
@@ -269,7 +273,7 @@ GET user/profile
 
         
 ##### 处罚接口
-POST  /punish
+POST  /api/1/punish
 
 参数 ：
   *   必选：    
@@ -298,7 +302,7 @@ POST  /punish
  
         
 ##### 通过
-POST  /pass
+POST  /api/1/pass
 
 参数 ：
   *   必选：    
@@ -320,7 +324,7 @@ POST  /pass
    
    
 #####  大厅解除禁言  
-POST   /hall/open_mouth  
+POST   /api/1/hall/open_mouth  
 
 参数：
    * 必选：  
@@ -334,7 +338,7 @@ POST   /hall/open_mouth
 
 
 #####  秀场解除禁言   
-POST   /show/open_mouth 
+POST   /api/1/show/open_mouth 
 
 参数：
    * 必选：  
@@ -348,7 +352,7 @@ POST   /show/open_mouth
 
 
 #####  秀场解除封禁      
-POST   /show/un_clock
+POST   /api/1/show/un_clock
 
 参数：
    * 必选：  
@@ -362,7 +366,7 @@ POST   /show/un_clock
 
 
 #####  用户解除封禁      
-POST   /user/un_clock
+POST   /api/1/user/un_clock
 
 参数：
    * 必选：  
@@ -376,7 +380,7 @@ POST   /user/un_clock
         
         
 #####  消息举报结束   
-GET /report/end   
+GET /api/1/report/end   
 
 参数：   
  *  必选:   
@@ -388,7 +392,7 @@ GET /report/end
  >   {ret:0}    
         
 #####  获取所有高危用户列表        
-GET   /user/risk/list  
+GET   /api/1/user/risk/list  
 
 参数：  
    * 必选：  
@@ -404,7 +408,7 @@ GET   /user/risk/list
 
 
 #####  添加一个高危用户      
-POST   /user/risk
+POST   /api/1/user/risk
 
 参数：
    * 必选：  
@@ -416,7 +420,7 @@ POST   /user/risk
 
 
 #####  获取一个高危用户      
-GET   /user/risk
+GET   /api/1/user/risk
 
 参数：
    * 必选：  
@@ -429,7 +433,7 @@ GET   /user/risk
     }}
 
 #####  删除一个高危用户       
-DELETE   /user/risk 
+DELETE   /api/1/user/risk 
 
 参数：
    * 必选：  
@@ -441,7 +445,7 @@ DELETE   /user/risk
     }}  
 
 #####  获取所有特殊用户列表        
-GET   /user/special/list  
+GET   /api/1/user/special/list  
 
 参数：  
    * 必选：  
@@ -457,7 +461,7 @@ GET   /user/special/list
 
 
 #####  添加一个特殊用户      
-POST   /user/special
+POST   /api/1/user/special
 
 参数：
    * 必选：  
@@ -469,7 +473,7 @@ POST   /user/special
 
 
 #####  获取一个特殊用户      
-GET   /user/special
+GET   /api/1/user/special
 
 参数：
    * 必选：  
@@ -482,7 +486,7 @@ GET   /user/special
     }}
 
 #####  删除一个特殊用户       
-DELETE   /user/special 
+DELETE   /api/1/user/special 
 
 参数：
    * 必选：  
@@ -494,7 +498,7 @@ DELETE   /user/special
     }}  
     
 ##### 添加系统用户 
-POST   /user  
+POST   /api/1/user  
 
 参数：
    * 必选：    
@@ -510,7 +514,7 @@ POST   /user
 
     
 #####  获取系统用户列表(管理员可以获得所有用户，编辑只能自己)  
-GET   /user/list    
+GET   /api/1/user/list    
 
 
 参数：
@@ -543,7 +547,7 @@ GET   /user/list
 }
 
 #####  获取系统用户用户名和ID列表(管理员可以获得所有用户，编辑只能自己)  
-GET   /user/name_id_list    
+GET   /api/1/user/name_id_list    
 
 参数：
    * 必选：          
@@ -568,7 +572,7 @@ GET   /user/name_id_list
 
 
 #####  获取指定客服日志列表详细信息 (管理员可以获得所有用户日志，编辑只能自己)   
-GET   /user/log/list
+GET   /api/1/user/log/list
 
 参数：
    * 可选：   
@@ -597,7 +601,7 @@ GET   /user/log/list
         }
 
 #####  获取友加用户惩罚日志   
-GET   /user/punish/log        
+GET   /api/1/user/punish/log        
 
 参数：
    * 必选：    
@@ -634,11 +638,11 @@ GET   /user/punish/log
        }
        
 #####  获取友加客服操作报表(admin可以获取所有，editor只能自己)   
-GET   /report/sheet
+GET   /api/1/report/sheet
 
 参数：
    * 可选:  
-     csid: 客服ID(admin可以获取所有，editor只能自己, default="")  
+     u_id: 客服ID(admin可以获取所有，editor只能自己, default="")  
      start_date: 查询开始时间（缺省：当天0点， 格式"2014-11-26 00:00:00"）   
      end_date:   查询截止时间（缺省：次日0点， 格式"2014-11-27 00:00:00"）      
 
@@ -661,7 +665,7 @@ GET   /report/sheet
             ]   
 
 #####  检查系统用户名是否被使用
-GET   /user/check_name    
+GET   /api/1/user/check_name    
 
 参数：
    * 必选:  
@@ -678,7 +682,7 @@ GET   /user/check_name
     "ret": 0}
     
 #####  获取举报Profile 
-GET   /report/{rid}/profile
+GET   /api/1/report/{rid}/profile
 
 参数：
    * 必选:     
@@ -697,7 +701,52 @@ GET   /report/{rid}/profile
         "name": 名称,
         "desc": 描述
     }
-    
+
+####  API2.0     
+
+#####  限制上传     
+GET   /api/2/punish/forbidden/upload
+
+参数：
+   * 必选:     
+     rid : 举报id    
+     uid : 被限制友加用户id  
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+     timedelta: 处罚持续时间(单位：小时)
+     reason: (原因:色情/广告/敏感信息)
+     reporter:举报者Id   
+
+返回：  
+
+>     
+        {
+    "info": "",
+    "code": "",
+    "ret":0,
+     data: 
+     }   
+
+#####  删除修改资源     
+GET   /api/2/punish/delete/resource
+
+参数：
+   * 必选:     
+     rid : 举报id    
+     uid : 被限制友加用户id  
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+     reason: (原因:色情/广告/敏感信息)
+     reporter:举报者Id   
+
+返回：  
+
+>     
+        {
+    "info": "",
+    "code": "",
+    "ret":0,
+     data: 
+     }   
+
 
 ### server接口
 ---
@@ -769,7 +818,7 @@ GET uplus-report/api/get_next_report
         }
 
 ##### 获取下一个视频
-GET 
+GET uplus-report/api/get_next_video
 
 参数： 
    * 必选：   
@@ -916,7 +965,46 @@ GET   /uplus-report/api/get_profile
         "desc": 描述
     }
             
-            
+#####  限制上传     
+GET   /uplus-report/api/get_profile
+
+参数：
+   * 必选:     
+     rid : 举报id    
+     uid : 被限制友加用户id  
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+返回：  
+
+>     
+        {
+    "info": "",
+    "code": "",
+    "ret":0,
+     data: 
+     }       
+
+#####  限制上传     
+GET   /uplus-report/api/get_profile
+
+参数：
+   * 必选:     
+     rid : 举报id    
+     uid : 被限制友加用户id  
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+     timedelta: 处罚持续时间(单位：小时)
+     reason: (原因:色情/广告/敏感信息)
+     reporter:举报者Id   
+     csid: 客服ID    
+
+返回：  
+
+>     
+        {
+    "info": "",
+    "code": "",
+    "ret":0,
+     data: 
+     }    
 
 # 其它
 ---
