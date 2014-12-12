@@ -725,12 +725,12 @@ GET   /api/2/punish/forbidden/upload
    * 必选:     
      rid : 举报id    
      uid : 被限制友加用户id  
-     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
-     timedelta: 处罚持续时间(单位：小时)
-     reason: (原因:色情/广告/敏感信息)
-     reporter:举报者Id   
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)    
+     timedelta: 处罚持续时间(单位：小时)     
+     reason: (原因:色情/广告/敏感信息)     
+     reporter:举报者Id     
 
-返回：  
+返回：    
 
 >     
         {
@@ -986,10 +986,10 @@ GET
    * 必选:     
      rid : 举报id    
      uid : 被限制友加用户id  
-     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
-     timedelta: 处罚持续时间(单位：小时)
-     reason: (原因:色情/广告/敏感信息)
-     reporter:举报者Id   
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)    
+     timedelta: 处罚持续时间(单位：小时)   
+     reason: (原因:色情/广告/敏感信息)   
+     reporter:举报者Id    
      csid:操作客服  
 
 返回：  
