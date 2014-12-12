@@ -1,9 +1,12 @@
 # 索引   
 ---   
 
-#### [前端接口索引](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3)  
+### [前端接口索引](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3)  
 
-+ [登录](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E7%99%BB%E5%BD%95)  
+####  [API 1.0](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#API 1.0) 
+---
+
++ [登录](#%E7%99%BB%E5%BD%95)  
 + [登出](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E7%99%BB%E5%87%BA)  
 + [获取关联信息](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%85%B3%E8%81%94%E4%BF%A1%E6%81%AF)
 + [获取入口MOD枚举](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%85%A5%E5%8F%A3mod%E6%9E%9A%E4%B8%BE)
@@ -34,9 +37,15 @@
 + [获取友加用户惩罚日志](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%8F%8B%E5%8A%A0%E7%94%A8%E6%88%B7%E6%83%A9%E7%BD%9A%E6%97%A5%E5%BF%97)
 + [获取友加客服操作报表(admin可以获取所有，editor只能自己)](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%8F%8B%E5%8A%A0%E5%AE%A2%E6%9C%8D%E6%93%8D%E4%BD%9C%E6%8A%A5%E8%A1%A8admin%E5%8F%AF%E4%BB%A5%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89editor%E5%8F%AA%E8%83%BD%E8%87%AA%E5%B7%B1)
 + [用户名是否可用](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E6%A3%80%E6%9F%A5%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E8%A2%AB%E4%BD%BF%E7%94%A8)
-+ [获取举报Profile](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%BE%E6%8A%A5profile)
++ [获取举报Profile](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%BE%E6%8A%A5profile)   
+
+####  [API 2.0](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#API 2.0)   
+---
++ [限制上传](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md限制上传)
++ [删除修改资源](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#删除修改资源)   
 
 #### [server接口索引](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#server%E6%8E%A5%E5%8F%A3)   
+---
 + [获取一批新的像册待审核图片](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%80%E6%89%B9%E6%96%B0%E7%9A%84%E5%83%8F%E5%86%8C%E5%BE%85%E5%AE%A1%E6%A0%B8%E5%9B%BE%E7%89%87)
 + [获取下一条被举报消息记录](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%8B%E4%B8%80%E6%9D%A1%E8%A2%AB%E4%B8%BE%E6%8A%A5%E6%B6%88%E6%81%AF%E8%AE%B0%E5%BD%95)
 + [获取被举报用户详情](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E8%A2%AB%E4%B8%BE%E6%8A%A5%E7%94%A8%E6%88%B7%E8%AF%A6%E6%83%85-1)
@@ -47,7 +56,8 @@
 + [获取客服操作报表](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%9C%8D%E6%93%8D%E4%BD%9C%E6%8A%A5%E8%A1%A8)
 + [获取举报Profile](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E8%8E%B7%E5%8F%96%E4%B8%BE%E6%8A%A5profile-1)
 
-#### [其他](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%85%B6%E5%AE%83)    
+#### [其他](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E5%85%B6%E5%AE%83)  
+---  
 + [**处罚接口**与**被举报message**参数对照](https://github.com/youjia/youjia-api/blob/master/docs/report-profile-punish.JPG "参数图解") 
 + [消息惩罚二级关联](http://gitlab.youja.cn/xuefeng.dai/py_uplus_report/blob/master/docs/report_front_end.md#%E6%B6%88%E6%81%AF%E6%83%A9%E7%BD%9A%E4%BA%8C%E7%BA%A7%E5%85%B3%E8%81%94)  
 
@@ -58,6 +68,7 @@
 
 
 ###    API 1.0
+---
 #####  登录  
 POST   /login   
 
@@ -702,7 +713,8 @@ GET   /api/1/report/{rid}/profile
         "desc": 描述
     }
 
-####  API2.0     
+####  API2.0   
+---   
 
 #####  限制上传     
 GET   /api/2/punish/forbidden/upload
@@ -966,7 +978,7 @@ GET   /uplus-report/api/get_profile
     }
             
 #####  限制上传     
-GET   /uplus-report/api/get_profile
+GET   
 
 参数：
    * 必选:     
@@ -983,18 +995,12 @@ GET   /uplus-report/api/get_profile
      data: 
      }       
 
-#####  限制上传     
-GET   /uplus-report/api/get_profile
+#####  删除修改资源      
+GET    
 
 参数：
    * 必选:     
-     rid : 举报id    
-     uid : 被限制友加用户id  
-     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
-     timedelta: 处罚持续时间(单位：小时)
-     reason: (原因:色情/广告/敏感信息)
-     reporter:举报者Id   
-     csid: 客服ID    
+
 
 返回：  
 
