@@ -839,8 +839,9 @@ GET uplus-report/api/get_next_video
       csid : 客服ID    
       report_type : 是否高危（ 1：高危, 2:资源）     
       resource_type : 视频来源类型（ 303：私聊, 304:群， 305：秀场）     
-返回值:
->
+返回值:      
+   
+>       
     {ret:1,
     info: ''
     data:{

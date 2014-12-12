@@ -6,7 +6,7 @@ from handlers import base, auth, report, constantenu, punish, passed, \
     hall, show, user, render, userlog
 
 
-routers = [
+routers_api1 = [
     # 首页
     url(r"/", base.DefaultHandler),
     # 登录
@@ -29,7 +29,7 @@ routers = [
     # 所有枚举
     url(r"/api/1/enum/all", constantenu.ALLEnumHandler),
 
-    #获取像册图片列表
+    # 获取像册图片列表
     url(r"/api/1/report/album_image/list",
         report.AlbumImageReportListHandler),
     #获取下一个被举报的消息
@@ -82,11 +82,6 @@ routers = [
     #友加用户Profile:
     url(r'/api/1/user/profile', user.UplusUserProfileHandler),
 
-    # #友加用户限制上传
-    # url(r'/user/profile', user.UplusUserProfileHandler),
-
-
-
     #系统用户维护
     url(r'/api/1/user', user.UserHandler),
     #所有系统用户
@@ -101,9 +96,16 @@ routers = [
     url(r'/api/1/user/log/list', userlog.UserLogListHandler),
 ]
 
+routers_api2 = [
+    #友加用户限制上传
+    url(r'/api/2/punish/forbidden/upload', )
+]
+
 append_routers = [
     # 获取模板
     url(r"/(?P<path>\w+)", render.RenderHandler)
 ]
 
+routers = []
+routers += routers_api1
 routers += append_routers
