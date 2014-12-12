@@ -1012,7 +1012,7 @@ $.extend({
 		, options.msg_id = options.msg_id || ''
 		, options.owner = options.owner || '';
 
-		api = api || '/punish';
+		api = api || '/api/1/punish';
 
 		// This Option Is Merge By 2 Options
 		// console.log(options);
