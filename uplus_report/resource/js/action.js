@@ -1041,6 +1041,7 @@ var
 
 		// 获取视频: 下一条
 		getVideoNext: function(it){
+
 			// 全局锁
 			if( _.globalLock ){
 				return;
@@ -1053,11 +1054,11 @@ var
 			if( iElement.find('.unPage').length ){
 
 				// Report End
-				if( _.cache.id ){
+				if( _.cache.video.id ){
 
-					$.get(_.api.end, {id: _.cache.id}, function(result){
+					$.get(_.api.end, {id: _.cache.video.id}, function(result){
 
-						$.checkResult(function(result){
+						$.checkResult(result, function(result){
 
 							// 获取剩余消息数, 并渲染页面
 							kitFunction.getRemain({
@@ -1091,9 +1092,9 @@ var
 			}
 
 			// Report End
-			$.get(_.api.end, {id: _.cache.id}, function(result){
+			$.get(_.api.end, {id: _.cache.video.id}, function(result){
 
-				$.checkResult(function(result){
+				$.checkResult(result, function(result){
 
 					// 参数容错: report: reporter
 					_.cache.video.reporter = _.cache.video.report;
@@ -1106,7 +1107,6 @@ var
 						data: _.cache.video,
 						success: function(result){
 							$.checkResult(result, function( result ){
-
 								// Loading UI
 								mask.close();
 

@@ -444,3 +444,104 @@ class ForbiddenUploadHandler(BaseHandler):
     @gen.coroutine
     def on_finish(self):
         yield gen.Task(self.log_record_close)
+
+
+class DeleteResourceHandler(BaseHandler):
+    """
+    限制上传特定资源（文字:0 (暂定)， 图片:1, 语音：2, 视频：3）
+    """
+    DELETE_RESOURCE = config.api.report_delete_resource
+
+    def __init__(self, *args, **kwargs):
+        super(BaseHandler, self).__init__(*args, **kwargs)
+        self.args = {}
+
+    def parse_args(self):
+        self.args = dict(
+            # 举报记录id
+            rid=int(self.get_argument("rid")),
+            # 被举报友加用户id
+            uid=int(self.get_argument("uid")),
+            # 资源类型(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
+            type=int(self.get_argument("type")),
+            # 限制持续的时间(-1为永久)
+            timedelta=int(self.get_argument("timedelta", -1)),
+            # 违规类型
+            reason=int(self.get_argument("reason")),
+            # 举报者id
+            reporter=int(self.get_argument("reporter")),
+            # 备注
+            memo=self.get_argument("memo", ""),
+            # 信息ID
+            msgId=self.get_argument("msg_id"),
+            # 资源url
+            url=self.get_argument("url", ""),
+            # 资源缩略图
+            thumb_url=self.get_argument("thumb_url", ""),
+            # uucid
+            uucid=self.get_argument("uucid",
+                                    "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
+            # 是profile还是普通mesg
+            deal_type=self.get_argument("deal_type", "megs"),
+            # 举报入口
+            mod=self.get_argument("mod"),
+            # 秀场或者群id
+            mid=self.get_argument("module_id", ""),
+            csid=self.current_user.id,
+        )
+
+    def v(self, key):
+        return self.args.get(key)
+
+    @property
+    def resource_parameter(self):
+        return dict(
+            uid=self.v("uid"),
+            reason=self.v("reason"),
+            mid=self.v("mid"),
+            mod=self.v("mod"),
+            url=self.v("url"),
+            thumb_url=self.v("thumb_url"),
+            msgId=self.v("msg_id"),
+            timedelta=self.v("timedelta"),
+            csid=self.v("csid"),
+            rid=self.v("rid"),
+            reporter=self.v("reporter_id"),
+            uucid=self.v("uucid"),
+            memo=self.v("memo").encode('utf8'),
+            deal_type=self.v("deal_type")
+        )
+
+    def log_record_close(self, **kwargs):
+        log_format = u"{reason},限制用户({uid})上传{type}"
+        content = log_format.format(
+            reason=reportConstant.REPORT_REASONS.get(self.v("reason")),
+            uid=self.v("u_id"),
+            type=reportConstant.FORBIDDEN_RESOURCE_TYPES_ENUMS.get(
+                self.v("type")))
+        if self.v("timedelta"):
+            content += str(" %sHOURS" % str(self.v("timedelta")))
+        if self.v("content"):
+            content += "<br/>" + self.v("content").encode('utf8')
+        if self.v("url"):
+            content += "<br/>" + str(" %s" % str(self.v("url")))
+        if self.v("thumb_url"):
+            content += str(" %s" % str(self.v("thumb_url")))
+
+        self.record_log(content, memo=self.v("memo"))
+
+    @util.exception_handler
+    @tornado.web.authenticated
+    @gen.coroutine
+    def get(self):
+        server_api = self.DELETE_RESOURCE
+        reps = yield WebRequrestUtil. \
+            asyncPostRequest(API_HOST,
+                             server_api,
+                             parameters=self.resource_parameter)
+        # yield gen.Task(self.log_record_delete)
+        logging.info("punish response is %s" % reps.body)
+
+    @gen.coroutine
+    def on_finish(self):
+        yield gen.Task(self.log_record_close)

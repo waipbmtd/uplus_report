@@ -131,7 +131,8 @@ class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
         if self.current_user:
             current_user = self.session.query(AdminUser).get(
                 self.current_user.id)
-            current_user.logs.append(log)
+            log.admin_user = current_user
+            # current_user.logs.append(log)
         else:
             self.session.add(log)
 
