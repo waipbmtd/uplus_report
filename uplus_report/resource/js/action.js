@@ -1067,24 +1067,35 @@ var
 				mask.open();
 			}
 
-			// 参数容错: report: reporter
-			_.cache.video.reporter = _.cache.video.report;
-
-			// 1.通过, 2.请求数据
+			// Report End
 			$.ajax({
-				type: 'post',
-				dataType: 'json',
-				url: _.api.pass,
-				data: _.cache.video,
+				type: 'get',
+				url: _.api.end,
+				data: _.cache.video.id,
 				success: function(result){
 					$.checkResult(result, function( result ){
+						
+						// 参数容错: report: reporter
+						_.cache.video.reporter = _.cache.video.report;
 
-						// Loading UI
-						mask.close();
+						// 1.通过, 2.请求数据
+						$.ajax({
+							type: 'post',
+							dataType: 'json',
+							url: _.api.pass,
+							data: _.cache.video,
+							success: function(result){
+								$.checkResult(result, function( result ){
 
-						// 请求数据
-						iElement.html('<div class="unPage">'),
-						kitFunction.getVideoNext( it );
+									// Loading UI
+									mask.close();
+
+									// 请求数据
+									iElement.html('<div class="unPage">'),
+									kitFunction.getVideoNext( it );
+								});
+							}
+						});
 					});
 				}
 			});
