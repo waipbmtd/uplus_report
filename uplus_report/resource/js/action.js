@@ -1052,12 +1052,35 @@ var
 			// 如果空(首次拉取数据)
 			if( iElement.find('.unPage').length ){
 
-				// 获取剩余消息数, 并渲染页面
-				kitFunction.getRemain({
-					callback: function(result){
-						kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
-					}
-				});
+				// Report End
+				if( _.cache.id ){
+
+					$.get(_.api.end, {id: _.cache.id}, function(result){
+
+						$.checkResult(function(result){
+
+							// 获取剩余消息数, 并渲染页面
+							kitFunction.getRemain({
+								callback: function(result){
+									kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
+								}
+							});
+
+						});
+
+					});
+
+				}
+				else{
+
+					// 获取剩余消息数, 并渲染页面
+					kitFunction.getRemain({
+						callback: function(result){
+							kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
+						}
+					});
+
+				}
 
 				return false;
 			}
@@ -1068,36 +1091,34 @@ var
 			}
 
 			// Report End
-			$.ajax({
-				type: 'get',
-				url: _.api.end,
-				data: _.cache.video.id,
-				success: function(result){
-					$.checkResult(result, function( result ){
-						
-						// 参数容错: report: reporter
-						_.cache.video.reporter = _.cache.video.report;
+			$.get(_.api.end, {id: _.cache.id}, function(result){
 
-						// 1.通过, 2.请求数据
-						$.ajax({
-							type: 'post',
-							dataType: 'json',
-							url: _.api.pass,
-							data: _.cache.video,
-							success: function(result){
-								$.checkResult(result, function( result ){
+				$.checkResult(function(result){
 
-									// Loading UI
-									mask.close();
+					// 参数容错: report: reporter
+					_.cache.video.reporter = _.cache.video.report;
 
-									// 请求数据
-									iElement.html('<div class="unPage">'),
-									kitFunction.getVideoNext( it );
-								});
-							}
-						});
+					// 1.通过, 2.请求数据
+					$.ajax({
+						type: 'post',
+						dataType: 'json',
+						url: _.api.pass,
+						data: _.cache.video,
+						success: function(result){
+							$.checkResult(result, function( result ){
+
+								// Loading UI
+								mask.close();
+
+								// 请求数据
+								iElement.html('<div class="unPage">'),
+								kitFunction.getVideoNext( it );
+							});
+						}
 					});
-				}
+					
+				});
+
 			});
 
 			return;
@@ -1796,7 +1817,7 @@ $.extend({
 						calculateTime( database.data );
 
 						$.each( database.data, function(i, data){
-							var num = data.album_remain + data.msg_remain ;
+							var num = data.album_remain + data.msg_remain;
 							elements.eq(i).html( num );
 							// elements.eq(i).html( num > 999 ? '999+' : num );
 						});
