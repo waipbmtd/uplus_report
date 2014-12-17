@@ -1132,7 +1132,7 @@ var
 			form.find('[data-name=punish_type]').attr('data-value', 103);
 
 			$.each(_.cache.video, function(name, value){
-				form.append('<i data-name="' + name + '" data-value="' + value + '">');
+				form.append('<input type="hidden" data-name="' + name + '" data-value="' + value + '">');
 			});
 
 			// Loading UI

@@ -564,7 +564,7 @@ $.extend({
 
 					$.each( form.find('[' + option.name + ']'), function(i, item){
 						item = $(item);
-						if( !item.is(':hidden') ){
+						if( !item.is(':hidden') || item.is('[type=hidden]') ){
 							option.data[ item.attr( option.name ) ] = item.attr( option.value );
 						}
 					});
