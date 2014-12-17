@@ -299,12 +299,12 @@ class PunishAdapterHandler(PunishBaseHandler):
     def _delete_resource(self):
         # 删除资源
         server_api = self.DELETE_RESOURCE
-        reps = yield WebRequrestUtil. \
-            asyncPostRequest(API_HOST,
-                             server_api,
-                             parameters=self.resource_parameter)
+        yield WebRequrestUtil.\
+            asyncGetRequest(API_HOST,
+                                              server_api,
+                                              parameters=self.resource_parameter)
         yield gen.Task(self.log_record_delete)
-        logging.info("punish response is %s" % reps.body)
+        # logging.info("punish response is %s" % reps.body)
 
 
 class UplusUserPunishList(BaseHandler):
@@ -380,7 +380,7 @@ class ForbiddenUploadHandler(BaseHandler):
             uucid=self.get_argument("uucid",
                                     "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
             # 是profile还是普通mesg
-            deal_type=self.get_argument("deal_type", "megs"),
+            deal_type=self.get_argument("deal_type", "msgs"),
             # 举报入口
             mod=self.get_argument("mod"),
             # 秀场或者群id
@@ -431,18 +431,16 @@ class ForbiddenUploadHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @gen.coroutine
     def get(self):
-        server_api = self.PUNISH_FORBIDDEN_UPLOAD
-        reps = yield WebRequrestUtil. \
-            asyncGetRequest(API_HOST,
-                            server_api,
-                            parameters=self.feature_parameter
-                            )
-        self.asyn_response(reps)
+        return self.send_success_json()
 
     @gen.coroutine
     def on_finish(self):
+        server_api = self.PUNISH_FORBIDDEN_UPLOAD
+        yield WebRequrestUtil. \
+            asyncGetRequest(API_HOST,
+                            server_api,
+                            parameters=self.feature_parameter)
         yield gen.Task(self.log_record_close)
 
 
@@ -482,7 +480,7 @@ class DeleteResourceHandler(BaseHandler):
             uucid=self.get_argument("uucid",
                                     "7cfc665c-6f9b-11e4-bf2e-976fc2a28482"),
             # 是profile还是普通mesg
-            deal_type=self.get_argument("deal_type", "megs"),
+            deal_type=self.get_argument("deal_type", "msgs"),
             # 举报入口
             mod=self.get_argument("mod"),
             # 秀场或者群id
@@ -512,8 +510,8 @@ class DeleteResourceHandler(BaseHandler):
             deal_type=self.v("deal_type")
         )
 
-    def log_record_close(self, **kwargs):
-        log_format = u"{reason},限制用户({uid})上传{type}"
+    def log_record_delete(self, **kwargs):
+        log_format = u"{reason},删除用户({uid}){type}"
         content = log_format.format(
             reason=reportConstant.REPORT_REASONS.get(self.v("reason")),
             uid=self.v("u_id"),
@@ -532,16 +530,14 @@ class DeleteResourceHandler(BaseHandler):
 
     @util.exception_handler
     @tornado.web.authenticated
-    @gen.coroutine
     def get(self):
+        return self.send_success_json()
+
+    @gen.coroutine
+    def on_finish(self):
         server_api = self.DELETE_RESOURCE
         reps = yield WebRequrestUtil. \
             asyncPostRequest(API_HOST,
                              server_api,
                              parameters=self.resource_parameter)
-        # yield gen.Task(self.log_record_delete)
-        logging.info("punish response is %s" % reps.body)
-
-    @gen.coroutine
-    def on_finish(self):
-        yield gen.Task(self.log_record_close)
+        yield gen.Task(self.log_record_delete)

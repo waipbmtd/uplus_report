@@ -40,6 +40,8 @@ class PassedHandler(BaseHandler):
             content=self.get_argument("content", ""),
             # 拥有者ID
             owner=self.get_argument("owner", ""),
+            # profile还是msgs
+            deal_type=self.get_argument("deal_type", "msgs"),
             # 客服id
             csid=self.current_user.id
         )
@@ -74,16 +76,15 @@ class PassedHandler(BaseHandler):
         server_api = self.PASS_API
 
         yield WebRequrestUtil.asyncGetRequest(API_HOST,
-                                              server_api,
-                                              parameters=dict(
-                                                  rid=self.v("rid"),
-                                                  csid=self.current_user.id,
-                                                  msgId=self.v("msg_id"),
-                                                  mod=self.v("mod"),
-                                                  u_id=self.v("uid"),
-                                                  reporter=self.v(
-                                                      "reporter_id"),
-                                                  deal_type=self.v("deal_type",
-                                                                   "msgs")
-                                              ))
+                                    server_api,
+                                    parameters=dict(
+                                        rid=self.v("rid"),
+                                        csid=self.current_user.id,
+                                        msgId=self.v("msg_id"),
+                                        mod=self.v("mod"),
+                                        u_id=self.v("uid"),
+                                        reporter=self.v(
+                                            "reporter_id"),
+                                        deal_type=self.v("deal_type")
+                                    ))
         yield gen.Task(self.log_record_pass)

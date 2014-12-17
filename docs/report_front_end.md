@@ -727,10 +727,11 @@ GET   /api/2/punish/forbidden/upload
      u_id : 被限制友加用户id  
      type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)    
      reason: 处罚的原因（ 1: "广告",2: "色情", 3: "敏感话题",）        
+     msg_id： 消息的ID   
      reporter:举报者Id     
   * 可选：     
     timedelta: 处罚持续时间(单位：小时, default=-1)     
-    memo: 处罚备注
+    memo: 处罚备注     
 
 返回：    
 
@@ -749,9 +750,13 @@ GET   /api/2/punish/delete/resource
    * 必选:     
      rid : 举报id    
      uid : 被限制友加用户id  
-     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)
-     reason: (原因:色情/广告/敏感信息)
+     type:(文字:0 (暂定)， 图片:1, 语音：2, 视频：3)     
+     reason: (原因:色情/广告/敏感信息)     
+     msg_id： 消息的ID     
      reporter:举报者Id   
+  * 可选：     
+    timedelta: 处罚持续时间(单位：小时, default=-1)     
+    memo: 处罚备注     
 
 返回：  
 

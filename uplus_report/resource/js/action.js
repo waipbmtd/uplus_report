@@ -1097,7 +1097,7 @@ var
 				$.checkResult(result, function(result){
 
 					// 参数容错: report: reporter
-					_.cache.video.reporter = _.cache.video.report;
+					_.cache.video.report = _.cache.video.reporter;
 
 					// 1.通过, 2.请求数据
 					$.ajax({

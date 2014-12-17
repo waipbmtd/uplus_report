@@ -21,7 +21,7 @@ echo = str(statistics_db.get("echo")) == "True"
 
 db_path = "%s://%s:%s@%s/%s?charset=%s" % (
     dialect, user, password, host, db_name, charset)
-engine = create_engine(db_path, echo=echo, pool_size=10, max_overflow=20,
+engine = create_engine(db_path, echo=echo, pool_size=5, max_overflow=5,
                        pool_recycle=7200)
 
 DB_Session = sessionmaker(bind=engine)

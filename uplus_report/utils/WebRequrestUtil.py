@@ -49,6 +49,7 @@ def asyncGetRequest(host, path, parameters={}, callback=None):
     http_client = AsyncHTTPClient()
     request = HTTPRequest(url + "?" + urllib.urlencode(parameters),
                           method="GET")
+    getAsyncRequest(request)
     try:
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
@@ -65,14 +66,34 @@ def asyncPostRequest(host, path, parameters={}, callback=None):
     http_client = AsyncHTTPClient()
     request = HTTPRequest(url, body=urllib.urlencode(parameters),
                           method="POST")
+    getAsyncRequest(request)
     try:
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
     except HTTPError, e:
         logging.error("exception : %s : %s : %s" % (e.code,
                                                     e.message,
-                                                    str(e.response)))
+                                                    traceback.format_exc()))
         raise gen.Return(e)
+
+
+def getAsyncRequest(req):
+    s = StringIO()
+    s.write("url : %s\n" % req.url)
+    s.write("method : %s\n" % req.method)
+    if req.body:
+        s.write("data: \n")
+        paras = req.body.split("&")
+        for x in paras:
+            x_l = x.split("=")
+            s.write("\t%s : %s\n" % (x_l[0], urllib.unquote_plus(x_l[1])))
+
+    s.write("headers: \n")
+    for (k, v) in sorted(req.headers.get_all()):
+        s.write("\t%s : %s\n" % (k, v))
+
+    logging.info(s.getvalue())
+    # print s.getvalue()
 
 
 def printHttpRequest(req):
@@ -95,5 +116,8 @@ def printHttpRequest(req):
 
 
 if __name__ == "__main__":
-    pass
+    request = HTTPRequest("www.baidu.com", body=urllib.urlencode(
+        dict(a=1, b=u'大大大在'.encode('utf8'))),
+                          method="POST")
+    print getAsyncRequest(request)
     # datetime.timedelta
