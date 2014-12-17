@@ -552,9 +552,10 @@ section{
 						.relative;
 
 						img{
-							.absolute;
-
-							top: 5px; right: 5px;
+							max-width: @distance * 8; max-height: @distance * 8;
+							margin-left: @distance;
+							padding: 2px;
+							border: 1px solid @color-ghost;
 						}
 						li{
 							padding: 0 @distance;
