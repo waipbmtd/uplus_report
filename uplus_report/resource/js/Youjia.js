@@ -52,6 +52,8 @@ _.console = _.console || { log: $.noop },
 
 _.report_type = $.trim(_.report_type).length ? Number(_.report_type) : 0,
 
+_.select_remain = undefined,
+
 _.globalLock = false,
 
 /* !!

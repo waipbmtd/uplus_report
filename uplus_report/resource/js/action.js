@@ -1753,7 +1753,7 @@ $.extend({
 		;(function( time ){
 
 			var cache = {
-					album: 0, msg: 0
+					album: 0, msg: 0, show: 0, shiliao: 0, group: 0
 				},
 				// 时间间隔
 				timeResult = time,
@@ -1761,10 +1761,13 @@ $.extend({
 				elements = $('#remain_default, #remain_dangerous, #remain_resource'),
 				// 临时方法 - 响应赠长
 				calculateTime = function( data ){
-
-					if( data.album_remain != cache.album || data.msg_remain != cache.msg ){
+					if( data.album_remain != cache.album || data.msg_remain != cache.msg
+                        || data.show_video_remain != cache.show || data.shiliao_video_remain != cache.shiliao
+                        || data.group_video_remain != cache.group ){
 						cache = {
 							album: data.album_remain, msg: data.msg_remain
+                            ,show: data.show_video_remain, shiliao: data.shiliao_video_remain
+                            ,group: data.group_video_remain
 						},
 						timeResult = time;
 						return;
@@ -1817,12 +1820,22 @@ $.extend({
 						calculateTime( database.data );
 
 						$.each( database.data, function(i, data){
-							var num = data.album_remain + data.msg_remain;
-							elements.eq(i).html( num );
+							var num = data.album_remain + data.msg_remain +
+                                data.show_video_remain +
+                                data.shiliao_video_remain +
+                                data.group_video_remain;
+//                            elements.eq(i).html( num );a
+                            _.console.log(data);
+                            _.console.log(num +" "+i + "  " + _.report_type + " " +_.select_remain);
+                            if (i == _.report_type && _.select_remain != undefined){
+                                elements.eq(i).html( data[_.select_remain + "_remain"] );
+                            }else{
+                                elements.eq(i).html( num );
+                            }
 							// elements.eq(i).html( num > 999 ? '999+' : num );
 						});
 					};
-
+                    /*
 					$.timeout({
 						count: (_.QQ, 312272592),
 						time: time,
@@ -1835,7 +1848,7 @@ $.extend({
 							return timeResult;
 						}
 					});
-
+                    */
 				}
 
 			}
@@ -2004,6 +2017,10 @@ $.extend({
 				current: _.current
 			},
 			callback: function(){
+                /* Click aside a */
+                $('aside a').on("click", function(){
+                    _.select_remain = $(this).attr("data-remain");
+                })
 				$.timeout({
 					callback: function(){
 						_.dom.aside.find('a:eq(0)').trigger( _.evt.click );

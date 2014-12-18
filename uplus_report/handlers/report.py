@@ -162,7 +162,8 @@ class RemainReportCountHandler(BaseHandler):
 
 class WSRemainReportCountHandler(BaseWebSocketHandler):
     _redis = redis_remain_num
-    KEY = redisConstant.REDIS_REMAIN_NUM
+    KEY = redisConstant.REDIS_ALL_REMAIN_NUM
+    A_KEY = redisConstant.REDIS_REMAIN_NUM
 
     clients = set()
     REMAIN_REPORT = config.api.report_remain_count
@@ -194,14 +195,24 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     def read_stat(cls):
         logging.info(
             "websocket connections(%s), in read db" % len(cls.clients))
-        resps = yield [WebRequrestUtil.
-                           asyncGetRequest(API_HOST,
-                                           cls.REMAIN_REPORT,
-                                           parameters=dict(
-                                               report_type=report_type
-                                           )) for
-                       report_type in reportConstant.REPORT_TYPE_ENUMS]
-        data = [json.loads(reps.body).get("data") for reps in resps]
+        # resps = yield [WebRequrestUtil.
+        #                    asyncGetRequest(API_HOST,
+        #                                    cls.REMAIN_REPORT,
+        #                                    parameters=dict(
+        #                                        report_type=report_type
+        #                                    )) for
+        #                report_type in reportConstant.REPORT_TYPE_ENUMS]
+        # data = [json.loads(reps.body).get("data") for reps in resps]
+        # r_j_data = dict(data=data)
+        data = []
+        data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0,
+                         shiliao_video_remain=0, group_video_remain=0))
+        data.append(dict(msg_remain=100, album_remain=200, show_video_remain=300 ,
+                         shiliao_video_remain=400, group_video_remain=500))
+        data.append(dict(msg_remain=0,
+                         album_remain=int(redis_remain_num.get(cls.A_KEY)),
+                         show_video_remain=0, shiliao_video_remain=0,
+                         group_video_remain=0))
         r_j_data = dict(data=data)
         s_j_data = json.dumps(r_j_data)
         cls._redis.psetex(cls.KEY,

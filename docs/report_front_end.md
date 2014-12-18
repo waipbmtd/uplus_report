@@ -163,9 +163,9 @@ GET   /api/1/report/remain/all
 
 返回：  
 >
-        {"ret":0,"data":[ {"msg_remain":1789,"album_remain":2127},   #report_type=0
-                  {"msg_remain":1789,"album_remain":2127},   #report_type=1
-                  {"msg_remain":1789,"album_remain":2127}    #report_type=2
+        {"ret":0,"data":[ {"msg_remain":1789,"album_remain":2127, "show_video_remain":2134,"shiliao_video_remain":234,"group_video_remain":654},   #report_type=0
+                  {"msg_remain":1789,"album_remain":2127, "show_video_remain":2134,"shiliao_video_remain":234,"group_video_remain":654},   #report_type=1
+                  {"msg_remain":1789,"album_remain":2127, "show_video_remain":2134,"shiliao_video_remain":234,"group_video_remain":654}    #report_type=2
                 ]
         }  
         
