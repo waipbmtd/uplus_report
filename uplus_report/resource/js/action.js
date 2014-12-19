@@ -1825,8 +1825,8 @@ $.extend({
                                 data.shiliao_video_remain +
                                 data.group_video_remain;
 //                            elements.eq(i).html( num );a
-                            _.console.log(data);
-                            _.console.log(num +" "+i + "  " + _.report_type + " " +_.select_remain);
+//                            _.console.log(data);
+//                            _.console.log(num +" "+i + "  " + _.report_type + " " +_.select_remain);
                             if (i == _.report_type && _.select_remain != undefined){
                                 elements.eq(i).html( data[_.select_remain + "_remain"] );
                             }else{
