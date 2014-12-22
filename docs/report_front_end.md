@@ -859,7 +859,7 @@ GET uplus-report/api/get_next_video
               reporter: 举报者，
               u_id: 被举报的人， 
               mod: 举报入口
-              mod: 举报入口
+              mid: 模块ID
               name:场所名称 
               desc:场所描述 
               }]     
