@@ -16,8 +16,7 @@ items_per_page=30
 
 [logging]
 level=debug
-format="%(asctime)s %(pathname)s[line:%(lineno)d] %(levelname)s : "
-           "%(message)s"
+format="%(asctime)s %(pathname)s[line:%(lineno)d] %(levelname)s :%(message)s"
 
 [remote]
 debug=False

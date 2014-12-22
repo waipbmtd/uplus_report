@@ -3,6 +3,7 @@
 import json
 import logging
 import datetime
+import time
 
 import tornado
 import tornado.web
@@ -195,25 +196,25 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     def read_stat(cls):
         logging.info(
             "websocket connections(%s), in read db" % len(cls.clients))
-        resps = yield [WebRequrestUtil.
-                           asyncGetRequest(API_HOST,
-                                           cls.REMAIN_REPORT,
-                                           parameters=dict(
-                                               report_type=report_type
-                                           )) for
-                       report_type in reportConstant.REPORT_TYPE_ENUMS]
-        data = [json.loads(reps.body).get("data") for reps in resps]
-        r_j_data = dict(data=data)
-        # data = []
-        # data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0,
-        #                  shiliao_video_remain=0, group_video_remain=0))
-        # data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0 ,
-        #                  shiliao_video_remain=0, group_video_remain=0))
-        # data.append(dict(msg_remain=0,
-        #                  album_remain=int(redis_remain_num.get(cls.A_KEY)),
-        #                  show_video_remain=0, shiliao_video_remain=0,
-        #                  group_video_remain=0))
+        # resps = yield [WebRequrestUtil.
+        #                    asyncGetRequest(API_HOST,
+        #                                    cls.REMAIN_REPORT,
+        #                                    parameters=dict(
+        #                                        report_type=report_type
+        #                                    )) for
+        #                report_type in reportConstant.REPORT_TYPE_ENUMS]
+        # data = [json.loads(reps.body).get("data") for reps in resps]
         # r_j_data = dict(data=data)
+        data = []
+        data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0,
+        shiliao_video_remain=0, group_video_remain=0))
+        data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0 ,
+                         shiliao_video_remain=0, group_video_remain=0))
+        data.append(dict(msg_remain=0,
+                         album_remain=int(redis_remain_num.get(cls.A_KEY)),
+                         show_video_remain=0, shiliao_video_remain=0,
+                         group_video_remain=0))
+        r_j_data = dict(data=data)
         s_j_data = json.dumps(r_j_data)
         cls._redis.psetex(cls.KEY,
                           cls._redis.pttl(cls.KEY) + 500,
@@ -259,26 +260,30 @@ class ReportEndHandler(BaseHandler):
 class ReportBatchDealHandler(BaseHandler):
     BATH_REPORT = config.api.report_batch_deal
 
+    @tornado.web.authenticated
     def post(self):
         return self.send_success_json()
 
-    @tornado.web.authenticated
     @gen.coroutine
     def on_finish(self):
+        st = time.time()
         report_type = self.get_argument("report_type",
                                         reportConstant.REPORT_TYPE_COMM)
         items = self.get_argument("items")
         deal = self.get_argument("deal")
         timedelta = self.get_argument("timedelta", -1)
-        yield WebRequrestUtil.asyncPostRequest(API_HOST,
-                                               self.BATH_REPORT,
-                                               parameters=dict(
-                                                   items=items.encode('utf8'),
-                                                   deal=deal.encode('utf8'),
-                                                   report_type=report_type,
-                                                   timedelta=timedelta,
-                                                   csid=self.current_user.id,
-                                               ))
+        resp = yield WebRequrestUtil.asyncPostRequest(API_HOST,
+                                                      self.BATH_REPORT,
+                                                      parameters=dict(
+                                                          items=items.encode(
+                                                              'utf8'),
+                                                          deal=deal.encode(
+                                                              'utf8'),
+                                                          report_type=report_type,
+                                                          timedelta=timedelta,
+                                                          csid=self.current_user.id,
+                                                      ))
+        logging.info("deal on_finish:%s Sec", time.time() - st)
         s_content, s_memo = self._deal_detail()
         s_content2 = self._items_detail()
         yield gen.Task(self.record_log,

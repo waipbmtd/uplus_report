@@ -299,8 +299,7 @@ class PunishAdapterHandler(PunishBaseHandler):
     def _delete_resource(self):
         # 删除资源
         server_api = self.DELETE_RESOURCE
-        yield WebRequrestUtil.\
-            asyncGetRequest(API_HOST,
+        yield WebRequrestUtil.asyncGetRequest(API_HOST,
                                               server_api,
                                               parameters=self.resource_parameter)
         yield gen.Task(self.log_record_delete)

@@ -1161,8 +1161,26 @@ var
 			}
 
 			form.submit();
-		}
+		},
 
+        //视频 - 关闭秀场
+		video_close_show: function( it ){
+
+			var form = it.closest('form');
+
+			form.find('[data-name=punish_type]').attr('data-value', 104);
+
+			$.each(_.cache.video, function(name, value){
+				form.append('<i data-name="' + name + '" data-value="' + value + '">');
+			});
+
+			// Loading UI
+			if( !kitFunction.hasMask() ){
+				mask.open();
+			}
+
+			form.submit();
+		}
 	};
 
 
@@ -1824,7 +1842,7 @@ $.extend({
                                 data.show_video_remain +
                                 data.shiliao_video_remain +
                                 data.group_video_remain;
-//                            elements.eq(i).html( num );a
+//                            elements.eq(i).html( num );
 //                            _.console.log(data);
 //                            _.console.log(num +" "+i + "  " + _.report_type + " " +_.select_remain);
                             if (i == _.report_type && _.select_remain != undefined){

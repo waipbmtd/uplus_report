@@ -37,8 +37,8 @@
 	<tbody>
 		{{~ it.data.data:item }}
 		<tr>
-			<td>{{= item.user_id }}</td>
-			<td>{{= item.url }}</td>
+			<td><a href="http://admin.uplus.youja.cn/user/{{= item.user_id }}/detail" target="_blank">{{= item.user_id }}</a></td>
+			<td>{{? $.resType(item.url)==1 || $.resType(item.url)==4  }}<img src="{{= item.url }}" width="100">{{??}}{{= item.url }}{{?}}</td>
 			<td>{{= item.content }}</td>
 			<td>{{= $.escape(item.punish_type, 'punish_types') }}</td>
 			<td>{{= item.timedelta=='-1'?"永久":item.timedelta+'小时' }}</td>

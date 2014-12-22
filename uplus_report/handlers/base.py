@@ -95,21 +95,23 @@ class BaseHandler(tornado.web.RequestHandler, JsonBaseHandler):
         user_id = self.get_secure_cookie("r_u_a")
         expire_time = self.get_secure_cookie("r_u_a_e")
 
+        # user = AdminUser(id=12, username="daixuefeng", role="admin",)
+        user = None
         if not user_id:
-            return None
+            return user
 
         now = time.time()
         idel = int(config.app.max_idle_time)
         try:
             expire = float(expire_time)
         except Exception:
-            return None
+            return user
         if expire < now:
-            return None
+            return user
 
         user = self.session.query(AdminUser).get(int(user_id))
         if not user or not user.state:
-            return None
+            return user
 
         expire_time = now + idel
         self.set_secure_cookie("u_a_e", u'{}'.format(expire_time))

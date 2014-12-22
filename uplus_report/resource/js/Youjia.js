@@ -269,6 +269,15 @@ $.extend({
 			return result;
 		}
 	},
+    /*return resource type identify （1,4：图片， 2：，3：）*/
+ 	resType: function(url){
+        var re = /^.*resource_type\/(\d{1})\d+\/resource_id.*$/i;
+        var arr = re.exec(url);
+        if(arr != null && arr.length == 2){
+            return arr[1];
+        }
+        return -1;
+	},
 	drag: function(options){
 		
 		options = options || {}
