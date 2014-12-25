@@ -1093,7 +1093,6 @@ var
 							// 获取剩余消息数, 并渲染页面
 							kitFunction.getRemain({
 								callback: function(result){
-                                    console.log({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 									kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 								}
 							});
@@ -1108,7 +1107,6 @@ var
 					// 获取剩余消息数, 并渲染页面
 					kitFunction.getRemain({
 						callback: function(result){
-                            console.log({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 							kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 						}
 					});
