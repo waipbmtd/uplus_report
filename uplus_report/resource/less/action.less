@@ -384,6 +384,10 @@ section{
 			}
 		}
 
+		.key-panel-media{
+			.key-panel;
+		}
+
 		.album{
 			width: 100%; height: 100%;
 			li{
@@ -500,6 +504,21 @@ section{
 		}
 
 		.videos{
+			.v-profile{
+				img{
+					max-width: @distance * 8; max-height: @distance * 8;
+					margin-left: @distance;
+					padding: 2px;
+					border: 1px solid @color-ghost;
+					.left;
+				}
+				ul{
+					margin-left: 90px;
+				}
+				li{
+					padding: 0 @distance;
+				}
+			}
 			&>div{
 				padding: @distance @distance 0;
 				.over-hide;
@@ -546,19 +565,6 @@ section{
 									color: @color-white;
 								}
 							}
-						}
-					}
-					&.v-profile{
-						.relative;
-
-						img{
-							max-width: @distance * 8; max-height: @distance * 8;
-							margin-left: @distance;
-							padding: 2px;
-							border: 1px solid @color-ghost;
-						}
-						li{
-							padding: 0 @distance;
 						}
 					}
 					&.v-video, &.v-control, &.v-profile{

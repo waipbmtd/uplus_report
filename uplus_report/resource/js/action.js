@@ -1050,6 +1050,36 @@ var
 			var itData = $.getData(it),
 				iElement = $(itData.element);
 
+			/* 显示按键设置: Key Panel Choose */
+			var keyPanel = $('.key-panel-media').show();
+			$.each( keyPanel.find('input'), function(i, input){
+				input = $(input);
+				input
+					.on(_.evt.over, function(){
+						input.select();
+					})
+					.on('keyup', function(){
+						input.select();
+					})
+					.blur(function(){
+						var v = input.val().toUpperCase().substr(0, 1);
+
+						if( !v.length || v.charCodeAt(0) < 65 || v.charCodeAt(0) > 90 ){
+							v = input.attr('data-default').toUpperCase();
+						}
+
+						$.each( keyPanel.find('input:not(:eq(' + i + '))'), function(x, item){
+							v = input.val().toUpperCase();
+							if( v == $(item).val() ){
+								v = input.attr('data-default').toUpperCase();
+								return false;
+							}
+						});
+
+						input.val(v).attr('value', v);
+					});
+			});
+
 			// 如果空(首次拉取数据)
 			if( iElement.find('.unPage').length ){
 
@@ -1183,7 +1213,20 @@ var
 			}
 
 			form.submit();
-		}
+		},
+
+		// 视频 - Trigger Delete
+		video_del_trigg: function(){
+			$('[data-function=video_del]').trigger( _.evt.click );
+		},
+		// 视频 - Trigger Limit
+		video_lim_trigg: function(){
+			$('[data-function=video_lim]').trigger( _.evt.click );
+		},
+		// 视频 - Trigger Next
+		video_next_trigg: function(){
+			$('[data-function=getVideoNext]').trigger( _.evt.click );
+		} 
 	};
 
 
@@ -2017,6 +2060,48 @@ $.extend({
 			}
 		});
 
+		/* Key Down For Choose Media */
+		_.dom.doc.on('keydown', function(e){
+			var code = e.keyCode, isOff = !$(media + ':visible').length;
+
+			// Only For Key Code
+			console.log(code);
+
+			// 如果全局锁
+			if( _.globalLock ){
+				return;
+			}
+
+			// 如果不在Masonry区
+			if( isOff ){
+				return;
+			}
+
+			// 如果焦点在输入框内
+			if( e.target.tagName == 'INPUT' || e.target.tagName == 'TEXTAREA' ){
+				return;
+			}
+
+			// 快捷键 - 字母
+			if( code > 64 && code < 91 ){
+
+				var keyPanel = $('.key-panel-media'), keys = {};
+				if( !keyPanel.length ){
+					return;
+				}
+
+				$.each( keyPanel.find('[data-name]'), function(i, item){
+
+					keys[ item.getAttribute('data-name') ] = item.value.charCodeAt(0);
+
+					if( code == item.value.charCodeAt(0) ){
+						kitFunction[ item.getAttribute('data-name') ]( iMasonry );
+					}
+
+				});
+			}
+		});
+
 		/* Default High Light Nav */
 		;(function( param ){
 
@@ -2029,7 +2114,6 @@ $.extend({
 
 		})
 		( _.location.pathname.match(/\w{0,}$/g)[0] );
-
 
 		/* Reload Aside */
 		$.reloadHTML({
