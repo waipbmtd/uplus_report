@@ -129,7 +129,17 @@ class VideoReportNextHandler(BaseHandler):
                                 report_type=report_type,
                                 resource_type=resource_type,
                                 csid=self.current_user.id))
-        self.asyn_response(reps)
+        if isinstance(reps, HTTPError):
+            self.send_error_json(info=reps.message, code=reps.code)
+        else:
+            r_body = json.loads(reps.body)
+            r_data = r_body.get("data")
+            map(lambda x: x.update(
+                dict(report_type=int(report_type),
+                     resource_type=int(resource_type))),
+                r_data)
+            r_body.update(dict(data=r_data))
+            self.send_success_json(r_body)
 
     @gen.coroutine
     def on_finish(self):
@@ -196,25 +206,25 @@ class WSRemainReportCountHandler(BaseWebSocketHandler):
     def read_stat(cls):
         logging.info(
             "websocket connections(%s), in read db" % len(cls.clients))
-        # resps = yield [WebRequrestUtil.
-        #                    asyncGetRequest(API_HOST,
-        #                                    cls.REMAIN_REPORT,
-        #                                    parameters=dict(
-        #                                        report_type=report_type
-        #                                    )) for
-        #                report_type in reportConstant.REPORT_TYPE_ENUMS]
-        # data = [json.loads(reps.body).get("data") for reps in resps]
-        # r_j_data = dict(data=data)
-        data = []
-        data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0,
-        shiliao_video_remain=0, group_video_remain=0))
-        data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0 ,
-                         shiliao_video_remain=0, group_video_remain=0))
-        data.append(dict(msg_remain=0,
-                         album_remain=int(redis_remain_num.get(cls.A_KEY)),
-                         show_video_remain=0, shiliao_video_remain=0,
-                         group_video_remain=0))
+        resps = yield [WebRequrestUtil.
+                           asyncGetRequest(API_HOST,
+                                           cls.REMAIN_REPORT,
+                                           parameters=dict(
+                                               report_type=report_type
+                                           )) for
+                       report_type in reportConstant.REPORT_TYPE_ENUMS]
+        data = [json.loads(reps.body).get("data") for reps in resps]
         r_j_data = dict(data=data)
+        # data = []
+        # data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0,
+        # shiliao_video_remain=0, group_video_remain=0))
+        # data.append(dict(msg_remain=0, album_remain=0, show_video_remain=0 ,
+        #                  shiliao_video_remain=0, group_video_remain=0))
+        # data.append(dict(msg_remain=0,
+        #                  album_remain=int(redis_remain_num.get(cls.A_KEY)),
+        #                  show_video_remain=0, shiliao_video_remain=0,
+        #                  group_video_remain=0))
+        # r_j_data = dict(data=data)
         s_j_data = json.dumps(r_j_data)
         cls._redis.psetex(cls.KEY,
                           cls._redis.pttl(cls.KEY) + 500,

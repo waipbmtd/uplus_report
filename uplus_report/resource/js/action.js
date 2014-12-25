@@ -1063,6 +1063,7 @@ var
 							// 获取剩余消息数, 并渲染页面
 							kitFunction.getRemain({
 								callback: function(result){
+                                    console.log({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 									kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 								}
 							});
@@ -1077,6 +1078,7 @@ var
 					// 获取剩余消息数, 并渲染页面
 					kitFunction.getRemain({
 						callback: function(result){
+                            console.log({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 							kitFunction.renderVideoPage({ remain: result.data, element: itData.element, resource: itData.resource, report: itData.report });
 						}
 					});
@@ -1168,7 +1170,8 @@ var
 
 			var form = it.closest('form');
 
-			form.find('[data-name=punish_type]').attr('data-value', 104);
+			form.find('[data-name=punish_type]').attr('data-value', 102);
+            form.find('[data-name=module_type]').attr('data-value', 2);
 
 			$.each(_.cache.video, function(name, value){
 				form.append('<i data-name="' + name + '" data-value="' + value + '">');

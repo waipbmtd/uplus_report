@@ -5,7 +5,8 @@
 	<div>
 
 		<div class="v-video">
-			<h4>视频：</h4>
+			<h4>视频：{{= $.escape(it.resource_type, 'video_from') }}</h4>
+			<h4>描述：{{= it.desc }}</h4>
 			<video controls preload="none" poster="{{= it.thumb_url }}" width="320" height="180" autoplay="autoplay">
 				<source type="video/mp4" src="{{= it.url }}"></source>
 			</video>
@@ -45,7 +46,9 @@
 				</ul>
 				<hr />
 				<menu>
-                    <!--<button type="button" data-function="video_close_show" data-id="">关闭秀场</button>-->
+                    {{? it.resource_type == 305 }}
+                    <button type="button" data-function="video_close_show" data-id="">关闭秀场</button>
+                    {{?}}
 					<button type="button" data-function="video_del" data-id="">删除资源</button>
 					<button type="button" data-function="video_lim" data-id="">限制登录</button>
 				</menu>

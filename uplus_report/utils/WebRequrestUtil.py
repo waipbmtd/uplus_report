@@ -49,7 +49,7 @@ def asyncGetRequest(host, path, parameters={}, callback=None):
     http_client = AsyncHTTPClient()
     request = HTTPRequest(url + "?" + urllib.urlencode(parameters),
                           method="GET")
-    # getAsyncRequest(request)
+    getAsyncRequest(request)
     try:
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
@@ -66,7 +66,7 @@ def asyncPostRequest(host, path, parameters={}, callback=None):
     http_client = AsyncHTTPClient()
     request = HTTPRequest(url, body=urllib.urlencode(parameters),
                           method="POST")
-    # getAsyncRequest(request)
+    getAsyncRequest(request)
     try:
         response = yield http_client.fetch(request, callback=callback)
         raise gen.Return(response)
