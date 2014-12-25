@@ -1214,15 +1214,15 @@ var
 
 		// 视频 - Trigger Delete
 		video_del_trigg: function(){
-			$('[data-function=video_del]').trigger( _.evt.click );
+			$('[data-function=video_del]:visible').trigger( _.evt.click );
 		},
 		// 视频 - Trigger Limit
 		video_lim_trigg: function(){
-			$('[data-function=video_lim]').trigger( _.evt.click );
+			$('[data-function=video_lim]:visible').trigger( _.evt.click );
 		},
 		// 视频 - Trigger Next
 		video_next_trigg: function(){
-			$('[data-function=getVideoNext]').trigger( _.evt.click );
+			$('[data-function=getVideoNext]:visible').trigger( _.evt.click );
 		} 
 	};
 
